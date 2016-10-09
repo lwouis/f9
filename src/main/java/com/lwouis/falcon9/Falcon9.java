@@ -23,6 +23,10 @@ public class Falcon9 extends Application {
   //@Inject
   //private FXMLLoader fxmlLoader;
 
+  public static void main(String[] args) {
+    launch(args);
+  }
+
   @Override
   public void start(Stage primaryStage) throws Exception {
     //guiceContext.init();
@@ -31,9 +35,11 @@ public class Falcon9 extends Application {
     primaryStage.setTitle("Hello World");
     primaryStage.setScene(new Scene(root, 300, 275));
     primaryStage.show();
+    DiskPersister.startRecurrentSaveToDisk();
   }
 
-  public static void main(String[] args) {
-    launch(args);
+  @Override
+  public void stop() {
+    DiskPersister.stopRecurrentSaveToDisk();
   }
 }
