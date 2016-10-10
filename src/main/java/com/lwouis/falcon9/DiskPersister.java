@@ -45,7 +45,7 @@ public class DiskPersister {
     timer.schedule(task, 0, savePeriod);
   }
 
-  public static void stopRecurrentSaveToDisk() {
+  public static void saveThenstopRecurrentSaveToDisk() {
     task.run();
     timer.cancel();
   }
