@@ -1,0 +1,30 @@
+[
+  {
+    "name": "BoardingPass.pdf",
+    "absolutePath": "C:\\Users\\Louis\\Desktop\\BoardingPass.pdf"
+  },
+  {
+    "name": "DS4Windows.exe",
+    "absolutePath": "C:\\Program Files (x86)\\DS4Windows\\DS4Windows.exe"
+  },
+  {
+    "name": "mintty.exe",
+    "absolutePath": "C:\\cygwin64\\bin\\mintty.exe"
+  },
+  {
+    "name": "emulationstation.exe",
+    "absolutePath": "C:\\Program Files (x86)\\EmulationStation\\emulationstation.exe"
+  },
+  {
+    "name": "Insomnia.exe",
+    "absolutePath": "C:\\Program Files (x86)\\Insomnia\\Insomnia.exe"
+  },
+  {
+    "name": "JDownloader2.exe",
+    "absolutePath": "C:\\Users\\Louis\\AppData\\Local\\JDownloader v2.0\\JDownloader2.exe"
+  },
+  {
+    "name": "rapidee.exe",
+    "absolutePath": "C:\\Program Files\\RapidEEx64\\rapidee.exe"
+  }
+]

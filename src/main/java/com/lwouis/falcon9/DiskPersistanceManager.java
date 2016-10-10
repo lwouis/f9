@@ -50,11 +50,19 @@ public class DiskPersistanceManager {
   }
 
   public static void loadFromDisk() {
-    if (!JSON_FILE.exists()) {
+    loadFromDiskInternal(JSON_FILE);
+  }
+
+  public static void loadFromDisk(File file) {
+    loadFromDiskInternal(file);
+  }
+
+  private static void loadFromDiskInternal(File file) {
+    if (!file.exists()) {
       return;
     }
     try {
-      String json = FileUtils.readFileToString(JSON_FILE, StandardCharsets.UTF_8);
+      String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
       List<Launchable> appState = gson.fromJson(json, type);
       AppState.getItemList().setAll(appState);
     }
