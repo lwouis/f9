@@ -2,6 +2,6 @@
 
 
 <?import javafx.scene.control.ListView?>
-<ListView xmlns:fx="http://javafx.com/fxml/1" fx:id="itemList" onMouseClicked="#launchSelected"
+<ListView xmlns:fx="http://javafx.com/fxml/1" fx:id="itemList" fixedCellSize="24.0" onMouseClicked="#launchSelected"
           xmlns="http://javafx.com/javafx/8.0.92"
           fx:controller="com.lwouis.falcon9.components.item_list.ItemListController"/>
