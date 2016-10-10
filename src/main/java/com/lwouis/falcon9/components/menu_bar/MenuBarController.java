@@ -1,6 +1,7 @@
 package com.lwouis.falcon9.components.menu_bar;
 
 import java.io.File;
+import java.util.List;
 
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.DiskPersistanceManager;
@@ -23,8 +24,10 @@ public class MenuBarController {
   @FXML
   private void chooseFile() {
     FileChooser fileChooser = new FileChooser();
-    File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
-    AppState.getItemList().add(new Launchable(file.getName(), file.getAbsolutePath()));
+    List<File> files = fileChooser.showOpenMultipleDialog(menuBar.getScene().getWindow());
+    for (File file : files) {
+      AppState.getItemList().add(new Launchable(file.getName(), file.getAbsolutePath()));
+    }
   }
 
   @FXML
