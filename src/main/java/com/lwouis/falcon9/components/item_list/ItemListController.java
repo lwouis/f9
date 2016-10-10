@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
@@ -51,16 +52,27 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  public void launchSelected(MouseEvent mouseEvent) throws IOException {
+  public void onMouseEvent(MouseEvent mouseEvent) throws IOException {
     if (mouseEvent.getClickCount() == 2) {
-      for (Launchable launchable : itemList.getSelectionModel().getSelectedItems()) {
-        File file = new File(launchable.getAbsolutePath());
-        if (Desktop.isDesktopSupported()) {
-          Desktop.getDesktop().open(file);
-        }
-        else {
-          new ProcessBuilder(launchable.getAbsolutePath()).start();
-        }
+      launchSelectedInternal();
+    }
+  }
+
+  @FXML
+  public void onKeyEvent(KeyEvent keyEvent) throws IOException {
+    if (keyEvent.getCharacter().equals("\r")) {
+      launchSelectedInternal();
+    }
+  }
+
+  private void launchSelectedInternal() throws IOException {
+    for (Launchable launchable : itemList.getSelectionModel().getSelectedItems()) {
+      File file = new File(launchable.getAbsolutePath());
+      if (Desktop.isDesktopSupported()) {
+        Desktop.getDesktop().open(file);
+      }
+      else {
+        new ProcessBuilder(launchable.getAbsolutePath()).start();
       }
     }
   }
