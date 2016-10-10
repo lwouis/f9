@@ -25,6 +25,7 @@ public class GlobalHotkeyManager {
     if (!is64bit) {
       dllFile = "JIntellitype.dll";
     }
+    @SuppressWarnings("ConstantConditions")
     String dllPath = ClassLoader.getSystemClassLoader().getResource(dllFile).getPath();
     JIntellitype.setLibraryLocation(dllPath);
     jIntellitype = JIntellitype.getInstance();

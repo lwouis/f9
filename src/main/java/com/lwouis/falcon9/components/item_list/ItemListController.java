@@ -12,10 +12,6 @@ public class ItemListController implements Initializable {
   @FXML
   private ListView<String> itemList;
 
-  public static void addItem(String item) {
-    AppState.getItemList().add(item);
-  }
-
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     itemList.setItems(AppState.getItemList());

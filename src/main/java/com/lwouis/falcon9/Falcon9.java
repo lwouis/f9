@@ -3,12 +3,10 @@ package com.lwouis.falcon9;
 import com.melloware.jintellitype.HotkeyListener;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class Falcon9 extends Application implements HotkeyListener {
   private Stage primaryStage;
@@ -41,8 +39,8 @@ public class Falcon9 extends Application implements HotkeyListener {
     GlobalHotkeyManager.registerGlobalHotkey(this);
     DiskPersistanceManager.loadFromDisk();
 
-    Parent root = FXMLLoader.load(ClassLoader.getSystemClassLoader()
-            .getResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
+    @SuppressWarnings("ConstantConditions")
+    Parent root = FXMLLoader.load(ClassLoader.getSystemClassLoader().getResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
     primaryStage.setTitle("Hello World");
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
@@ -53,12 +51,7 @@ public class Falcon9 extends Application implements HotkeyListener {
     // don't close the app when main window is hidden
     Platform.setImplicitExit(false);
     // close the app when the user requests it
-    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-      @Override
-      public void handle(WindowEvent t) {
-        Platform.exit();
-      }
-    });
+    primaryStage.setOnCloseRequest(event -> Platform.exit());
   }
 
   @Override

@@ -54,7 +54,7 @@ public class DiskPersistanceManager {
     timer.cancel();
   }
 
-  public static void saveToDisk() throws IOException {
+  private static void saveToDisk() throws IOException {
     String json = gson.toJson(AppState.getItemList(), type);
     Files.createDirectories(JSON_FILE.toPath().getParent());
     FileUtils.writeStringToFile(JSON_FILE, json, StandardCharsets.UTF_8, false);

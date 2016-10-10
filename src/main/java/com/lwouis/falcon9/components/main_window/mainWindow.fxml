@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity"
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
       minHeight="-Infinity"
       minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60"
       fx:controller="com.lwouis.falcon9.components.main_window.MainWindowController">
-  <children>
-    <fx:include fx:id="menuBar" source="../menu_bar/menuBar.fxml"/>
-    <fx:include fx:id="itemList" source="../item_list/itemList.fxml"/>
-  </children>
+  <fx:include fx:id="menuBar" source="../menu_bar/menuBar.fxml"/>
+  <fx:include fx:id="itemList" source="../item_list/itemList.fxml"/>
 </VBox>
