@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 
@@ -23,11 +24,11 @@ public class DiskPersistanceManager {
 
   private static final Gson gson = new Gson();
 
-  private static final Type type = new TypeToken<List<String>>() {
+  private static final Type type = new TypeToken<List<Launchable>>() {
   }.getType();
 
   public static void startSaveToDiskListener() {
-    AppState.getItemList().addListener((ListChangeListener<String>)change -> new Thread(new Task() {
+    AppState.getItemList().addListener((ListChangeListener<Launchable>)change -> new Thread(new Task() {
       @Override
       protected Void call() throws Exception {
         try {
@@ -54,7 +55,7 @@ public class DiskPersistanceManager {
     }
     try {
       String json = FileUtils.readFileToString(JSON_FILE, StandardCharsets.UTF_8);
-      List<String> appState = gson.fromJson(json, type);
+      List<Launchable> appState = gson.fromJson(json, type);
       AppState.getItemList().setAll(appState);
     }
     catch (Exception e) {
