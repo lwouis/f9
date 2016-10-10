@@ -1,5 +1,8 @@
 package com.lwouis.falcon9.components.item_list;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -10,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 public class ItemListController implements Initializable {
@@ -41,7 +45,23 @@ public class ItemListController implements Initializable {
     });
   }
 
+  @FXML
   public void removeSelected() {
     AppState.getItemList().removeAll(itemList.getSelectionModel().getSelectedItems());
+  }
+
+  @FXML
+  public void launchSelected(MouseEvent mouseEvent) throws IOException {
+    if (mouseEvent.getClickCount() == 2) {
+      for (Launchable launchable : itemList.getSelectionModel().getSelectedItems()) {
+        File file = new File(launchable.getAbsolutePath());
+        if (Desktop.isDesktopSupported()) {
+          Desktop.getDesktop().open(file);
+        }
+        else {
+          new ProcessBuilder(launchable.getAbsolutePath()).start();
+        }
+      }
+    }
   }
 }
