@@ -40,11 +40,12 @@ public class Falcon9 extends Application implements HotkeyListener {
     DiskPersistanceManager.loadFromDisk();
 
     @SuppressWarnings("ConstantConditions")
-    Parent root = FXMLLoader.load(ClassLoader.getSystemClassLoader().getResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
+    Parent root = FXMLLoader.load(ClassLoader.getSystemClassLoader()
+            .getResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
     primaryStage.setTitle("Hello World");
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
-    DiskPersistanceManager.startRecurrentSaveToDisk();
+    DiskPersistanceManager.startSaveToDiskListener();
   }
 
   private void customCloseBehaviour(Stage primaryStage) {
@@ -56,7 +57,6 @@ public class Falcon9 extends Application implements HotkeyListener {
 
   @Override
   public void stop() {
-    DiskPersistanceManager.lastSaveThenstopRecurrentSaveToDisk();
     GlobalHotkeyManager.unregisterGlobalHotkey();
   }
 
