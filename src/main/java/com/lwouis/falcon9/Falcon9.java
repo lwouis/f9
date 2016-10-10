@@ -42,7 +42,7 @@ public class Falcon9 extends Application implements HotkeyListener {
     @SuppressWarnings("ConstantConditions")
     Parent root = FXMLLoader.load(ClassLoader.getSystemClassLoader()
             .getResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
-    primaryStage.setTitle("Hello World");
+    primaryStage.setTitle("Falcon9");
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
     DiskPersistanceManager.startSaveToDiskListener();
