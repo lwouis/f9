@@ -26,7 +26,7 @@ public class GlobalHotkeyManager {
       dllFile = "JIntellitype.dll";
     }
     @SuppressWarnings("ConstantConditions")
-    String dllPath = ClassLoader.getSystemClassLoader().getResource(dllFile).getPath();
+    String dllPath = ClassLoader.getSystemResource(dllFile).getPath();
     JIntellitype.setLibraryLocation(dllPath);
     jIntellitype = JIntellitype.getInstance();
     jIntellitype.registerHotKey(hotkeyId, JIntellitype.MOD_ALT + JIntellitype.MOD_SHIFT, (int)'A');

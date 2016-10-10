@@ -37,7 +37,7 @@ public class MenuBarController {
 
   @FXML
   public void fillWithDummy() {
-    String pathToJsonFile = ClassLoader.getSystemClassLoader().getResource("dummyItems.json").getPath();
+    String pathToJsonFile = ClassLoader.getSystemResource("dummyItems.json").getPath();
     DiskPersistanceManager.loadFromDisk(new File(pathToJsonFile));
   }
 }
