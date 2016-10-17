@@ -10,20 +10,22 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang3.StringUtils;
 
 import com.lwouis.falcon9.AppState;
+import com.lwouis.falcon9.components.launchable_cell.LaunchableCell;
 import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 
 public class ItemListController implements Initializable {
+  @FXML
+  public Label launchableLabel;
+
   @FXML
   private ListView<Launchable> launchableListView;
 
@@ -44,7 +46,8 @@ public class ItemListController implements Initializable {
         launchableFilteredList.setPredicate(s -> true);
       }
       else {
-        launchableFilteredList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), filterText));
+        String filterTextTrimmed = filterText.trim(); // ignore extra spaces on the sides
+        launchableFilteredList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), filterTextTrimmed));
       }
     });
   }
@@ -57,26 +60,7 @@ public class ItemListController implements Initializable {
     });
     launchableListView.setItems(AppState.getLaunchableSortedList());
     launchableListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    launchableListView.setCellFactory(new Callback<ListView<Launchable>, ListCell<Launchable>>() {
-      @Override
-      public ListCell<Launchable> call(ListView<Launchable> p) {
-        return new ListCell<Launchable>() {
-          @Override
-          protected void updateItem(Launchable launchable, boolean bln) {
-            super.updateItem(launchable, bln);
-            if (launchable != null) {
-              setText(launchable.getName() + " (" + launchable.getAbsolutePath() + ")");
-              setGraphic(new ImageView(launchable.getImage()));
-            }
-            else {
-              setText(null);
-              setGraphic(null);
-            }
-          }
-
-        };
-      }
-    });
+    launchableListView.setCellFactory(lv -> new LaunchableCell());
   }
 
   @FXML
