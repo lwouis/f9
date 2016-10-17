@@ -7,8 +7,6 @@ public class GlobalHotkeyManager {
 
   private static final int hotkeyId = 0;
 
-  private static final boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
-
   private static JIntellitype jIntellitype;
 
   public static int getHotkeyId() {
@@ -16,7 +14,7 @@ public class GlobalHotkeyManager {
   }
 
   public static void registerGlobalHotkey(HotkeyListener hotkeyListener) {
-    if (!isWindows) {
+    if (!Environment.IS_WINDOWS) {
       return;
     }
     String dllFile = "JIntellitype64.dll";
@@ -34,7 +32,7 @@ public class GlobalHotkeyManager {
   }
 
   public static void unregisterGlobalHotkey() {
-    if (!isWindows) {
+    if (!Environment.IS_WINDOWS) {
       return;
     }
     jIntellitype.unregisterHotKey(hotkeyId);

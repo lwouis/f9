@@ -18,7 +18,7 @@ import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 
 public class DiskPersistanceManager {
-  private static final File JSON_FILE = Paths.get(System.getProperty("user.home") + "/.falcon9/appState.json").toFile();
+  private static final File JSON_FILE = Paths.get(Environment.USER_HOME + "/.falcon9/appState.json").toFile();
 
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
