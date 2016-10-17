@@ -17,9 +17,6 @@ import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 
-// TODO checksum on file before overwriting
-// TODO atomic file save (copy then move) to avoid data corruption in unlucky cases
-// TODO sequential file rotation so if corrupted, can fallback to previous working file
 public class DiskPersistanceManager {
   private static final File JSON_FILE = Paths.get(System.getProperty("user.home") + "/.falcon9/appState.json").toFile();
 
