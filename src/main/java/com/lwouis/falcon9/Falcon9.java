@@ -23,22 +23,33 @@ public class Falcon9 extends Application implements HotkeyListener {
   }
 
   @Override
-  public void start(Stage primaryStage) throws Exception {
-    this.primaryStage = primaryStage;
-    SystemTray tray = showTrayIcon(primaryStage);
-    customMinifyAndCloseBehaviour(primaryStage, tray);
+  public void start(Stage primaryStage) {
+    try {
+      this.primaryStage = primaryStage;
+      setUncaughtExceptionHandlers();
+      SystemTray tray = showTrayIcon(primaryStage);
+      customMinifyAndCloseBehaviour(primaryStage, tray);
 
-    GlobalHotkeyManager.registerGlobalHotkey(this);
-    DiskPersistanceManager.loadFromDisk();
+      GlobalHotkeyManager.registerGlobalHotkey(this);
+      DiskPersistanceManager.loadFromDisk();
 
-    @SuppressWarnings("ConstantConditions")
-    Parent root = FXMLLoader
-            .load(ClassLoader.getSystemResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
-    primaryStage.setTitle(APP_NAME);
-    primaryStage.setScene(new Scene(root));
-    primaryStage.centerOnScreen();
-    primaryStage.show();
-    DiskPersistanceManager.startSaveToDiskListener();
+      @SuppressWarnings("ConstantConditions")
+      Parent root = FXMLLoader
+              .load(ClassLoader.getSystemResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
+      primaryStage.setTitle(APP_NAME);
+      primaryStage.setScene(new Scene(root));
+      primaryStage.centerOnScreen();
+      primaryStage.show();
+      DiskPersistanceManager.startSaveToDiskListener();
+    }
+    catch (Throwable t) {
+      t.printStackTrace();
+    }
+  }
+
+  private void setUncaughtExceptionHandlers() {
+    Thread.setDefaultUncaughtExceptionHandler((t, e) -> Platform.runLater(e::printStackTrace));
+    Thread.currentThread().setUncaughtExceptionHandler((t, e) -> e.printStackTrace());
   }
 
   private SystemTray showTrayIcon(Stage stage) throws IOException, AWTException {

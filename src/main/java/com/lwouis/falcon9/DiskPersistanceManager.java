@@ -26,7 +26,7 @@ public class DiskPersistanceManager {
   }.getType();
 
   public static void startSaveToDiskListener() {
-    AppState.getItemList().addListener((ListChangeListener<Launchable>)change -> new Thread(new Task() {
+    AppState.getLaunchableObservableList().addListener((ListChangeListener<Launchable>)change -> new Thread(new Task() {
       @Override
       protected Void call() throws Exception {
         try {
@@ -41,10 +41,16 @@ public class DiskPersistanceManager {
   }
 
   private static void saveToDisk() throws IOException {
-    String json = gson.toJson(AppState.getItemList(), type);
-    Files.createDirectories(JSON_FILE.toPath().getParent());
-    FileUtils.writeStringToFile(JSON_FILE, json, StandardCharsets.UTF_8, false);
-    System.out.println(json);
+    try {
+      String json = gson.toJson(AppState.getLaunchableObservableList(), type);
+      Files.createDirectories(JSON_FILE.toPath().getParent());
+      FileUtils.writeStringToFile(JSON_FILE, json, StandardCharsets.UTF_8, false);
+    }
+    catch (Throwable e) {
+      System.err.println("Failure during DiskPersistanceManager.saveToDisk()");
+      e.printStackTrace();
+      // TODO: do something about the save failure
+    }
   }
 
   public static void loadFromDisk() {
@@ -62,9 +68,10 @@ public class DiskPersistanceManager {
     try {
       String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
       List<Launchable> appState = gson.fromJson(json, type);
-      AppState.getItemList().setAll(appState);
+      AppState.getLaunchableObservableList().setAll(appState);
     }
-    catch (Exception e) {
+    catch (Throwable e) {
+      System.err.println("Failure during DiskPersistanceManager.loadFromDiskInternal()");
       e.printStackTrace();
       // TODO: notify user that their data is lost, and what they could do
     }
