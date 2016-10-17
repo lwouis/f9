@@ -1,30 +1,67 @@
 [
   {
-    "name": "BoardingPass.pdf",
-    "absolutePath": "C:\\Users\\Louis\\Desktop\\BoardingPass.pdf"
+    "name": "mintty.exe",
+    "absolutePath": "C:\\cygwin64\\bin\\mintty.exe",
+    "image": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACJUlEQVR42q2Sy2paURSGfYe
+    +g5pJ4v16NN5viULbUUtHKSQPIQ5CEgQDjpv2LbygERI0qRe8K2ggIhkkgg6C8xD237V3a4y2k0AP/Jx99tnrW/9ae8lk/+F5RwqTIm9U+E
+    +sbL9erz/3ej0Mh0OMRiPc3d3h4eEB0+kUj4+PmM/nmM1mYo//42fo/DOPFYBGowGPxw2f3wuXx4Vthx2STYLZbILBYIBWp4VKtYWtrd9Sq9Xo9
+    /tYAA44YCccQqFwjtPTBD58fI
+    /QThBenxdOpwOSJEGv10On00Gj0WBjY4M74ICDFcDnL59wdX0lLAaCAbjcTlisFgpSY3Nz80UKhQKdTmcNQBnL5Z84O/uGcGQXe1
+    /3cE2wTCZD9lUrAKVSiWazuQrwBbzYjezAT2
+    +e2WaXYKIe8Pp53esAavwqwOlyUN0BqtsDh3Ob6rbCaDSIml8HLwC1Wm0J4HZ4UDDkh8frFrdgsZqhN+ip46p/AqrV6hLQarUEwB/wCft2u01cIe
+    /6uv0FoFKpLAHtdhtWm5XmwCNKkWhtNBmh1f5tn0sul68C+JXk83nkcjmahQIuLi5QLBZRKpVweXkp9vj
+    /bDaLVCol9BqwXy6XcXR0hJOTE8TjcSQSCSSTSSG
+    +5nvHx8c4PDxELBZDNBoVSV5GmT6eut0uGwwG7Pb2ltG8s8lkwu7v79l4PGY3NzeMRpdRsxllZuSMpdPppwXATPpO+vFG8RjzL4I
+    +x9ya1yMMAAAAAElFTkSuQmCC"
   },
   {
     "name": "DS4Windows.exe",
-    "absolutePath": "C:\\Program Files (x86)\\DS4Windows\\DS4Windows.exe"
-  },
-  {
-    "name": "mintty.exe",
-    "absolutePath": "C:\\cygwin64\\bin\\mintty.exe"
+    "absolutePath": "C:\\Program Files (x86)\\DS4Windows\\DS4Windows.exe",
+    "image": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAj0lEQVR42mP4//8/IyWYgWoGMDAw/AdhghrQ1MENUFNT+w
+    /DIAVSUlIoGCSGrAbFAGSNMDa6ASCxz4FKYLp+JxPcELgBMM0wGpsB6BhsALIkujPRMdOS9xCNUBeAvYbNBlhA4eIju5ABmzMJGYASuOh+RTYIF5
+    +gAbjSAFEGEEpI1DcAWZDY9I+snmHAcyMA7V0a+OLLr+kAAAAASUVORK5CYII\u003d"
   },
   {
     "name": "emulationstation.exe",
-    "absolutePath": "C:\\Program Files (x86)\\EmulationStation\\emulationstation.exe"
+    "absolutePath": "C:\\Program Files (x86)\\EmulationStation\\emulationstation.exe",
+    "image": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABi0lEQVR42mNgGHgQVCbD4FtyjcGv+D8Z
+    +AcDkLgO4nCFVvxPm7zyf8GsdXAc2rEArNC1ZjqKOAgLRNZADAER3EDN+85f/48MXr3/9F8/t+t/xuTl/9FB2/LtCFcw+Bb9T
+    +tbAJbIm7jov0FS9X+DlJr//GHl/xk8sv7//vPn//7z1yDiQKwUX43qDQanxP8Fk5eADehYuvl/QHX//4CG6f/FwoCSdjH/P339/v/MjXsQ8drJ
+    /12rp/5n8i9BMgCoCGYAMsjrmwc2wK+y7/+v339Q5JbuPfGfOaAU04DOZVv+B5R3
+    /g8obvkv5pcBNgCE1WNKIS4A4po5q8FqY3uXIAxI654LtXXuf4PI3P8G8eX/+T3TwJpVIovh/gdhUDiBACjG4AbwuKf833fmMmosvPvwXy
+    +h8n96zzwM74FijCesCmEAg0XQfy6rwP9pLZP+F/TMhOPQqh6wK1yLOsDeBOG0voX/uUIqYIF4nYHBPOAXg5HXfwxsFgAPAzh2SvoPinawZlDqBaXioQ8AwnSnZ4UqVLwAAAAASUVORK5CYII\u003d"
   },
   {
     "name": "Insomnia.exe",
-    "absolutePath": "C:\\Program Files (x86)\\Insomnia\\Insomnia.exe"
+    "absolutePath": "C:\\Program Files (x86)\\Insomnia\\Insomnia.exe",
+    "image": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAADDElEQVR42n1T+UtUURidX/oH
+    +rUia9pMS2NqMAqVcqxwQ42KaiyVSC2kENJMxT2M1IKMhBFJh1Bxchvf+JwpSUlzQ9Ncx32ZNHFNjEA4nVsiVNSDy3u8e7
+    /znfOdcxWKPx6Tyc5OkvbFms3OZWaz2mo2q6y1tfYGo3FPrCzbHVD875GkPeH19We
+    /NjdfRWtrCJqbg9DUdAENDd6oq3NDbe2R75KkjG9rU235q1iWncpEUU9PMkZGHnOlYnQ0hu
+    /b6Ou7jo6OQLx7p4HFooYk7W38DUR0FsUjI7lYXDRhZuYVGhtTeDASshzCQi2GhoIwOBhANqdBWdxTZmxqFrRFZ1G8ttYAm60UNTWJ0OvDYTBc47cWVusNTE9f4dsbb9+e5D+H9YqKnUcUYmBC8+hoJlZWDFhdNfFg0QZABLq747j3gP/uEDgYk5OBlKMhi2MwmfblKMS0Bf3JyYdYWsrH8nIRv/MIEEuAm6Segs+f0ygrmiBh3LuM/n5fsnAjwKH3CmGVmLbNFoeFhSeUkYvx8afcjEJhYSgpJ7EwlSsaExPhGBsLIqg/3rzRsIlqRWGxHB0XVgmKc3OJmJ9/RMppqK6OwMuXWnZLYNdkFkZxyGEE1KK315/D9eQgj6/RPsdq4fPQUAhmZ+/iy5dYDA/HoKoqFPn5F2lrDAHj6EAkC4PR1XWR+fBBZaUHl8tHYWGCCElnZyBlhFDrLR6+hYqKK9DpAghwj4D3OcwbaGu7hA8f/CjPEyUlrnRIpVcYjTscRcJESITP09NXSfMaKQaguPjcz+5TUwlMppaD84bReAp5eSfITo2iIifvjSAp40XCREisVj8MDJynTV4oLdUQIJpDjeFeADu6ISdHjexsZ+Tm2hs2kyhiKeIpElZX5472di929EVLiw+lXUB9vT+7uSMzU4XExP1IStpt0+kctv52F36BKDNk2XndYnElAw21nsHr1x4oKHDF8+dHkZ5uT4BtlVlZ27f+80ZWVe1Sy/JhnSSpO8rLXb6VlKi/6fWqTy9eHCx+9kzp/+f5H6qlZtWd9BggAAAAAElFTkSuQmCC"
   },
   {
     "name": "JDownloader2.exe",
-    "absolutePath": "C:\\Users\\Louis\\AppData\\Local\\JDownloader v2.0\\JDownloader2.exe"
+    "absolutePath": "C:\\Users\\Louis\\AppData\\Local\\JDownloader v2.0\\JDownloader2.exe",
+    "image": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8
+    /9hAAADQElEQVR42n1Ta0xbZRgul7anPael955LT88pteVSoDc2SokykEIFhHARcEwzXCcDIxswSKaJwWxIzLJsw
+    /4iisxlOjEaEwQNIm4L0ZlBjGLMNn+QOGK2QAbhxwIu9rGg2diW7f3z5s2X5
+    /Lme16J5KFKVqny5WbupNpim4o0inMr44qvzncntsefSMmTiqJoo0Zwjukz3GC8PqQ+44K/gUddoxMbl80YeE16szFMNT0GTBnthcK12qM8gm0e
+    +Pb44WnyoeZtM+y7HIj2F+D2dzR6I0Ts6pD64CME6lTnWOtpBtN/UOg4m4PyviCymkthLSqEybMTTr8Lyz9XYiaahLuX2L8zeFnWtp11
+    +aVdbGz6ugIfXnTi7A88ohesCHY+B664AiZfALr0bJx7vx7L00ZszFqR7yc/vW+f508eH6fwy19yTP5uxhtfhrHjSAfszW3gQlUw
+    +gugjRPsaSnBymwGVr/WwZtD3olD5f/Zd9imwm+KaDntRvjYbrgO98MZ6YLY8AqYonLoPXlIcbqQtlPE2nwhrg9LYbIRkMn
+    +X0Mp2GZ8L9shVoWQFWmALa4s1O8FW1YDQ14hNJleUPZ0PF1sx+JMAebPJMLoICFVSnO3CAia
+    +0TjykZqjRvulkAcWAFzUcUWWJvth8rhgkq0YfK8B79OBHDrGxkcbn1MQpL0FoE0RRehRAe8dVb0j0px+AyBnBfS4soeqJ7KBCnY0d2eiRs
+    /enFp2IPliySeL1bNb/9FUs7yNy0BDs19crQfl+KleA+1quAKmVBWloqF77248oENuysdWLmswcih5HcfyIFMo69WcOI
+    /XC6HcKsCTd0y1L0uxb4DGsx9noHZEQElAQNqQgxWrwj481zCtd+OScamehS990gInbFFQfPrunQLgtVy9LyqwbenaEwMGFGUZ8RnURZrV61Y
+    /YnB8hckFqMJ67VBQnjAiJbjWp/doV14b7889tFBOTprVWBFOkYwllWKsXz8TpcwtHTBFFsaTcZEj2Lw4UQnKA0Ck8LypQaO69QwzAmKZgfVtOUtNcu/qDVbsgWDktlXQhydG0ha84uS9McdZuJWylhWKTGb4ycsEpuJ3+7Uopdwm4Kbw7/Kc08ZnCceWwAAAABJRU5ErkJggg\u003d\u003d"
   },
   {
     "name": "rapidee.exe",
-    "absolutePath": "C:\\Program Files\\RapidEEx64\\rapidee.exe"
+    "absolutePath": "C:\\Program Files\\RapidEEx64\\rapidee.exe",
+    "image": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8
+    /9hAAAC0UlEQVR42o1TW0jTYRT31ZfIp4FNU6keEtYw5lZziGFqzM3sMptTvFXq0l2SLpRaYhGuEObWSiVveCG3UGypbW5uKm5
+    /tcypwdaD9WC3pxguFWO/9i0SRLsc+MHhfOc73+8753dCQna2sNDQUA6NRhMQEJ/EQv7DdjGZTKlOp3NOTtu8k7OjfoIxyuLVaBocTCZDSnL
+    +dJmuVCr17vcudFu0uKrLRXEdHyWqdFxWn8MTowouzwxkMpme5G57WaFUPHMtOVB6XwhxZQLya5JRWJuKojtpkFQmIqMiLhA7DuqtNVCkzLCFCYPBkLo/uJB/KwWiCh6ybyQi73YyCmpSghDf5OGkMh6CMhZE17mY81AgdzYbpm3SUp0DjXjUosbCwjx6X7QjtzIZOVVJkFQl4lQZF49bGrC4uIDO/iZ0DDZAq9VQwcaSDtvsZl/702YYzG3oGWoGMf1wGzLk8Ui9wISmsR7r6+toNKgwOGaA3tQGs924EpxOYEzC8WmLP786DZkBmpnlR+F554bfD0y9cmBswoZV3xqWlj1IKtoPXkEUBPI4jDqG/TRauPBXgSmr/7SSi/TywxBKOXDNzwVZeFe+4fuaL+i7lxaQkBeFI5IIJBUegPV3AULDZB3ytXY3Qt16F4rq8/B5V2G090JQyoLwEhs2hwkbPzYgr81Ddd0VPOxQwWR7Tr7ADjaxXv2A6hvpgt1pxsdPy7A4jDhRHAeuJBrxWXvAvxgP6s04vnz9jD5TD7qGdNBo1dSmOslIpucncKzgIFKKGOBkRYKdFQFudnQAMWCL6OCKYwJnh5CQE4Mp1/iWMQaFJJPLDLaZQfAk+xDLDwPrDB0c0d4giB/L342j4miYnf0guTtJmk5k+nqRwr3ma+AXs8A+G2AiikR6CQs1OgWcs3bIlDtLeZMJoabRaBwjdrP3pW3AT0B8EmP8Y5m2rXM4LVxA8Ld1/gmRZrlLYIpKgwAAAABJRU5ErkJggg\u003d\u003d"
   }
 ]

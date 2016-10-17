@@ -1,14 +1,18 @@
 package com.lwouis.falcon9.components.menu_bar;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
+import javax.swing.filechooser.FileSystemView;
 
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.DiskPersistanceManager;
 import com.lwouis.falcon9.components.item_list.ItemListController;
 import com.lwouis.falcon9.models.Launchable;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 
 public class MenuBarController {
@@ -25,9 +29,21 @@ public class MenuBarController {
   private void chooseFile() {
     FileChooser fileChooser = new FileChooser();
     List<File> files = fileChooser.showOpenMultipleDialog(menuBar.getScene().getWindow());
-    for (File file : files) {
-      AppState.getItemList().add(new Launchable(file.getName(), file.getAbsolutePath()));
+    if (files == null) {
+      return;
     }
+    for (File file : files) {
+      AppState.getItemList().add(new Launchable(file.getName(), file.getAbsolutePath(), getFileIcon(file)));
+    }
+  }
+
+  private Image getFileIcon(File file) {
+    FileSystemView view = FileSystemView.getFileSystemView();
+    javax.swing.Icon icon = view.getSystemIcon(file);
+    BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+            BufferedImage.TYPE_INT_ARGB);
+    icon.paintIcon(null, bufferedImage.getGraphics(), 0, 0);
+    return SwingFXUtils.toFXImage(bufferedImage, null);
   }
 
   @FXML

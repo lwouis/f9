@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
@@ -34,6 +35,7 @@ public class ItemListController implements Initializable {
             super.updateItem(launchable, bln);
             if (launchable != null) {
               setText(launchable.getName() + " (" + launchable.getAbsolutePath() + ")");
+              setGraphic(new ImageView(launchable.getImage()));
             }
             else {
               setText(null);
