@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.ListChangeListener;
@@ -22,7 +23,7 @@ import javafx.concurrent.Task;
 public class DiskPersistanceManager {
   private static final File JSON_FILE = Paths.get(System.getProperty("user.home") + "/.falcon9/appState.json").toFile();
 
-  private static final Gson gson = new Gson();
+  private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
   private static final Type type = new TypeToken<List<Launchable>>() {
   }.getType();
