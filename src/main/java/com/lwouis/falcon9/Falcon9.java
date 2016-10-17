@@ -47,19 +47,23 @@ public class Falcon9 extends Application implements HotkeyListener {
     }
     SystemTray tray = SystemTray.getSystemTray();
     int trayHeight = (int)tray.getTrayIconSize().getHeight();
-    String iconPath = "trayIcon/icon1_h" + trayHeight + ".png";
+    String iconPath = "trayIcon/icon1_" + trayHeight + ".png";
     URL systemResource = ClassLoader.getSystemResource(iconPath);
     if (systemResource == null) {
       System.err.println("Didn't find icon for SystemTray at path " + iconPath);
       return tray;
     }
     Image image = ImageIO.read(systemResource);
-    PopupMenu popup = new PopupMenu();
-    TrayIcon trayIcon = new TrayIcon(image, APP_NAME, popup);
+
+    TrayIcon trayIcon = new TrayIcon(image, APP_NAME);
     trayIcon.addActionListener(e -> Platform.runLater(() -> showStageCenteredOnPrimaryDisplay(stage)));
     tray.add(trayIcon);
-    MenuItem closeItem = new MenuItem("Exit");
+    MenuItem closeItem = new MenuItem("Quit");
+    // https://bugs.openjdk.java.net/browse/JDK-4039705
+    //closeItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    PopupMenu popup = new PopupMenu();
     popup.add(closeItem);
+    trayIcon.setPopupMenu(popup);
     closeItem.addActionListener(e -> exitAllThreads(tray));
     return tray;
   }
