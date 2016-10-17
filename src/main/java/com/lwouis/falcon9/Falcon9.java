@@ -56,12 +56,7 @@ public class Falcon9 extends Application implements HotkeyListener {
     Image image = ImageIO.read(systemResource);
     PopupMenu popup = new PopupMenu();
     TrayIcon trayIcon = new TrayIcon(image, APP_NAME, popup);
-    trayIcon.addActionListener(e1 -> Platform.runLater(() -> {
-      stage.setX(0); // hack to get window back on primary screen
-      stage.centerOnScreen();
-      stage.setIconified(false);
-      stage.show();
-    }));
+    trayIcon.addActionListener(e -> Platform.runLater(() -> showStageCenteredOnPrimaryDisplay(stage)));
     tray.add(trayIcon);
     MenuItem closeItem = new MenuItem("Exit");
     popup.add(closeItem);
@@ -104,7 +99,14 @@ public class Falcon9 extends Application implements HotkeyListener {
       Platform.runLater(primaryStage::hide);
     }
     else {
-      Platform.runLater(primaryStage::hide);
+      Platform.runLater(() -> showStageCenteredOnPrimaryDisplay(primaryStage));
     }
+  }
+
+  private void showStageCenteredOnPrimaryDisplay(Stage stage) {
+    stage.setX(0); // hack to get window back on primary display
+    stage.centerOnScreen();
+    stage.setIconified(false);
+    stage.show();
   }
 }
