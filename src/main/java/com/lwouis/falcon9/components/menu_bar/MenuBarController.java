@@ -33,8 +33,8 @@ public class MenuBarController {
       return;
     }
     for (File file : files) {
-      AppState.getLaunchableObservableList()
-              .add(new Launchable(file.getName(), file.getAbsolutePath(), getFileIcon(file)));
+      Launchable launchable = new Launchable(file.getName(), file.getAbsolutePath(), getFileIcon(file));
+      AppState.getLaunchableObservableList().add(launchable);
     }
   }
 

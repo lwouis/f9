@@ -82,14 +82,20 @@ public class ItemListController implements Initializable {
     }
   }
 
-  private void launchSelectedInternal() throws IOException {
+  private void launchSelectedInternal() {
     for (Launchable launchable : launchableListView.getSelectionModel().getSelectedItems()) {
       File file = new File(launchable.getAbsolutePath());
-      if (Desktop.isDesktopSupported()) {
-        Desktop.getDesktop().open(file);
+      try {
+        if (Desktop.isDesktopSupported()) {
+          Desktop.getDesktop().open(file);
+        }
+        else {
+          new ProcessBuilder(launchable.getAbsolutePath()).start();
+        }
       }
-      else {
-        new ProcessBuilder(launchable.getAbsolutePath()).start();
+      catch (IOException e) {
+        e.printStackTrace();
+        // TODO: show the user that the file doesn't exist
       }
     }
   }

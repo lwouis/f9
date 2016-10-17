@@ -67,8 +67,8 @@ public class DiskPersistanceManager {
     }
     try {
       String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-      List<Launchable> appState = gson.fromJson(json, type);
-      AppState.getLaunchableObservableList().setAll(appState);
+      List<Launchable> launchables = gson.fromJson(json, type);
+      AppState.getLaunchableObservableList().setAll(launchables);
     }
     catch (Throwable e) {
       System.err.println("Failure during DiskPersistanceManager.loadFromDiskInternal()");
