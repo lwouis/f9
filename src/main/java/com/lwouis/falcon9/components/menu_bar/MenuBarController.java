@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.DiskPersistanceManager;
-import com.lwouis.falcon9.Environment;
 import com.lwouis.falcon9.components.item_list.ItemListController;
 import com.lwouis.falcon9.models.Launchable;
 import javafx.embed.swing.SwingFXUtils;
@@ -22,6 +22,8 @@ public class MenuBarController {
   private MenuBar menuBar;
 
   private ItemListController itemListController;
+
+  private FileSystemView fileSystemView = FileSystemView.getFileSystemView();
 
   public void setItemListController(ItemListController itemListController) {
     this.itemListController = itemListController;
@@ -42,15 +44,7 @@ public class MenuBarController {
   }
 
   private Image getFileIcon(File file) {
-    javax.swing.Icon icon = null;
-    if (Environment.IS_WINDOWS) {
-      FileSystemView view = FileSystemView.getFileSystemView();
-      icon = view.getSystemIcon(file);
-    }
-    else if (Environment.IS_MACOS) {
-      javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
-      icon = fc.getUI().getFileView(fc).getIcon(file);
-    }
+    Icon icon = fileSystemView.getSystemIcon(file);
     BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
             BufferedImage.TYPE_INT_ARGB);
     icon.paintIcon(null, bufferedImage.getGraphics(), 0, 0);
