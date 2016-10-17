@@ -8,11 +8,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class LaunchableCell extends ListCell<Launchable> {
 
   @FXML
-  public Label launchableLabel;
+  private Label launchableNameLabel;
+
+  @FXML
+  private Label launchablePathLabel;
+
+  @FXML
+  private ImageView launchableImageView;
 
   @Override
   protected void updateItem(Launchable launchable, boolean empty) {
@@ -27,7 +35,10 @@ public class LaunchableCell extends ListCell<Launchable> {
               ClassLoader.getSystemResource("com/lwouis/falcon9/components/launchable_cell/launchableCell.fxml"));
       loader.setController(this);
       Parent parent = loader.load();
-      launchableLabel.setText(launchable.getName());
+      Image launchableImage = launchable.getImage();
+      launchableImageView.setImage(launchableImage);
+      launchableNameLabel.setText(launchable.getName());
+      launchablePathLabel.setText(launchable.getAbsolutePath());
       setText(null);
       setGraphic(parent);
     }

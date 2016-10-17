@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.92">
-  <Label fx:id="launchableLabel"/>
-</VBox>
+<HBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.92">
+  <ImageView fx:id="launchableImageView" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+  <VBox>
+    <Label fx:id="launchableNameLabel" text="launchableNameLabel"/>
+    <Label fx:id="launchablePathLabel" text="launchablePathLabel"/>
+  </VBox>
+</HBox>

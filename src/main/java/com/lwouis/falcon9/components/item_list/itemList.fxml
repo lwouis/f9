@@ -6,5 +6,5 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.92"
       fx:controller="com.lwouis.falcon9.components.item_list.ItemListController">
   <TextField fx:id="filterTextField"/>
-  <ListView fx:id="launchableListView" fixedCellSize="24.0" onKeyTyped="#onKeyEvent" onMouseClicked="#onMouseEvent"/>
+  <ListView fx:id="launchableListView" onKeyTyped="#onKeyEvent" onMouseClicked="#onMouseEvent"/>
 </VBox>
