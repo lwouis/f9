@@ -1,7 +1,7 @@
 # Purpose
 
-Falcon9 is an app launcher. It appears after you press the keyboard shortcut and displays a list of apps. You can 
-then chose one and it will get launched.
+Falcon9 is an app launcher. It appears after you press the global keyboard shortcut and displays a list of apps. You 
+can then choose one and it will get launched.
 
 *insert screenshot*
 
