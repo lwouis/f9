@@ -38,6 +38,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import sun.awt.shell.ShellFolder;
@@ -94,7 +95,7 @@ public class ItemListController implements Initializable {
 
   @FXML
   public void onMouseEvent(MouseEvent mouseEvent) throws IOException {
-    if (mouseEvent.getClickCount() == 2) {
+    if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
       launchSelectedInternal();
     }
   }
