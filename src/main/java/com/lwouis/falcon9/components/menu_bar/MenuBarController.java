@@ -1,10 +1,11 @@
 package com.lwouis.falcon9.components.menu_bar;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 
 import org.boris.pecoff4j.PE;
@@ -27,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import sun.awt.shell.ShellFolder;
 
 public class MenuBarController {
   @FXML
@@ -79,11 +81,19 @@ public class MenuBarController {
   }
 
   private Image getFileIcon(File file) {
-    Icon icon = fileSystemView.getSystemIcon(file);
-    BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-            BufferedImage.TYPE_INT_ARGB);
-    icon.paintIcon(null, bufferedImage.getGraphics(), 0, 0);
-    return SwingFXUtils.toFXImage(bufferedImage, null);
+    try {
+      java.awt.Image icon = ShellFolder.getShellFolder(file).getIcon(true); // true is 32x32, false if 16x16
+      BufferedImage bufferedImage = new BufferedImage(icon.getWidth(null), icon.getHeight(null),
+              BufferedImage.TYPE_INT_ARGB);
+      Graphics2D bGr = bufferedImage.createGraphics();
+      bGr.drawImage(icon, 0, 0, null);
+      bGr.dispose();
+      return SwingFXUtils.toFXImage(bufferedImage, null);
+    }
+    catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   @FXML

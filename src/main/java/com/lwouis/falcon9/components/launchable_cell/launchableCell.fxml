@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<HBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.92">
-  <ImageView fx:id="launchableImageView" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+<?import javafx.scene.text.Font?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT" fillHeight="false"
+      xmlns="http://javafx.com/javafx/8.0.92">
+  <ImageView fx:id="launchableImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+    <HBox.margin>
+      <Insets left="5.0" right="15.0"/>
+    </HBox.margin>
+  </ImageView>
   <VBox>
-    <Label fx:id="launchableNameLabel" text="launchableNameLabel"/>
-    <Label fx:id="launchablePathLabel" text="launchablePathLabel"/>
+    <Label fx:id="launchableNameLabel" text="launchableNameLabel">
+      <font>
+        <Font size="14.0"/>
+      </font>
+    </Label>
+    <Label fx:id="launchablePathLabel" ellipsisString="…" text="launchablePathLabel" textFill="#b2b2b2"
+           textOverrun="LEADING_ELLIPSIS"/>
   </VBox>
 </HBox>
