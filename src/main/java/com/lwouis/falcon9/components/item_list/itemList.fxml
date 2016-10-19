@@ -3,7 +3,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.lwouis.falcon9.components.item_list.ItemListController">
   <TextField fx:id="filterTextField" onKeyPressed="#onKeyPressedOnFilterTextField"
              onKeyTyped="#onKeyTypedOnFilterTextField"/>
