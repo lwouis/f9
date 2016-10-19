@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.Collator;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -22,6 +24,7 @@ import org.boris.pecoff4j.resources.StringPair;
 import org.boris.pecoff4j.resources.StringTable;
 import org.boris.pecoff4j.resources.VersionInfo;
 import org.boris.pecoff4j.util.ResourceHelper;
+import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.components.launchable_cell.LaunchableCell;
@@ -49,6 +52,10 @@ import javafx.scene.input.TransferMode;
 import sun.awt.shell.ShellFolder;
 
 public class ItemListController implements Initializable {
+  private static final String NETWORK_FILE_PREFIX = "\\\\";
+
+  private static final List<String> BUGGY_SHORTCUT_RESOLUTIONS = Arrays.asList(NETWORK_FILE_PREFIX, ".", "i");
+
   @FXML
   public Label launchableLabel;
 
@@ -213,13 +220,37 @@ public class ItemListController implements Initializable {
   public void addFiles(List<File> files) {
     List<Launchable> launchableList = new ArrayList<>();
     for (File file : files) {
-      launchableList.add(new Launchable(getProductName(file), file.getAbsolutePath(), getFileIcon(file)));
+      File actualFile = resolveWindowsShortcut(file);
+      launchableList
+              .add(new Launchable(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
     }
     AppState.getLaunchableObservableList().addAll(launchableList);
   }
 
+  private File resolveWindowsShortcut(File file) {
+    try {
+      if (WindowsShortcut.isPotentialValidLink(file)) {
+        String realFilename = new WindowsShortcut(file).getRealFilename();
+        if (BUGGY_SHORTCUT_RESOLUTIONS.contains(realFilename)) { // buggy .lnk shortcut
+          return file;
+        }
+        return new File(realFilename);
+      }
+      else {
+        return file;
+      }
+    }
+    catch (IOException | ParseException e) {
+      e.printStackTrace();
+      return file;
+    }
+  }
+
   private String getProductName(File file) {
     try {
+      if (file.getAbsolutePath().startsWith(NETWORK_FILE_PREFIX)) { // network files are too long to resolve
+        return file.getName();
+      }
       PE pe = PEParser.parse(file);
       ResourceDirectory rd = pe.getImageData().getResourceTable();
       ResourceEntry[] entries = ResourceHelper.findResources(rd, ResourceType.VERSION_INFO);
@@ -237,13 +268,17 @@ public class ItemListController implements Initializable {
       return file.getName();
     }
     catch (Throwable t) {
-      t.printStackTrace();
+      //t.printStackTrace();
+      System.out.println(file.getName());
       return file.getName();
     }
   }
 
   private Image getFileIcon(File file) {
     try {
+      if (file.getAbsolutePath().startsWith(NETWORK_FILE_PREFIX)) { // network files are too long to resolve
+        return null;
+      }
       java.awt.Image icon = ShellFolder.getShellFolder(file).getIcon(true); // true is 32x32, false if 16x16
       BufferedImage bufferedImage = new BufferedImage(icon.getWidth(null), icon.getHeight(null),
               BufferedImage.TYPE_INT_ARGB);
