@@ -32,11 +32,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCharacterCombination;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -53,9 +58,15 @@ public class ItemListController implements Initializable {
   @FXML
   private TextField filterTextField;
 
-  private static final String ENTER = "\r";
+  private static final KeyCharacterCombination ONLY_ENTER = new KeyCharacterCombination("\r");
 
-  private static final String DELETE = "";
+  private static final KeyCharacterCombination ONLY_TAB = new KeyCharacterCombination("\t");
+
+  private static final KeyCharacterCombination ONLY_DELETE = new KeyCharacterCombination("");
+
+  private static final KeyCombination ONLY_UP = new KeyCodeCombination(KeyCode.UP);
+
+  private static final KeyCombination ONLY_DOWN = new KeyCodeCombination(KeyCode.DOWN);
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -94,21 +105,78 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  public void onMouseEvent(MouseEvent mouseEvent) throws IOException {
+  public void onMouseEvent(MouseEvent mouseEvent) {
     if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
       launchSelectedInternal();
     }
   }
 
   @FXML
-  public void onKeyEvent(KeyEvent keyEvent) throws IOException {
-    if (keyEvent.getCharacter().equals(ENTER)) {
+  public void onKeyPressedOnFilterTextField(KeyEvent keyEvent) {
+    MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
+    if (ONLY_TAB.match(keyEvent)) {
+      keyEvent.consume();
+      launchableListView.requestFocus();
+    }
+    else if (ONLY_UP.match(keyEvent) || ONLY_DOWN.match(keyEvent)) {
+      if (selectionModel.isEmpty()) {
+        selectionModel.selectFirst();
+      }
+      if (ONLY_UP.match(keyEvent)) {
+        int newIndex = selectionModel.getSelectedIndex() - 1;
+        if (newIndex < 0) {
+          newIndex = launchableListView.getItems().size() - 1;
+        }
+        selectionModel.clearAndSelect(newIndex);
+      }
+      else if (ONLY_DOWN.match(keyEvent)) {
+        int newIndex = selectionModel.getSelectedIndex() + 1;
+        if (newIndex > launchableListView.getItems().size() - 1) {
+          newIndex = 0;
+        }
+        selectionModel.clearAndSelect(newIndex);
+      }
+      keyEvent.consume();
+    }
+
+  }
+
+  @FXML
+  public void onKeyTypedOnFilterTextField(KeyEvent keyEvent) {
+    String typedChar = keyEvent.getCharacter();
+    if (ONLY_TAB.getCharacter().equals(typedChar)) {
+      if (launchableListView.getSelectionModel().isEmpty()) {
+        launchableListView.getSelectionModel().selectFirst();
+      }
+    }
+  }
+
+  @FXML
+  public void onKeyPressedOnLaunchableListView(KeyEvent keyEvent) {
+    if (ONLY_TAB.match(keyEvent)) {
+      keyEvent.consume();
+      filterTextField.requestFocus();
+      filterTextField.end();
+    }
+  }
+
+  @FXML
+  public void onKeyTypedOnLaunchableListView(KeyEvent keyEvent) {
+    String typedChar = keyEvent.getCharacter();
+    if (ONLY_TAB.getCharacter().equals(typedChar)) {
+      keyEvent.consume();
+      return;
+    }
+    if (ONLY_ENTER.getCharacter().equals(typedChar)) {
       launchSelectedInternal();
     }
-    else {
-      if (keyEvent.getCharacter().equals(DELETE)) {
-        removeSelected();
-      }
+    else if (ONLY_DELETE.getCharacter().equals(typedChar)) {
+      removeSelected();
+    }
+    else if (!keyEvent.isAltDown() && !keyEvent.isShortcutDown()) {
+      filterTextField.requestFocus();
+      filterTextField.end();
+      filterTextField.fireEvent(keyEvent);
     }
   }
 
@@ -195,6 +263,7 @@ public class ItemListController implements Initializable {
     launchableListView.setOpacity(0.5);
     dragEvent.acceptTransferModes(TransferMode.ANY);
   }
+
   @FXML
   public void onDragExited(DragEvent dragEvent) {
     launchableListView.setOpacity(1);
