@@ -88,6 +88,7 @@ public class ItemListController implements Initializable {
     filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String filterText = filterTextField.getText();
       FilteredList<Launchable> launchableFilteredList = appState.getLaunchableFilteredList();
+      MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
       if (filterText == null || filterText.length() == 0) {
         launchableFilteredList.setPredicate(s -> true);
       }
@@ -95,6 +96,7 @@ public class ItemListController implements Initializable {
         String filterTextTrimmed = filterText.trim(); // ignore extra spaces on the sides
         launchableFilteredList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), filterTextTrimmed));
       }
+      selectionModel.selectFirst();
     });
   }
 
@@ -105,8 +107,10 @@ public class ItemListController implements Initializable {
       return coll.compare(o1.getName(), o2.getName());
     });
     launchableListView.setItems(appState.getLaunchableSortedList());
-    launchableListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     launchableListView.setCellFactory(lv -> new LaunchableCell());
+    MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
+    selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+    selectionModel.selectFirst();
   }
 
   @FXML
@@ -129,9 +133,6 @@ public class ItemListController implements Initializable {
       launchableListView.requestFocus();
     }
     else if (ONLY_UP.match(keyEvent) || ONLY_DOWN.match(keyEvent)) {
-      if (selectionModel.isEmpty()) {
-        selectionModel.selectFirst();
-      }
       if (ONLY_UP.match(keyEvent)) {
         int newIndex = selectionModel.getSelectedIndex() - 1;
         if (newIndex < 0) {
@@ -173,20 +174,11 @@ public class ItemListController implements Initializable {
   @FXML
   public void onKeyTypedOnLaunchableListView(KeyEvent keyEvent) {
     String typedChar = keyEvent.getCharacter();
-    if (ONLY_TAB.getCharacter().equals(typedChar)) {
-      keyEvent.consume();
-      return;
-    }
     if (ONLY_ENTER.getCharacter().equals(typedChar)) {
       launchSelectedInternal();
     }
     else if (ONLY_DELETE.getCharacter().equals(typedChar)) {
       removeSelected();
-    }
-    else if (!keyEvent.isAltDown() && !keyEvent.isShortcutDown()) {
-      filterTextField.requestFocus();
-      filterTextField.end();
-      filterTextField.fireEvent(keyEvent);
     }
   }
 
