@@ -1,5 +1,11 @@
 package com.lwouis.falcon9;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 
@@ -13,7 +19,7 @@ public class GlobalHotkeyManager {
     return hotkeyId;
   }
 
-  public static void registerGlobalHotkey(HotkeyListener hotkeyListener) {
+  public static void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
     if (!Environment.IS_WINDOWS) {
       return;
     }
@@ -23,9 +29,9 @@ public class GlobalHotkeyManager {
     if (!is64bit) {
       dllFile = "JIntellitype.dll";
     }
-    @SuppressWarnings("ConstantConditions")
-    String dllPath = ClassLoader.getSystemResource(dllFile).getPath();
-    JIntellitype.setLibraryLocation(dllPath);
+    String tmpFile = Environment.TPM_DIR + dllFile;
+    fromJarToFs(dllFile, tmpFile);
+    JIntellitype.setLibraryLocation(tmpFile);
     jIntellitype = JIntellitype.getInstance();
     jIntellitype.registerHotKey(hotkeyId, JIntellitype.MOD_ALT + JIntellitype.MOD_SHIFT, (int)'A');
     jIntellitype.addHotKeyListener(hotkeyListener);
@@ -37,5 +43,38 @@ public class GlobalHotkeyManager {
     }
     jIntellitype.unregisterHotKey(hotkeyId);
     jIntellitype.cleanUp();
+  }
+
+  private static void fromJarToFs(String jarPath, String filePath) throws IOException {
+    InputStream is = null;
+    OutputStream os = null;
+    try {
+      File file = new File(filePath);
+      if (file.exists()) {
+        boolean success = file.delete();
+        if (!success) {
+          throw new IOException("Could not delete file: " + filePath);
+        }
+      }
+
+      is = ClassLoader.getSystemResourceAsStream(jarPath);
+      os = new FileOutputStream(filePath);
+      byte[] buffer = new byte[8192];
+      int bytesRead;
+      while ((bytesRead = is.read(buffer)) != -1) {
+        os.write(buffer, 0, bytesRead);
+      }
+    }
+    catch (Exception ex) {
+      throw new IOException("FromJarToFileSystem could not load DLL: " + jarPath, ex);
+    }
+    finally {
+      if (is != null) {
+        is.close();
+      }
+      if (os != null) {
+        os.close();
+      }
+    }
   }
 }
