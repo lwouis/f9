@@ -1,51 +1,52 @@
 plugins {
-    id "java"
-    id "com.github.johnrengelman.shadow" version "1.2.3"
-    id "edu.sc.seis.launch4j" version "1.6.2"
-    id "net.alchim31.getdown" version "0.4.6"
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'edu.sc.seis.launch4j' version '1.6.2'
+    id 'net.alchim31.getdown' version '0.4.6'
 }
 
-apply plugin: "java"
-apply plugin: "idea"
-apply plugin: "application"
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+apply plugin: 'checkstyle'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "3.1"
+    gradleVersion = '3.1'
 }
 
 repositories {
     mavenCentral()
-    //maven { url "https://jitpack.io" }
+    //maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    //compile "com.google.guava:guava:19.0"
-    compile fileTree(dir: "lib", include: ["*.jar"])
-    compile "commons-io:commons-io:2.5"
-    compile "com.google.code.gson:gson:2.7"
-    compile "com.melloware:jintellitype:1.3.9"
-    compile "org.apache.commons:commons-lang3:3.4"
-    compile "org.testfx:testfx-core:4.0.4-alpha"
-    compile "com.gluonhq:ignite-guice:1.0.1"
+    //compile 'com.google.guava:guava:19.0'
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile 'commons-io:commons-io:2.5'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.melloware:jintellitype:1.3.9'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'org.testfx:testfx-core:4.0.4-alpha'
+    compile 'com.gluonhq:ignite-guice:1.0.1'
     compile 'org.apache.logging.log4j:log4j-core:2.7'
 }
 
-mainClassName = "com.lwouis.falcon9.Main"
+mainClassName = 'com.lwouis.falcon9.Main'
 
 launch4j {
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    jar = "lib/${project.tasks.shadowJar.archiveName}"
+    jar = 'lib/${project.tasks.shadowJar.archiveName}'
 }
 
 /*getdown {
-    urlbase = "http://mysite.com/myapp/"
+    urlbase = 'http://mysite.com/myapp/'
     tmplGetdownTxt = tmplGetdownTxt + '\nallow_offline = true'
 }*/
 
 sourceSets {
     main {
         java {
-            srcDir "lib/"
+            srcDir 'lib/'
         }
     }
 }
@@ -56,6 +57,24 @@ compileJava {
     options.compilerArgs << '-XDignore.symbol.file'
     options.fork = true
     options.forkOptions.executable = 'javac'
+}
+
+checkstyle {
+    toolVersion = '7.1.2'
+    configFile = rootProject.file('checkstyle.xml')
+}
+
+// Fail build on Checkstyle warnings
+// https://issues.gradle.org/browse/GRADLE-2888
+tasks.withType(Checkstyle).each { checkstyleTask ->
+    checkstyleTask.doLast {
+        reports.all { report ->
+            def outputFile = report.destination
+            if (outputFile.exists() && outputFile.text.contains("<error ")) {
+                throw new GradleException("There were checkstyle warnings! For more info check $outputFile")
+            }
+        }
+    }
 }
 
 idea {

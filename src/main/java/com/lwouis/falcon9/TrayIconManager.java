@@ -1,6 +1,12 @@
 package com.lwouis.falcon9;
 
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;

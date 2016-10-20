@@ -27,7 +27,7 @@ public class WindowsShortcut {
 
   private boolean isLocal;
 
-  private String real_file;
+  private String realFile;
 
   private static final int MINIMUM_VALID_LENGTH = 0x64;
 
@@ -54,12 +54,8 @@ public class WindowsShortcut {
   }
 
   public WindowsShortcut(File file) throws IOException, ParseException {
-    InputStream in = new FileInputStream(file);
-    try {
+    try (InputStream in = new FileInputStream(file)) {
       parseLink(getBytes(in));
-    }
-    finally {
-      in.close();
     }
   }
 
@@ -67,7 +63,7 @@ public class WindowsShortcut {
    * @return the name of the filesystem object pointed to by this shortcut
    */
   public String getRealFilename() {
-    return real_file;
+    return realFile;
   }
 
   /**
@@ -119,13 +115,13 @@ public class WindowsShortcut {
     ByteArrayOutputStream bout = new ByteArrayOutputStream();
     byte[] buff = new byte[256];
     while (max == null || max > 0) {
-      int n = in.read(buff);
-      if (n == -1) {
+      int nn = in.read(buff);
+      if (nn == -1) {
         break;
       }
-      bout.write(buff, 0, n);
+      bout.write(buff, 0, nn);
       if (max != null) {
-        max -= n;
+        max -= nn;
       }
     }
     in.close();
@@ -155,48 +151,43 @@ public class WindowsShortcut {
 
       // get the file attributes byte
       final int file_atts_offset = 0x18;
-      byte file_atts = link[file_atts_offset];
-      byte is_dir_mask = (byte)0x10;
-      if ((file_atts & is_dir_mask) > 0) {
-        isDirectory = true;
-      }
-      else {
-        isDirectory = false;
-      }
+      byte fileAtts = link[file_atts_offset];
+      byte isDirMask = (byte)0x10;
+      isDirectory = (fileAtts & isDirMask) > 0;
 
       // if the shell settings are present, skip them
       final int shell_offset = 0x4c;
       final byte has_shell_mask = (byte)0x01;
-      int shell_len = 0;
+      int shellLen = 0;
       if ((flags & has_shell_mask) > 0) {
         // the plus 2 accounts for the length marker itself
-        shell_len = bytesToWord(link, shell_offset) + 2;
+        shellLen = bytesToWord(link, shell_offset) + 2;
       }
 
       // get to the file settings
-      int file_start = 0x4c + shell_len;
+      int fileStart = 0x4c + shellLen;
 
       final int file_location_info_flag_offset_offset = 0x08;
-      int file_location_info_flag = link[file_start + file_location_info_flag_offset_offset];
-      isLocal = (file_location_info_flag & 2) == 0;
+      int fileLocationInfoFlag = link[fileStart + file_location_info_flag_offset_offset];
+      isLocal = (fileLocationInfoFlag & 2) == 0;
       // get the local volume and local system values
       //final int localVolumeTable_offset_offset = 0x0C;
       final int basename_offset_offset = 0x10;
       final int networkVolumeTable_offset_offset = 0x14;
       final int finalname_offset_offset = 0x18;
-      int finalname_offset = link[file_start + finalname_offset_offset] + file_start;
-      String finalname = getNullDelimitedString(link, finalname_offset);
+      int finalnameOffset = link[fileStart + finalname_offset_offset] + fileStart;
+      String finalname = getNullDelimitedString(link, finalnameOffset);
       if (isLocal) {
-        int basename_offset = link[file_start + basename_offset_offset] + file_start;
-        String basename = getNullDelimitedString(link, basename_offset);
-        real_file = basename + finalname;
+        int basenameOffset = link[fileStart + basename_offset_offset] + fileStart;
+        String basename = getNullDelimitedString(link, basenameOffset);
+        realFile = basename + finalname;
       }
       else {
-        int networkVolumeTable_offset = link[file_start + networkVolumeTable_offset_offset] + file_start;
-        int shareName_offset_offset = 0x08;
-        int shareName_offset = link[networkVolumeTable_offset + shareName_offset_offset] + networkVolumeTable_offset;
-        String shareName = getNullDelimitedString(link, shareName_offset);
-        real_file = shareName + "\\" + finalname;
+        int networkVolumeTableOffset = link[fileStart + networkVolumeTable_offset_offset] + fileStart;
+        int shareNameOffsetOffset = 0x08;
+        int shareNameOffset = link[networkVolumeTableOffset + shareNameOffsetOffset] + networkVolumeTableOffset;
+        String shareName = getNullDelimitedString(link, shareNameOffset);
+        realFile = shareName + "\\" + finalname;
       }
     }
     catch (ArrayIndexOutOfBoundsException e) {
