@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 import com.gluonhq.ignite.guice.GuiceContext;
-import com.google.inject.AbstractModule;
 import com.melloware.jintellitype.HotkeyListener;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -41,7 +40,7 @@ public class Falcon9 extends Application implements HotkeyListener {
   public void start(Stage primaryStage) {
     try {
       guiceContext.init();
-      this.primaryStage = primaryStage;
+      this.primaryStage = primaryStage; // needed in events callback
       setUncaughtExceptionHandlers();
       SystemTray tray = showTrayIcon(primaryStage);
       customMinifyAndCloseBehaviour(primaryStage, tray);
@@ -138,12 +137,5 @@ public class Falcon9 extends Application implements HotkeyListener {
     stage.centerOnScreen();
     stage.setIconified(false);
     stage.show();
-  }
-}
-
-class GuiceModule extends AbstractModule {
-  @Override
-  protected void configure() {
-    //        bind(Service.class).to(Service.class);
   }
 }
