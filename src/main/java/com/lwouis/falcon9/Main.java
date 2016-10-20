@@ -12,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Main extends Application implements HotkeyListener {
 
@@ -52,7 +51,6 @@ public class Main extends Application implements HotkeyListener {
       Parent root = fxmlLoader.load();
       primaryStage.setTitle(appName);
       primaryStage.setScene(new Scene(root));
-      primaryStage.initStyle(StageStyle.UNDECORATED);
       primaryStage.setAlwaysOnTop(true);
       showStageCenteredOnPrimaryDisplay();
     }
