@@ -1,6 +1,5 @@
-package com.lwouis.falcon9.components.main_window;
+package com.lwouis.falcon9.controllers;
 
-import com.lwouis.falcon9.components.item_list.ItemListController;
 import javafx.fxml.FXML;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;

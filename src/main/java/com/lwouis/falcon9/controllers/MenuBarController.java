@@ -1,11 +1,10 @@
-package com.lwouis.falcon9.components.menu_bar;
+package com.lwouis.falcon9.controllers;
 
 import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
 import com.lwouis.falcon9.DiskPersistanceManager;
-import com.lwouis.falcon9.components.item_list.ItemListController;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;

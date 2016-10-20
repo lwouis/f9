@@ -47,10 +47,6 @@ sourceSets {
         java {
             srcDir "lib/"
         }
-        resources {
-            srcDir "src/main/java/"
-            exclude "**/*.java"
-        }
     }
 }
 

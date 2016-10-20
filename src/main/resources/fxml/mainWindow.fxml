@@ -5,8 +5,8 @@
       minHeight="-Infinity"
       minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60"
-      fx:controller="com.lwouis.falcon9.components.main_window.MainWindowController" onDragDropped="#onDragDropped"
+      fx:controller="com.lwouis.falcon9.controllers.MainWindowController" onDragDropped="#onDragDropped"
       onDragExited="#onDragExited" onDragEntered="#onDragEntered">
-  <fx:include fx:id="menuBar" source="../menu_bar/menuBar.fxml"/>
-  <fx:include fx:id="itemList" source="../item_list/itemList.fxml"/>
+  <fx:include fx:id="menuBar" source="menuBar.fxml"/>
+  <fx:include fx:id="itemList" source="itemList.fxml"/>
 </VBox>

@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.components.launchable_cell;
+package com.lwouis.falcon9.controllers;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ public class LaunchableCell extends ListCell<Launchable> {
     super();
     try {
       FXMLLoader loader = new FXMLLoader(
-              ClassLoader.getSystemResource("com/lwouis/falcon9/components/launchable_cell/launchableCell.fxml"));
+              ClassLoader.getSystemResource("fxml/launchableCell.fxml"));
       loader.setController(this);
       content = loader.load();
     }

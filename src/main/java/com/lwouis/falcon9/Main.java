@@ -47,7 +47,7 @@ public class Main extends Application implements HotkeyListener {
       customMinifyAndCloseBehaviour(primaryStage);
       globalHotkeyManager.registerGlobalHotkey(this);
       diskPersistanceManager.loadFromDisk();
-      String mainWindowPath = "com/lwouis/falcon9/components/main_window/mainWindow.fxml";
+      String mainWindowPath = "fxml/mainWindow.fxml";
       fxmlLoader.setLocation(ClassLoader.getSystemResource(mainWindowPath));
       Parent root = fxmlLoader.load();
       primaryStage.setTitle(appName);

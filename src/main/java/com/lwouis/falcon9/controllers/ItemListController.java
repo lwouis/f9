@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.components.item_list;
+package com.lwouis.falcon9.controllers;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,7 +28,6 @@ import org.boris.pecoff4j.util.ResourceHelper;
 import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
-import com.lwouis.falcon9.components.launchable_cell.LaunchableCell;
 import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.SwingFXUtils;
