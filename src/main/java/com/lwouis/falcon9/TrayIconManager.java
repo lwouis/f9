@@ -4,14 +4,23 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.inject.Singleton;
 
+import org.apache.logging.log4j.Logger;
+
+import com.lwouis.falcon9.injection.InjectLogger;
 import javafx.application.Platform;
 
+@Singleton
 public class TrayIconManager {
 
   private SystemTray tray;
 
+  @InjectLogger
+  private Logger logger;
+
   public void showTrayIcon(Main main, String appName) throws IOException, AWTException {
+    logger.info("start");
     if (!SystemTray.isSupported()) {
       return;
     }

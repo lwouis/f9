@@ -4,6 +4,7 @@ import java.util.Collections;
 import javax.inject.Inject;
 
 import com.gluonhq.ignite.guice.GuiceContext;
+import com.lwouis.falcon9.injection.GuiceModule;
 import com.melloware.jintellitype.HotkeyListener;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -11,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application implements HotkeyListener {
 
@@ -45,14 +47,14 @@ public class Main extends Application implements HotkeyListener {
       customMinifyAndCloseBehaviour(primaryStage);
       globalHotkeyManager.registerGlobalHotkey(this);
       diskPersistanceManager.loadFromDisk();
-
       String mainWindowPath = "com/lwouis/falcon9/components/main_window/mainWindow.fxml";
       fxmlLoader.setLocation(ClassLoader.getSystemResource(mainWindowPath));
       Parent root = fxmlLoader.load();
       primaryStage.setTitle(appName);
       primaryStage.setScene(new Scene(root));
+      primaryStage.initStyle(StageStyle.UNDECORATED);
+      primaryStage.setAlwaysOnTop(true);
       showStageCenteredOnPrimaryDisplay();
-      diskPersistanceManager.startSaveToDiskListener();
     }
     catch (Throwable t) {
       t.printStackTrace();
