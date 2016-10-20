@@ -32,7 +32,7 @@ dependencies {
     compile "com.gluonhq:ignite-guice:1.0.1"
 }
 
-mainClassName = "com.lwouis.falcon9.Falcon9"
+mainClassName = "com.lwouis.falcon9.Main"
 
 launch4j {
     copyConfigurable = project.tasks.shadowJar.outputs.files

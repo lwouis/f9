@@ -12,7 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Falcon9 extends Application implements HotkeyListener {
+public class Main extends Application implements HotkeyListener {
 
   private Stage primaryStage;
 

@@ -11,7 +11,7 @@ public class TrayIconManager {
 
   private SystemTray tray;
 
-  public void showTrayIcon(Falcon9 falcon9, String appName) throws IOException, AWTException {
+  public void showTrayIcon(Main main, String appName) throws IOException, AWTException {
     if (!SystemTray.isSupported()) {
       return;
     }
@@ -21,7 +21,7 @@ public class TrayIconManager {
     URL systemResource = ClassLoader.getSystemResource(iconPath);
     Image image = ImageIO.read(systemResource);
     TrayIcon trayIcon = new TrayIcon(image, appName);
-    trayIcon.addActionListener(e -> Platform.runLater(falcon9::showStageCenteredOnPrimaryDisplay));
+    trayIcon.addActionListener(e -> Platform.runLater(main::showStageCenteredOnPrimaryDisplay));
     tray.add(trayIcon);
     MenuItem closeItem = new MenuItem("Quit");
     // https://bugs.openjdk.java.net/browse/JDK-4039705
@@ -29,7 +29,7 @@ public class TrayIconManager {
     PopupMenu popup = new PopupMenu();
     popup.add(closeItem);
     trayIcon.setPopupMenu(popup);
-    closeItem.addActionListener(e -> falcon9.exitAllThreads());
+    closeItem.addActionListener(e -> main.exitAllThreads());
   }
 
   public void exitTrayThread() {
