@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.boris.pecoff4j.PE;
@@ -33,7 +34,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
@@ -52,18 +52,17 @@ import javafx.scene.input.TransferMode;
 import sun.awt.shell.ShellFolder;
 
 public class ItemListController implements Initializable {
-  private static final String NETWORK_FILE_PREFIX = "\\\\";
-
-  private static final List<String> BUGGY_SHORTCUT_RESOLUTIONS = Arrays.asList(NETWORK_FILE_PREFIX, ".", "i");
-
-  @FXML
-  public Label launchableLabel;
-
   @FXML
   private ListView<Launchable> launchableListView;
 
   @FXML
   private TextField filterTextField;
+
+  private final AppState appState;
+
+  private static final String NETWORK_FILE_PREFIX = "\\\\";
+
+  private static final List<String> BUGGY_SHORTCUT_RESOLUTIONS = Arrays.asList(NETWORK_FILE_PREFIX, ".", "i");
 
   private static final KeyCharacterCombination ONLY_ENTER = new KeyCharacterCombination("\r");
 
@@ -75,6 +74,11 @@ public class ItemListController implements Initializable {
 
   private static final KeyCombination ONLY_DOWN = new KeyCodeCombination(KeyCode.DOWN);
 
+  @Inject
+  public ItemListController(AppState appState) {
+    this.appState = appState;
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     initializeFilterTextField();
@@ -84,7 +88,7 @@ public class ItemListController implements Initializable {
   private void initializeFilterTextField() {
     filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String filterText = filterTextField.getText();
-      FilteredList<Launchable> launchableFilteredList = AppState.getLaunchableFilteredList();
+      FilteredList<Launchable> launchableFilteredList = appState.getLaunchableFilteredList();
       if (filterText == null || filterText.length() == 0) {
         launchableFilteredList.setPredicate(s -> true);
       }
@@ -96,19 +100,19 @@ public class ItemListController implements Initializable {
   }
 
   private void initializeLaunchableListView() {
-    AppState.getLaunchableSortedList().setComparator((o1, o2) -> {
+    appState.getLaunchableSortedList().setComparator((o1, o2) -> {
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
       return coll.compare(o1.getName(), o2.getName());
     });
-    launchableListView.setItems(AppState.getLaunchableSortedList());
+    launchableListView.setItems(appState.getLaunchableSortedList());
     launchableListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     launchableListView.setCellFactory(lv -> new LaunchableCell());
   }
 
   @FXML
   public void removeSelected() {
-    AppState.getLaunchableObservableList().removeAll(launchableListView.getSelectionModel().getSelectedItems());
+    appState.getLaunchableObservableList().removeAll(launchableListView.getSelectionModel().getSelectedItems());
   }
 
   @FXML
@@ -224,7 +228,7 @@ public class ItemListController implements Initializable {
       launchableList
               .add(new Launchable(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
     }
-    AppState.getLaunchableObservableList().addAll(launchableList);
+    appState.getLaunchableObservableList().addAll(launchableList);
   }
 
   private File resolveWindowsShortcut(File file) {
@@ -300,7 +304,7 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  public void onDragExited(DragEvent dragEvent) {
+  public void onDragExited() {
     launchableListView.setOpacity(1);
   }
 }

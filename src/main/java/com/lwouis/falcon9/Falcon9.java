@@ -3,8 +3,12 @@ package com.lwouis.falcon9;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 
+import com.gluonhq.ignite.guice.GuiceContext;
+import com.google.inject.AbstractModule;
 import com.melloware.jintellitype.HotkeyListener;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -18,6 +22,17 @@ public class Falcon9 extends Application implements HotkeyListener {
 
   private Stage primaryStage;
 
+  private GuiceContext guiceContext = new GuiceContext(this, () -> Collections.singletonList(new GuiceModule()));
+
+  @Inject
+  private FXMLLoader fxmlLoader;
+
+  @Inject
+  private DiskPersistanceManager diskPersistanceManager;
+
+  @Inject
+  private GlobalHotkeyManager globalHotkeyManager;
+
   public static void main(String[] args) {
     launch(args);
   }
@@ -25,22 +40,22 @@ public class Falcon9 extends Application implements HotkeyListener {
   @Override
   public void start(Stage primaryStage) {
     try {
+      guiceContext.init();
       this.primaryStage = primaryStage;
       setUncaughtExceptionHandlers();
       SystemTray tray = showTrayIcon(primaryStage);
       customMinifyAndCloseBehaviour(primaryStage, tray);
 
-      GlobalHotkeyManager.registerGlobalHotkey(this);
-      DiskPersistanceManager.loadFromDisk();
+      globalHotkeyManager.registerGlobalHotkey(this);
+      diskPersistanceManager.loadFromDisk();
 
-      @SuppressWarnings("ConstantConditions")
-      Parent root = FXMLLoader
-              .load(ClassLoader.getSystemResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
+      fxmlLoader.setLocation(ClassLoader.getSystemResource("com/lwouis/falcon9/components/main_window/mainWindow.fxml"));
+      Parent root = fxmlLoader.load();
       primaryStage.setTitle(APP_NAME);
       primaryStage.setScene(new Scene(root));
       primaryStage.centerOnScreen();
       primaryStage.show();
-      DiskPersistanceManager.startSaveToDiskListener();
+      diskPersistanceManager.startSaveToDiskListener();
     }
     catch (Throwable t) {
       t.printStackTrace();
@@ -102,12 +117,12 @@ public class Falcon9 extends Application implements HotkeyListener {
 
   @Override
   public void stop() {
-    GlobalHotkeyManager.unregisterGlobalHotkey();
+    globalHotkeyManager.unregisterGlobalHotkey();
   }
 
   @Override
   public void onHotKey(int hotkeyId) {
-    if (GlobalHotkeyManager.getHotkeyId() != hotkeyId) {
+    if (globalHotkeyManager.getHotkeyId() != hotkeyId) {
       return; // TODO Log error
     }
     if (primaryStage.isShowing()) {
@@ -123,5 +138,12 @@ public class Falcon9 extends Application implements HotkeyListener {
     stage.centerOnScreen();
     stage.setIconified(false);
     stage.show();
+  }
+}
+
+class GuiceModule extends AbstractModule {
+  @Override
+  protected void configure() {
+    //        bind(Service.class).to(Service.class);
   }
 }

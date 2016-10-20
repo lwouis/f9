@@ -1,27 +1,30 @@
 package com.lwouis.falcon9;
 
+import javax.inject.Singleton;
+
 import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 
+@Singleton
 public class AppState {
   private static final ObservableList<Launchable> launchableObservableList = FXCollections.observableArrayList();
 
-  private static FilteredList<Launchable> launchableFilteredList = new FilteredList<>(launchableObservableList);
+  private static final FilteredList<Launchable> launchableFilteredList = new FilteredList<>(launchableObservableList);
 
-  private static SortedList<Launchable> launchableSortedList = new SortedList<>(launchableFilteredList);
+  private static final SortedList<Launchable> launchableSortedList = new SortedList<>(launchableFilteredList);
 
-  public static ObservableList<Launchable> getLaunchableObservableList() {
+  public ObservableList<Launchable> getLaunchableObservableList() {
     return launchableObservableList;
   }
 
-  public static FilteredList<Launchable> getLaunchableFilteredList() {
+  public FilteredList<Launchable> getLaunchableFilteredList() {
     return launchableFilteredList;
   }
 
-  public static SortedList<Launchable> getLaunchableSortedList() {
+  public SortedList<Launchable> getLaunchableSortedList() {
     return launchableSortedList;
   }
 }

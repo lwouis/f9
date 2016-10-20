@@ -6,20 +6,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.inject.Singleton;
+
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 
+@Singleton
 public class GlobalHotkeyManager {
 
-  private static final int hotkeyId = 0;
+  private static final int HOTKEY_ID = 0;
 
   private static JIntellitype jIntellitype;
 
-  public static int getHotkeyId() {
-    return hotkeyId;
+  public int getHotkeyId() {
+    return HOTKEY_ID;
   }
 
-  public static void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
+  public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
     if (!Environment.IS_WINDOWS) {
       return;
     }
@@ -33,19 +36,19 @@ public class GlobalHotkeyManager {
     fromJarToFs(dllFile, tmpFile);
     JIntellitype.setLibraryLocation(tmpFile);
     jIntellitype = JIntellitype.getInstance();
-    jIntellitype.registerHotKey(hotkeyId, JIntellitype.MOD_ALT + JIntellitype.MOD_SHIFT, (int)'A');
+    jIntellitype.registerHotKey(HOTKEY_ID, JIntellitype.MOD_ALT + JIntellitype.MOD_SHIFT, (int)'A');
     jIntellitype.addHotKeyListener(hotkeyListener);
   }
 
-  public static void unregisterGlobalHotkey() {
+  public void unregisterGlobalHotkey() {
     if (!Environment.IS_WINDOWS) {
       return;
     }
-    jIntellitype.unregisterHotKey(hotkeyId);
+    jIntellitype.unregisterHotKey(HOTKEY_ID);
     jIntellitype.cleanUp();
   }
 
-  private static void fromJarToFs(String jarPath, String filePath) throws IOException {
+  private void fromJarToFs(String jarPath, String filePath) throws IOException {
     InputStream is = null;
     OutputStream os = null;
     try {

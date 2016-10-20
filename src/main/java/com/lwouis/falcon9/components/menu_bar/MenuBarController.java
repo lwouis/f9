@@ -2,6 +2,7 @@ package com.lwouis.falcon9.components.menu_bar;
 
 import java.io.File;
 import java.util.List;
+import javax.inject.Inject;
 
 import com.lwouis.falcon9.DiskPersistanceManager;
 import com.lwouis.falcon9.components.item_list.ItemListController;
@@ -13,10 +14,14 @@ public class MenuBarController {
   @FXML
   private MenuBar menuBar;
 
-  private ItemListController itemListController;
+  private final ItemListController itemListController;
 
-  public void setItemListController(ItemListController itemListController) {
+  private final DiskPersistanceManager diskPersistanceManager;
+
+  @Inject
+  public MenuBarController(ItemListController itemListController, DiskPersistanceManager diskPersistanceManager) {
     this.itemListController = itemListController;
+    this.diskPersistanceManager = diskPersistanceManager;
   }
 
   @FXML
@@ -29,8 +34,6 @@ public class MenuBarController {
     itemListController.addFiles(files);
   }
 
-
-
   @FXML
   public void removeSelected() {
     itemListController.removeSelected();
@@ -39,6 +42,6 @@ public class MenuBarController {
   @FXML
   public void fillWithDummy() {
     String pathToJsonFile = ClassLoader.getSystemResource("dummyItems.json").getPath();
-    DiskPersistanceManager.loadFromDisk(new File(pathToJsonFile));
+    diskPersistanceManager.loadFromDisk(new File(pathToJsonFile));
   }
 }
