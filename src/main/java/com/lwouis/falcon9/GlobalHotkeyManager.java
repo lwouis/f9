@@ -23,9 +23,6 @@ public class GlobalHotkeyManager {
   }
 
   public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
-    if (!Environment.IS_WINDOWS) {
-      return;
-    }
     String dllFile = "JIntellitype64.dll";
     // 64bit check from http://stackoverflow.com/a/2269242
     boolean is64bit = System.getenv("ProgramFiles(x86)") != null;
@@ -41,9 +38,6 @@ public class GlobalHotkeyManager {
   }
 
   public void unregisterGlobalHotkey() {
-    if (!Environment.IS_WINDOWS) {
-      return;
-    }
     jIntellitype.unregisterHotKey(HOTKEY_ID);
     jIntellitype.cleanUp();
   }

@@ -20,10 +20,6 @@ public class TrayIconManager {
   private Logger logger;
 
   public void showTrayIcon(Main main, String appName) throws IOException, AWTException {
-    logger.info("start");
-    if (!SystemTray.isSupported()) {
-      return;
-    }
     tray = SystemTray.getSystemTray();
     int trayHeight = (int)tray.getTrayIconSize().getHeight();
     String iconPath = "trayIcon/icon1_" + trayHeight + ".png";
@@ -34,7 +30,7 @@ public class TrayIconManager {
     tray.add(trayIcon);
     MenuItem closeItem = new MenuItem("Quit");
     // https://bugs.openjdk.java.net/browse/JDK-4039705
-    //closeItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    closeItem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
     PopupMenu popup = new PopupMenu();
     popup.add(closeItem);
     trayIcon.setPopupMenu(popup);
@@ -42,7 +38,7 @@ public class TrayIconManager {
   }
 
   public void exitTrayThread() {
-    if (!SystemTray.isSupported() || tray == null) {
+    if (tray == null) {
       return;
     }
     for (TrayIcon icon : tray.getTrayIcons()) {
