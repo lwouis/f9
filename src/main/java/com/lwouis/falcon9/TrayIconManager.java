@@ -19,12 +19,7 @@ public class TrayIconManager {
     int trayHeight = (int)tray.getTrayIconSize().getHeight();
     String iconPath = "trayIcon/icon1_" + trayHeight + ".png";
     URL systemResource = ClassLoader.getSystemResource(iconPath);
-    if (systemResource == null) {
-      System.err.println("Didn't find icon for SystemTray at path " + iconPath);
-      return;
-    }
     Image image = ImageIO.read(systemResource);
-
     TrayIcon trayIcon = new TrayIcon(image, appName);
     trayIcon.addActionListener(e -> Platform.runLater(falcon9::showStageCenteredOnPrimaryDisplay));
     tray.add(trayIcon);
@@ -38,10 +33,11 @@ public class TrayIconManager {
   }
 
   public void exitTrayThread() {
-    if (tray != null) {
-      for (TrayIcon icon : tray.getTrayIcons()) {
-        tray.remove(icon);
-      }
+    if (!SystemTray.isSupported() || tray == null) {
+      return;
+    }
+    for (TrayIcon icon : tray.getTrayIcons()) {
+      tray.remove(icon);
     }
   }
 }

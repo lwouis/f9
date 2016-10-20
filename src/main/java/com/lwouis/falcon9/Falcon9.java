@@ -51,8 +51,7 @@ public class Falcon9 extends Application implements HotkeyListener {
       Parent root = fxmlLoader.load();
       primaryStage.setTitle(appName);
       primaryStage.setScene(new Scene(root));
-      primaryStage.centerOnScreen();
-      primaryStage.show();
+      showStageCenteredOnPrimaryDisplay();
       diskPersistanceManager.startSaveToDiskListener();
     }
     catch (Throwable t) {
