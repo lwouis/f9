@@ -39,8 +39,6 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -48,7 +46,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import sun.awt.shell.ShellFolder;
 
 public class ItemListController implements Initializable {
@@ -73,6 +70,8 @@ public class ItemListController implements Initializable {
   private static final KeyCombination ONLY_UP = new KeyCodeCombination(KeyCode.UP);
 
   private static final KeyCombination ONLY_DOWN = new KeyCodeCombination(KeyCode.DOWN);
+
+  private static double opacity = 1;
 
   @Inject
   public ItemListController(AppState appState) {
@@ -209,18 +208,6 @@ public class ItemListController implements Initializable {
     }
   }
 
-  @FXML
-  public void onDragDropped(DragEvent dragEvent) {
-    Dragboard db = dragEvent.getDragboard();
-    boolean success = false;
-    if (db.hasFiles()) {
-      success = true;
-      addFiles(db.getFiles());
-    }
-    dragEvent.setDropCompleted(success);
-    dragEvent.consume();
-  }
-
   public void addFiles(List<File> files) {
     List<Launchable> launchableList = new ArrayList<>();
     for (File file : files) {
@@ -297,14 +284,8 @@ public class ItemListController implements Initializable {
     }
   }
 
-  @FXML
-  public void onDragOver(DragEvent dragEvent) {
-    launchableListView.setOpacity(0.5);
-    dragEvent.acceptTransferModes(TransferMode.ANY);
-  }
-
-  @FXML
-  public void onDragExited() {
-    launchableListView.setOpacity(1);
+  public void toggleDragOverFeedback() {
+    opacity = opacity == 1 ? 0.5 : 1;
+    launchableListView.setOpacity(opacity);
   }
 }

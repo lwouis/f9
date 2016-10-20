@@ -7,8 +7,7 @@
       fx:controller="com.lwouis.falcon9.components.item_list.ItemListController">
   <TextField fx:id="filterTextField" onKeyPressed="#onKeyPressedOnFilterTextField"
              onKeyTyped="#onKeyTypedOnFilterTextField"/>
-  <ListView fx:id="launchableListView" onDragDropped="#onDragDropped" onDragExited="#onDragExited"
-            onDragOver="#onDragOver" onKeyPressed="#onKeyPressedOnLaunchableListView"
+  <ListView fx:id="launchableListView" onKeyPressed="#onKeyPressedOnLaunchableListView"
             onKeyTyped="#onKeyTypedOnLaunchableListView"
             onMouseClicked="#onMouseEvent"/>
 </VBox>
