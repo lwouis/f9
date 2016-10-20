@@ -39,10 +39,10 @@ launch4j {
     jar = "lib/${project.tasks.shadowJar.archiveName}"
 }
 
-getdown {
+/*getdown {
     urlbase = "http://mysite.com/myapp/"
     tmplGetdownTxt = tmplGetdownTxt + '\nallow_offline = true'
-}
+}*/
 
 sourceSets {
     main {
@@ -54,6 +54,14 @@ sourceSets {
             exclude "**/*.java"
         }
     }
+}
+
+// removing javac warning because sun.awt.shell.ShellFolder is used
+// https://gist.github.com/BorePlusPlus/3772416
+compileJava {
+    options.compilerArgs << '-XDignore.symbol.file'
+    options.fork = true
+    options.forkOptions.executable = 'javac'
 }
 
 idea {
