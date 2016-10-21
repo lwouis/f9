@@ -102,9 +102,20 @@ public class ItemListController implements Initializable {
 
   private void initializeLaunchableListView() {
     appState.getLaunchableSortedList().setComparator((o1, o2) -> {
-      Collator coll = Collator.getInstance();
-      coll.setStrength(Collator.PRIMARY);
-      return coll.compare(o1.getName(), o2.getName());
+      boolean o1StartsWithText = o1.getName().startsWith(filterTextField.getText());
+      boolean o2StartsWithText = o2.getName().startsWith(filterTextField.getText());
+      if ((o1StartsWithText && o2StartsWithText) || (!o1StartsWithText && !o2StartsWithText)) {
+        Collator coll = Collator.getInstance();
+        coll.setStrength(Collator.PRIMARY);
+        return coll.compare(o1.getName(), o2.getName());
+      }
+      else if (o1StartsWithText) {
+        return 1;
+      }
+      else {
+        return -1;
+      }
+
     });
     launchableListView.setItems(appState.getLaunchableSortedList());
     launchableListView.setCellFactory(lv -> new LaunchableCell());
