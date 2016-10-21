@@ -1,11 +1,12 @@
 package com.lwouis.falcon9;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import javax.inject.Singleton;
 
 import com.melloware.jintellitype.HotkeyListener;
@@ -16,62 +17,25 @@ public class GlobalHotkeyManager {
 
   private static final int HOTKEY_ID = 0;
 
-  private static JIntellitype jIntellitype;
+  private static JIntellitype jIntellitype = JIntellitype.getInstance();
 
-  public int getHotkeyId() {
-    return HOTKEY_ID;
-  }
-
-  public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
+  public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException, URISyntaxException {
     String dllFile = "JIntellitype64.dll";
     // 64bit check from http://stackoverflow.com/a/2269242
     boolean is64bit = System.getenv("ProgramFiles(x86)") != null;
     if (!is64bit) {
       dllFile = "JIntellitype.dll";
     }
-    String tmpFile = Environment.TPM_DIR + dllFile;
-    fromJarToFs(dllFile, tmpFile);
-    JIntellitype.setLibraryLocation(tmpFile);
-    jIntellitype = JIntellitype.getInstance();
-    jIntellitype.registerHotKey(HOTKEY_ID, JIntellitype.MOD_ALT + JIntellitype.MOD_SHIFT, (int)'A');
+    String tmpFilePath = Environment.TPM_DIR + dllFile;
+    URI dllFilePath = ClassLoader.getSystemResource(dllFile).toURI();
+    Files.copy(Paths.get(dllFilePath), Paths.get(tmpFilePath), StandardCopyOption.REPLACE_EXISTING);
+    JIntellitype.setLibraryLocation(tmpFilePath);
+    jIntellitype.registerHotKey(HOTKEY_ID, JIntellitype.MOD_SHIFT, KeyEvent.VK_TAB);
     jIntellitype.addHotKeyListener(hotkeyListener);
-  }
+}
 
   public void unregisterGlobalHotkey() {
     jIntellitype.unregisterHotKey(HOTKEY_ID);
     jIntellitype.cleanUp();
-  }
-
-  private void fromJarToFs(String jarPath, String filePath) throws IOException {
-    InputStream is = null;
-    OutputStream os = null;
-    try {
-      File file = new File(filePath);
-      if (file.exists()) {
-        boolean success = file.delete();
-        if (!success) {
-          throw new IOException("Could not delete file: " + filePath);
-        }
-      }
-
-      is = ClassLoader.getSystemResourceAsStream(jarPath);
-      os = new FileOutputStream(filePath);
-      byte[] buffer = new byte[8192];
-      int bytesRead;
-      while ((bytesRead = is.read(buffer)) != -1) {
-        os.write(buffer, 0, bytesRead);
-      }
-    }
-    catch (Exception ex) {
-      throw new IOException("FromJarToFileSystem could not load DLL: " + jarPath, ex);
-    }
-    finally {
-      if (is != null) {
-        is.close();
-      }
-      if (os != null) {
-        os.close();
-      }
-    }
   }
 }
