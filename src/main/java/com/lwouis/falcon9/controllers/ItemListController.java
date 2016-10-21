@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Logger;
 import org.boris.pecoff4j.PE;
 import org.boris.pecoff4j.ResourceDirectory;
 import org.boris.pecoff4j.ResourceEntry;
@@ -29,6 +30,8 @@ import org.boris.pecoff4j.util.ResourceHelper;
 import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
+import com.lwouis.falcon9.StageManager;
+import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Launchable;
 import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.SwingFXUtils;
@@ -49,6 +52,9 @@ import javafx.scene.input.MouseEvent;
 import sun.awt.shell.ShellFolder;
 
 public class ItemListController implements Initializable {
+
+  private final StageManager stageManager;
+
   @FXML
   private ListView<Launchable> launchableListView;
 
@@ -74,9 +80,13 @@ public class ItemListController implements Initializable {
   private static double opacity = 1;
 
   @Inject
-  public ItemListController(AppState appState) {
+  public ItemListController(AppState appState, StageManager stageManager) {
     this.appState = appState;
+    this.stageManager = stageManager;
   }
+
+  @InjectLogger
+  private Logger logger;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -102,20 +112,20 @@ public class ItemListController implements Initializable {
 
   private void initializeLaunchableListView() {
     appState.getLaunchableSortedList().setComparator((o1, o2) -> {
-      boolean o1StartsWithText = o1.getName().startsWith(filterTextField.getText());
-      boolean o2StartsWithText = o2.getName().startsWith(filterTextField.getText());
+      String text = filterTextField.getText();
+      Collator coll = Collator.getInstance();
+      coll.setStrength(Collator.PRIMARY);
+      boolean o1StartsWithText = coll.compare(o1.getName().substring(0, text.length()), text) == 0;
+      boolean o2StartsWithText = coll.compare(o2.getName().substring(0, text.length()), text) == 0;
       if ((o1StartsWithText && o2StartsWithText) || (!o1StartsWithText && !o2StartsWithText)) {
-        Collator coll = Collator.getInstance();
-        coll.setStrength(Collator.PRIMARY);
         return coll.compare(o1.getName(), o2.getName());
       }
       else if (o1StartsWithText) {
-        return 1;
-      }
-      else {
         return -1;
       }
-
+      else {
+        return 1;
+      }
     });
     launchableListView.setItems(appState.getLaunchableSortedList());
     launchableListView.setCellFactory(lv -> new LaunchableCell());
@@ -134,14 +144,15 @@ public class ItemListController implements Initializable {
     if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
       launchSelectedInternal();
     }
+    mouseEvent.consume();
   }
 
   @FXML
   public void onKeyPressedOnFilterTextField(KeyEvent keyEvent) {
     MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
-    if (ONLY_TAB.match(keyEvent)) {
+    if (ONLY_ENTER.match(keyEvent)) {
+      launchSelectedInternal();
       keyEvent.consume();
-      launchableListView.requestFocus();
     }
     else if (ONLY_UP.match(keyEvent) || ONLY_DOWN.match(keyEvent)) {
       if (ONLY_UP.match(keyEvent)) {
@@ -159,17 +170,6 @@ public class ItemListController implements Initializable {
         selectionModel.clearAndSelect(newIndex);
       }
       keyEvent.consume();
-    }
-
-  }
-
-  @FXML
-  public void onKeyTypedOnFilterTextField(KeyEvent keyEvent) {
-    String typedChar = keyEvent.getCharacter();
-    if (ONLY_TAB.getCharacter().equals(typedChar)) {
-      if (launchableListView.getSelectionModel().isEmpty()) {
-        launchableListView.getSelectionModel().selectFirst();
-      }
     }
   }
 
@@ -191,6 +191,7 @@ public class ItemListController implements Initializable {
     else if (ONLY_DELETE.getCharacter().equals(typedChar)) {
       removeSelected();
     }
+    keyEvent.consume();
   }
 
   private void launchSelectedInternal() {
@@ -205,9 +206,9 @@ public class ItemListController implements Initializable {
         }
       }
       catch (IOException e) {
-        e.printStackTrace();
-        // TODO: show the user that the file doesn't exist
+        logger.error("Failed opening the selected file.", e);
       }
+      stageManager.hideStage();
     }
   }
 
