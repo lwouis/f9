@@ -30,6 +30,11 @@ public class MainWindowController {
   @FXML
   public void onDragEntered(DragEvent dragEvent) {
     itemListController.toggleDragOverFeedback();
+    dragEvent.consume();
+  }
+
+  @FXML
+  public void onDragOver(DragEvent dragEvent) {
     dragEvent.acceptTransferModes(TransferMode.ANY);
     dragEvent.consume();
   }
