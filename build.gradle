@@ -35,6 +35,12 @@ dependencies {
     compile 'org.springframework:spring-core:4.3.3.RELEASE'
 }
 
+// How-to dev/run this project
+// ---------------------------
+// shadowJar -t: build the shadowJar + watch
+// runShadow: (build if not done through the watch) + run the shadowJar
+// launch4j: builds the launch4j directory which contains the .exe
+
 mainClassName = 'com.lwouis.falcon9.Main'
 
 launch4j {
