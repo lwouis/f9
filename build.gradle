@@ -7,7 +7,6 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'application'
 apply plugin: 'checkstyle'
 
 task wrapper(type: Wrapper) {
@@ -32,11 +31,11 @@ dependencies {
     compile 'org.apache.lucene:lucene-core:6.2.1'
 }
 
-mainClassName = 'com.lwouis.falcon9.Main'
 
 launch4j {
+    mainClassName = 'com.lwouis.falcon9.Main'
     copyConfigurable = project.tasks.shadowJar.outputs.files
-    jar = 'lib/${project.tasks.shadowJar.archiveName}'
+    jar = 'lib/' + project.tasks.shadowJar.archiveName
 }
 
 /*getdown {
