@@ -3,7 +3,6 @@ package com.lwouis.falcon9;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import javax.inject.Singleton;
 
@@ -23,7 +22,7 @@ public class GlobalHotkeyManager {
 
   private static JIntellitype jIntellitype;
 
-  public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException, URISyntaxException {
+  public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
     JIntellitype.setLibraryLocation(copyOfDllFromJar());
     jIntellitype = JIntellitype.getInstance();
     jIntellitype.registerHotKey(HOTKEY_ID, JIntellitype.MOD_SHIFT, KeyEvent.VK_TAB);
@@ -35,7 +34,7 @@ public class GlobalHotkeyManager {
     jIntellitype.cleanUp();
   }
 
-  private String copyOfDllFromJar() {
+  private String copyOfDllFromJar() throws IOException {
     try {
       String dllFile = "JIntellitype64.dll";
       // 64bit check from http://stackoverflow.com/a/2269242
@@ -52,8 +51,7 @@ public class GlobalHotkeyManager {
       return tmpFilePath;
     }
     catch (Throwable t) {
-      logger.error("Failed to extract file from Jar.", t);
-      return null;
+      throw new IOException("Failed to extract file from Jar.", t);
     }
   }
 }

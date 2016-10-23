@@ -215,8 +215,8 @@ public class ItemListController implements Initializable {
           new ProcessBuilder(launchable.getAbsolutePath()).start();
         }
       }
-      catch (IOException e) {
-        logger.error("Failed opening the selected file.", e);
+      catch (Throwable t) {
+        logger.error("Failed to open the selected item with user's prefered app.", t);
       }
       stageManager.hideStage();
     }

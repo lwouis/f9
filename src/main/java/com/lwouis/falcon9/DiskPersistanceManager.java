@@ -55,7 +55,7 @@ public class DiskPersistanceManager {
       FileUtils.writeStringToFile(jsonFile, json, StandardCharsets.UTF_8, false);
     }
     catch (Throwable t) {
-      logger.error(t);
+      logger.error("Failed to save appState to disk.", t);
     }
   }
 
@@ -77,7 +77,7 @@ public class DiskPersistanceManager {
       launchableObservableList.setAll(launchables);
     }
     catch (Throwable t) {
-      logger.error(t);
+      logger.error("Failed to load appState from disk.", t);
     }
   }
 

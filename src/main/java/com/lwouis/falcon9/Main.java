@@ -56,7 +56,7 @@ public class Main extends Application {
       stageManager.showStageCenteredOnPrimaryDisplay();
     }
     catch (Throwable t) {
-      logger.error(t);
+      logger.error("Failed to start the app.", t);
     }
   }
 

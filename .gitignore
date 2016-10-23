@@ -6,3 +6,6 @@
 # Gradle
 .gradle/
 build/
+
+# Log4j2
+logs/app.log
