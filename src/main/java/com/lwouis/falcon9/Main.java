@@ -3,6 +3,9 @@ package com.lwouis.falcon9;
 import java.util.Collections;
 import javax.inject.Inject;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.gluonhq.ignite.guice.GuiceContext;
 import com.lwouis.falcon9.injection.GuiceModule;
 import javafx.application.Application;
@@ -30,6 +33,8 @@ public class Main extends Application {
   @Inject
   private StageManager stageManager;
 
+  private Logger logger = LogManager.getLogger(getClass().getName());
+
   public static void main(String[] args) {
     launch(args);
   }
@@ -51,7 +56,7 @@ public class Main extends Application {
       stageManager.showStageCenteredOnPrimaryDisplay();
     }
     catch (Throwable t) {
-      t.printStackTrace();
+      logger.error(t);
     }
   }
 

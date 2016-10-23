@@ -14,14 +14,11 @@ public class StageManager implements HotkeyListener {
 
   private final TrayIconManager trayIconManager;
 
-  private final GlobalHotkeyManager globalHotkeyManager;
-
   private Stage stage;
 
   @Inject
-  public StageManager(TrayIconManager trayIconManager, GlobalHotkeyManager globalHotkeyManager) {
+  public StageManager(TrayIconManager trayIconManager) {
     this.trayIconManager = trayIconManager;
-    this.globalHotkeyManager = globalHotkeyManager;
   }
 
   public void setStage(Stage stage) {

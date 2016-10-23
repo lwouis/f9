@@ -17,7 +17,7 @@ public class GlobalHotkeyManager {
 
   private static final int HOTKEY_ID = 0;
 
-  private static JIntellitype jIntellitype = JIntellitype.getInstance();
+  private static JIntellitype jIntellitype;
 
   public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException, URISyntaxException {
     String dllFile = "JIntellitype64.dll";
@@ -30,6 +30,7 @@ public class GlobalHotkeyManager {
     URI dllFilePath = ClassLoader.getSystemResource(dllFile).toURI();
     Files.copy(Paths.get(dllFilePath), Paths.get(tmpFilePath), StandardCopyOption.REPLACE_EXISTING);
     JIntellitype.setLibraryLocation(tmpFilePath);
+    jIntellitype = JIntellitype.getInstance();
     jIntellitype.registerHotKey(HOTKEY_ID, JIntellitype.MOD_SHIFT, KeyEvent.VK_TAB);
     jIntellitype.addHotKeyListener(hotkeyListener);
 }
