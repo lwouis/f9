@@ -39,12 +39,12 @@ public class FuzzySearchDraft {
     List<String> noPrefixMatches = new ArrayList<>();
     Collator coll = Collator.getInstance();
     coll.setStrength(Collator.PRIMARY);
-    for (String s : candidates) {
-      if (coll.compare(query, s.substring(0, Math.min(testLength, s.length()))) == 0) {
-        prefixMatches.add(s);
+    for (String ss : candidates) {
+      if (coll.compare(query, ss.substring(0, Math.min(testLength, ss.length()))) == 0) {
+        prefixMatches.add(ss);
       }
       else {
-        noPrefixMatches.add(s);
+        noPrefixMatches.add(ss);
       }
     }
 
@@ -53,8 +53,8 @@ public class FuzzySearchDraft {
 
     List<String> fuzzyCandidates = fuzzySearch(query, noPrefixMatches);
     prefixMatches.addAll(fuzzyCandidates);
-    for (String r : prefixMatches) {
-      System.out.println(r);
+    for (String rr : prefixMatches) {
+      System.out.println(rr);
     }
   }
 
@@ -63,19 +63,19 @@ public class FuzzySearchDraft {
     IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
     IndexWriter writer = new IndexWriter(dir, config);
     Document doc = new Document();
-    for (String s : sample) {
-      doc.add(new StringField("name", s, Field.Store.YES));
+    for (String ss : sample) {
+      doc.add(new StringField("name", ss, Field.Store.YES));
     }
     writer.addDocument(doc);
     writer.close();
     IndexReader reader = DirectoryReader.open(dir);
     IndexSearcher searcher = new IndexSearcher(reader);
-    Term t = new Term("name", test);
-    Query query = new FuzzyQuery(t);
+    Term tt = new Term("name", test);
+    Query query = new FuzzyQuery(tt);
     TopDocs docs = searcher.search(query, 1000);
-    ScoreDoc[] e = docs.scoreDocs;
+    ScoreDoc[] ee = docs.scoreDocs;
     List<String> result = new ArrayList<>();
-    for (ScoreDoc scoreDoc : e) {
+    for (ScoreDoc scoreDoc : ee) {
       result.add(searcher.doc(scoreDoc.doc).get("name"));
     }
     return result;
