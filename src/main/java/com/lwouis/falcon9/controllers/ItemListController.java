@@ -27,9 +27,13 @@ import org.boris.pecoff4j.resources.StringPair;
 import org.boris.pecoff4j.resources.StringTable;
 import org.boris.pecoff4j.resources.VersionInfo;
 import org.boris.pecoff4j.util.ResourceHelper;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.glyphfont.FontAwesome;
+import org.controlsfx.glyphfont.Glyph;
 import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
+import com.lwouis.falcon9.FontAwesomeManager;
 import com.lwouis.falcon9.StageManager;
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Launchable;
@@ -40,7 +44,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;
@@ -53,15 +56,17 @@ import sun.awt.shell.ShellFolder;
 
 public class ItemListController implements Initializable {
 
+  private final AppState appState;
+
   private final StageManager stageManager;
+
+  private final FontAwesomeManager fontAwesomeManager;
 
   @FXML
   private ListView<Launchable> launchableListView;
 
   @FXML
-  private TextField filterTextField;
-
-  private final AppState appState;
+  private CustomTextField filterTextField;
 
   private static final String NETWORK_FILE_PREFIX = "\\\\";
 
@@ -80,9 +85,10 @@ public class ItemListController implements Initializable {
   private static double opacity = 1;
 
   @Inject
-  public ItemListController(AppState appState, StageManager stageManager) {
+  public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager) {
     this.appState = appState;
     this.stageManager = stageManager;
+    this.fontAwesomeManager = fontAwesomeManager;
   }
 
   @InjectLogger
@@ -95,6 +101,10 @@ public class ItemListController implements Initializable {
   }
 
   private void initializeFilterTextField() {
+    Glyph searchIcon = fontAwesomeManager.getGlyph(FontAwesome.Glyph.SEARCH);
+    searchIcon.setTranslateX(35);
+    searchIcon.setTranslateY(-1);
+    filterTextField.setLeft(searchIcon);
     filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String filterText = filterTextField.getText();
       FilteredList<Launchable> launchableFilteredList = appState.getLaunchableFilteredList();

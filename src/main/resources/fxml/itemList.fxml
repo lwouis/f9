@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.lwouis.falcon9.controllers.ItemListController">
-  <TextField fx:id="filterTextField" onKeyPressed="#onKeyPressedOnFilterTextField"/>
-  <ListView fx:id="launchableListView" onKeyPressed="#onKeyPressedOnLaunchableListView"
-            onKeyTyped="#onKeyTypedOnLaunchableListView"
-            onMouseClicked="#onMouseEvent"/>
+<VBox xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lwouis.falcon9.controllers.ItemListController">
+  <CustomTextField fx:id="filterTextField" onKeyPressed="#onKeyPressedOnFilterTextField" promptText="Search" styleClass="filterTextField">
+      <padding>
+         <Insets bottom="10.0" left="40.0" top="10.0" />
+      </padding>
+  </CustomTextField>
+  <ListView fx:id="launchableListView" styleClass="launchableListView" onKeyPressed="#onKeyPressedOnLaunchableListView"
+            onKeyTyped="#onKeyTypedOnLaunchableListView" onMouseClicked="#onMouseEvent">
+
+  </ListView>
 </VBox>

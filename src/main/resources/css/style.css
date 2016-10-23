@@ -1,0 +1,32 @@
+.filterTextField, .launchableListView {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-text-box-border: transparent;
+    -fx-background-color: -fx-control-inner-background;
+}
+
+.filterTextField {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+    -fx-background-radius: 0 0 0 0;
+    -fx-border-radius: 0 0 0 0;
+    -fx-border-insets: 0 0 1 0;
+    -fx-border-color: #aaa;
+    -fx-border-width: 0 0 1 0;
+}
+
+.filterTextField:focused {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
+.launchableNameLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #000;
+}
+
+.launchablePathLabel {
+    -fx-text-fill: #b2b2b2;
+}
+
+.launchableListView .list-cell:selected {
+    -fx-background-color: #b8dcff;
+}
