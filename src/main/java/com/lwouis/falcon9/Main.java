@@ -1,6 +1,8 @@
 package com.lwouis.falcon9;
 
 import java.util.Collections;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.inject.Inject;
 
 import org.apache.logging.log4j.LogManager;
@@ -44,14 +46,15 @@ public class Main extends Application {
     try {
       guiceContext.init();
       setUncaughtExceptionHandlers();
-      String appName = "Falcon9";
-      trayIconManager.showTrayIcon(appName);
+      final String APP_NAME = "Falcon9";
+      trayIconManager.showTrayIcon(APP_NAME);
       globalHotkeyManager.registerGlobalHotkey(stageManager);
       diskPersistanceManager.loadFromDisk();
+      fxmlLoader.setResources(ResourceBundle.getBundle("i18n.strings", Locale.getDefault()));
       fxmlLoader.setLocation(ClassLoader.getSystemResource("fxml/MainWindow.fxml"));
       Parent root = fxmlLoader.load();
       stageManager.setStage(primaryStage);
-      stageManager.initialize(appName, root);
+      stageManager.initialize(APP_NAME, root);
       stageManager.showStageCenteredOnPrimaryDisplay();
     }
     catch (Throwable t) {
