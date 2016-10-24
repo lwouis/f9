@@ -1,6 +1,8 @@
 language: java
 
-script: ./gradlew shadowJar
+script:
+- ./gradlew test
+- ./gradlew shadowJar
 
 # The default JDK is 7 if unspecified, and we need 8
 jdk:
