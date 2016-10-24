@@ -1,5 +1,8 @@
 language: java
 
+env:
+- headless=true
+
 script:
 - ./gradlew test
 - ./gradlew shadowJar

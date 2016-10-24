@@ -1,13 +1,11 @@
 package com.lwouis.falcon9;
 
-import java.awt.AWTException;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
-import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -51,8 +49,8 @@ public class TrayIconManager {
       trayIcon.setPopupMenu(popup);
       closeItem.addActionListener(e -> stageManager.get().exitAllThreads());
     }
-    catch (IOException | AWTException e) {
-      logger.error("Failed to show the system tray icon.", e);
+    catch (Throwable t) {
+      logger.error("Failed to show the system tray icon.", t);
     }
   }
 
