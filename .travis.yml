@@ -1,21 +1,23 @@
 os: linux
 language: java
 jdk: oraclejdk8
+
 # By default, the Travis container-based mode runs jdk1.8.0_31 (which is too old for this build)
-#addons:
-#  apt:
-#    packages:
-#    - oracle-java8-installer
+addons:
+  apt:
+    packages:
+    - oracle-java8-installer
 
-env:
-  - USE_FRAMEBUFFER=true
-  - USE_FRAMEBUFFER=false _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
+#env:
+#  - USE_FRAMEBUFFER=true
+#  - USE_FRAMEBUFFER=false _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true
+#-Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
 
-before_install:
-  - if [ $USE_FRAMEBUFFER = "true" ]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start; fi
+#before_install:
+#  - if [ $USE_FRAMEBUFFER = "true" ]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start; fi
 
 script:
-- ./gradlew test
+#- ./gradlew test -Dheadless=true
 - ./gradlew shadowJar
 
 # These files changes at every build, and should not be cached
