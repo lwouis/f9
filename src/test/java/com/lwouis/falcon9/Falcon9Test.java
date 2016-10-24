@@ -42,10 +42,10 @@ public class Falcon9Test extends ApplicationTest {
   }
 
   @Test
-  public void typing_in_the_filter_text_field_works() {
+  public void typing_in_the_search_text_field_works() {
     String testText = "Test";
     write(testText);
-    verifyThat("#filterTextField", (CustomTextField filterTextField) -> filterTextField.getText().equals(testText));
+    verifyThat("#searchTextField", (CustomTextField searchTextField) -> searchTextField.getText().equals(testText));
   }
 
 }

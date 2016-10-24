@@ -17,7 +17,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
 import com.lwouis.falcon9.injection.InjectLogger;
-import com.lwouis.falcon9.models.Launchable;
+import com.lwouis.falcon9.models.Item;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -28,18 +28,18 @@ public class DiskPersistanceManager {
 
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-  private static final Type type = new TypeToken<List<Launchable>>() {
+  private static final Type type = new TypeToken<List<Item>>() {
   }.getType();
 
   @InjectLogger
   private Logger logger;
 
-  private ObservableList<Launchable> launchableObservableList;
+  private ObservableList<Item> itemObservableList;
 
   @Inject
   public DiskPersistanceManager(AppState appState) {
-    launchableObservableList = appState.getLaunchableObservableList();
-    launchableObservableList.addListener((ListChangeListener<Launchable>)change -> new Thread(new Task<Void>() {
+    itemObservableList = appState.getItemObservableList();
+    itemObservableList.addListener((ListChangeListener<Item>)change -> new Thread(new Task<Void>() {
       @Override
       protected Void call() {
         saveToDisk();
@@ -73,8 +73,8 @@ public class DiskPersistanceManager {
     }
     try {
       String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-      List<Launchable> launchables = deserializeFromJson(json);
-      launchableObservableList.setAll(launchables);
+      List<Item> items = deserializeFromJson(json);
+      itemObservableList.setAll(items);
     }
     catch (Throwable t) {
       logger.error("Failed to load appState from disk.", t);
@@ -83,14 +83,14 @@ public class DiskPersistanceManager {
 
   private String serializeToJson() throws JsonIOException {
     try {
-      return gson.toJson(launchableObservableList, type);
+      return gson.toJson(itemObservableList, type);
     }
     catch (Throwable t) {
       throw new JsonIOException("Failed to serialize AppState to JSON", t);
     }
   }
 
-  private List<Launchable> deserializeFromJson(String json) throws JsonIOException {
+  private List<Item> deserializeFromJson(String json) throws JsonIOException {
     try {
       return gson.fromJson(json, type);
     }

@@ -8,6 +8,6 @@
       fx:controller="com.lwouis.falcon9.controllers.MainWindowController" onDragDropped="#onDragDropped"
       onDragExited="#onDragExited" onDragEntered="#onDragEntered" onDragOver="#onDragOver"
       stylesheets="@/css/style.css">
-  <fx:include fx:id="menuBar" source="/fxml/menuBar.fxml"/>
-  <fx:include fx:id="itemList" source="/fxml/itemList.fxml"/>
+  <fx:include fx:id="menuBar" source="/fxml/MenuBar.fxml"/>
+  <fx:include fx:id="itemList" source="/fxml/ItemList.fxml"/>
 </VBox>

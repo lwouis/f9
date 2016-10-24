@@ -1,11 +1,11 @@
-.filterTextField, .launchableListView {
+.searchTextField, .itemListView {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-text-box-border: transparent;
     -fx-background-color: -fx-control-inner-background;
 }
 
-.filterTextField {
+.searchTextField {
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
     -fx-background-radius: 0 0 0 0;
     -fx-border-radius: 0 0 0 0;
@@ -14,19 +14,19 @@
     -fx-border-width: 0 0 1 0;
 }
 
-.filterTextField:focused {
+.searchTextField:focused {
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
 
-.launchableNameLabel {
+.itemNameLabel {
     -fx-font-size: 14px;
     -fx-text-fill: #000;
 }
 
-.launchablePathLabel {
+.itemPathLabel {
     -fx-text-fill: #b2b2b2;
 }
 
-.launchableListView .list-cell:selected {
+.itemListView .list-cell:selected {
     -fx-background-color: #b8dcff;
 }

@@ -36,7 +36,7 @@ import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.FontAwesomeManager;
 import com.lwouis.falcon9.StageManager;
 import com.lwouis.falcon9.injection.InjectLogger;
-import com.lwouis.falcon9.models.Launchable;
+import com.lwouis.falcon9.models.Item;
 import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -63,10 +63,10 @@ public class ItemListController implements Initializable {
   private final FontAwesomeManager fontAwesomeManager;
 
   @FXML
-  private ListView<Launchable> launchableListView;
+  private ListView<Item> itemListView;
 
   @FXML
-  private CustomTextField filterTextField;
+  private CustomTextField searchTextField;
 
   private static final String NETWORK_FILE_PREFIX = "\\\\";
 
@@ -96,33 +96,33 @@ public class ItemListController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    initializeFilterTextField();
-    initializeLaunchableListView();
+    initializeSearchTextField();
+    initializeItemListView();
   }
 
-  private void initializeFilterTextField() {
+  private void initializeSearchTextField() {
     Glyph searchIcon = fontAwesomeManager.getGlyph(FontAwesome.Glyph.SEARCH);
     searchIcon.setTranslateX(35);
     searchIcon.setTranslateY(-1);
-    filterTextField.setLeft(searchIcon);
-    filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      String filterText = filterTextField.getText();
-      FilteredList<Launchable> launchableFilteredList = appState.getLaunchableFilteredList();
-      MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
-      if (filterText == null || filterText.length() == 0) {
-        launchableFilteredList.setPredicate(s -> true);
+    searchTextField.setLeft(searchIcon);
+    searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      String searchText = searchTextField.getText();
+      FilteredList<Item> itemFilteredList = appState.getItemFilteredList();
+      MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
+      if (searchText == null || searchText.length() == 0) {
+        itemFilteredList.setPredicate(s -> true);
       }
       else {
-        String filterTextTrimmed = filterText.trim(); // ignore extra spaces on the sides
-        launchableFilteredList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), filterTextTrimmed));
+        String searchTextTrimmed = searchText.trim(); // ignore extra spaces on the sides
+        itemFilteredList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), searchTextTrimmed));
       }
       selectionModel.selectFirst();
     });
   }
 
-  private void initializeLaunchableListView() {
-    appState.getLaunchableSortedList().setComparator((o1, o2) -> {
-      String text = filterTextField.getText();
+  private void initializeItemListView() {
+    appState.getItemSortedList().setComparator((o1, o2) -> {
+      String text = searchTextField.getText();
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
       boolean o1StartsWithText = coll.compare(o1.getName().substring(0, text.length()), text) == 0;
@@ -137,16 +137,16 @@ public class ItemListController implements Initializable {
         return 1;
       }
     });
-    launchableListView.setItems(appState.getLaunchableSortedList());
-    launchableListView.setCellFactory(lv -> new LaunchableCell());
-    MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
+    itemListView.setItems(appState.getItemSortedList());
+    itemListView.setCellFactory(lv -> new ItemListCell());
+    MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
     selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
     selectionModel.selectFirst();
   }
 
   @FXML
   public void removeSelected() {
-    appState.getLaunchableObservableList().removeAll(launchableListView.getSelectionModel().getSelectedItems());
+    appState.getItemObservableList().removeAll(itemListView.getSelectionModel().getSelectedItems());
   }
 
   @FXML
@@ -158,8 +158,8 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  public void onKeyPressedOnFilterTextField(KeyEvent keyEvent) {
-    MultipleSelectionModel<Launchable> selectionModel = launchableListView.getSelectionModel();
+  public void onKeyPressedOnSearchTextField(KeyEvent keyEvent) {
+    MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
     if (ONLY_ENTER.match(keyEvent)) {
       launchSelectedInternal();
       keyEvent.consume();
@@ -168,13 +168,13 @@ public class ItemListController implements Initializable {
       if (ONLY_UP.match(keyEvent)) {
         int newIndex = selectionModel.getSelectedIndex() - 1;
         if (newIndex < 0) {
-          newIndex = launchableListView.getItems().size() - 1;
+          newIndex = itemListView.getItems().size() - 1;
         }
         selectionModel.clearAndSelect(newIndex);
       }
       else if (ONLY_DOWN.match(keyEvent)) {
         int newIndex = selectionModel.getSelectedIndex() + 1;
-        if (newIndex > launchableListView.getItems().size() - 1) {
+        if (newIndex > itemListView.getItems().size() - 1) {
           newIndex = 0;
         }
         selectionModel.clearAndSelect(newIndex);
@@ -184,16 +184,16 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  public void onKeyPressedOnLaunchableListView(KeyEvent keyEvent) {
+  public void onKeyPressedOnItemListView(KeyEvent keyEvent) {
     if (ONLY_TAB.match(keyEvent)) {
       keyEvent.consume();
-      filterTextField.requestFocus();
-      filterTextField.end();
+      searchTextField.requestFocus();
+      searchTextField.end();
     }
   }
 
   @FXML
-  public void onKeyTypedOnLaunchableListView(KeyEvent keyEvent) {
+  public void onKeyTypedOnItemListView(KeyEvent keyEvent) {
     String typedChar = keyEvent.getCharacter();
     if (ONLY_ENTER.getCharacter().equals(typedChar)) {
       launchSelectedInternal();
@@ -205,14 +205,14 @@ public class ItemListController implements Initializable {
   }
 
   private void launchSelectedInternal() {
-    for (Launchable launchable : launchableListView.getSelectionModel().getSelectedItems()) {
-      File file = new File(launchable.getAbsolutePath());
+    for (Item item : itemListView.getSelectionModel().getSelectedItems()) {
+      File file = new File(item.getAbsolutePath());
       try {
         if (Desktop.isDesktopSupported()) {
           Desktop.getDesktop().open(file);
         }
         else {
-          new ProcessBuilder(launchable.getAbsolutePath()).start();
+          new ProcessBuilder(item.getAbsolutePath()).start();
         }
       }
       catch (Throwable t) {
@@ -223,13 +223,13 @@ public class ItemListController implements Initializable {
   }
 
   public void addFiles(List<File> files) {
-    List<Launchable> launchableList = new ArrayList<>();
+    List<Item> itemList = new ArrayList<>();
     for (File file : files) {
       File actualFile = resolveWindowsShortcut(file);
-      launchableList
-              .add(new Launchable(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
+      itemList
+              .add(new Item(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
     }
-    appState.getLaunchableObservableList().addAll(launchableList);
+    appState.getItemObservableList().addAll(itemList);
   }
 
   private File resolveWindowsShortcut(File file) {
@@ -300,6 +300,6 @@ public class ItemListController implements Initializable {
 
   public void toggleDragOverFeedback() {
     opacity = opacity == 1 ? 0.5 : 1;
-    launchableListView.setOpacity(opacity);
+    itemListView.setOpacity(opacity);
   }
 }

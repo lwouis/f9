@@ -48,8 +48,7 @@ public class Main extends Application {
       trayIconManager.showTrayIcon(appName);
       globalHotkeyManager.registerGlobalHotkey(stageManager);
       diskPersistanceManager.loadFromDisk();
-      String mainWindowPath = "fxml/mainWindow.fxml";
-      fxmlLoader.setLocation(ClassLoader.getSystemResource(mainWindowPath));
+      fxmlLoader.setLocation(ClassLoader.getSystemResource("fxml/MainWindow.fxml"));
       Parent root = fxmlLoader.load();
       stageManager.setStage(primaryStage);
       stageManager.initialize(appName, root);

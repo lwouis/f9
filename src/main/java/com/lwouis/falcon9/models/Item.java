@@ -3,7 +3,7 @@ package com.lwouis.falcon9.models;
 import com.google.gson.annotations.JsonAdapter;
 import javafx.scene.image.Image;
 
-public class Launchable {
+public class Item {
   private String name;
 
   private String absolutePath;
@@ -11,7 +11,7 @@ public class Launchable {
   @JsonAdapter(ImageJsonSerializer.class)
   private Image image;
 
-  public Launchable(String name, String absolutePath, Image image) {
+  public Item(String name, String absolutePath, Image image) {
     this.name = name;
     this.absolutePath = absolutePath;
     this.image = image;

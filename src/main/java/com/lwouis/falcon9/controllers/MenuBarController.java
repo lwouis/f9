@@ -37,10 +37,4 @@ public class MenuBarController {
   public void removeSelected() {
     itemListController.removeSelected();
   }
-
-  @FXML
-  public void fillWithDummy() {
-    String pathToJsonFile = ClassLoader.getSystemResource("dummyItems.json").getPath();
-    diskPersistanceManager.loadFromDisk(new File(pathToJsonFile));
-  }
 }

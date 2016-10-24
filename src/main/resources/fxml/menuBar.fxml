@@ -9,9 +9,4 @@
     <MenuItem mnemonicParsing="false" onAction="#chooseFile" text="Add"/>
     <MenuItem mnemonicParsing="false" onAction="#removeSelected" text="Remove selected"/>
   </Menu>
-  <Menu mnemonicParsing="false" text="Debug">
-    <items>
-      <MenuItem mnemonicParsing="false" onAction="#fillWithDummy" text="Fill with dummy"/>
-    </items>
-  </Menu>
 </MenuBar>
