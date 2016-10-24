@@ -34,7 +34,7 @@ dependencies {
     compile 'org.springframework:spring-core:4.3.3.RELEASE'
     testCompile 'org.testfx:testfx-core:4.0.4-alpha'
     testCompile 'org.testfx:testfx-junit:4.0.4-alpha'
-    testCompile 'org.testfx:openjfx-monocle:1.8.0_20'
+    testRuntime 'org.testfx:openjfx-monocle:1.8.0_20'
 }
 
 // How-to dev/run this project
@@ -86,6 +86,20 @@ tasks.withType(Checkstyle).each { checkstyleTask ->
                 throw new GradleException("There were checkstyle warnings! For more info check $outputFile")
             }
         }
+    }
+}
+
+// forward system properties (e.g. headless=true) to the Java tests
+[test].each { runTask ->
+    configure(runTask) {
+        systemProperties System.properties
+    }
+}
+
+// show full stracktraces if a test throws an exception
+test {
+    testLogging {
+        exceptionFormat = 'full'
     }
 }
 
