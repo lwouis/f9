@@ -20,7 +20,6 @@ repositories {
 }
 
 dependencies {
-    //compile 'com.google.guava:guava:19.0'
     compile fileTree(dir: 'lib', include: ['*.jar'])
     compile 'commons-io:commons-io:2.5'
     compile 'com.google.code.gson:gson:2.7'
@@ -34,7 +33,7 @@ dependencies {
     compile 'org.springframework:spring-core:4.3.3.RELEASE'
     testCompile 'org.testfx:testfx-core:4.0.4-alpha'
     testCompile 'org.testfx:testfx-junit:4.0.4-alpha'
-    testRuntime 'org.testfx:openjfx-monocle:1.8.0_20'
+    testCompile 'org.testfx:openjfx-monocle:1.8.0_20'
 }
 
 // How-to dev/run this project
