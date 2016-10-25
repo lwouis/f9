@@ -4,7 +4,6 @@ import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.Collator;
@@ -260,6 +259,7 @@ public class ItemListController implements Initializable {
       ResourceDirectory rd = pe.getImageData().getResourceTable();
       ResourceEntry[] entries = ResourceHelper.findResources(rd, ResourceType.VERSION_INFO);
       if (entries.length == 0) {
+        logger.info("Failed to retrieve pretty file name for file: " + file.getAbsolutePath() + ".");
         return file.getName();
       }
       VersionInfo versionInfo = ResourceParser.readVersionInfo(entries[0].getData());
@@ -270,11 +270,11 @@ public class ItemListController implements Initializable {
           return property.getValue();
         }
       }
+      logger.info("Failed to retrieve pretty file name for file: " + file.getAbsolutePath() + ".");
       return file.getName();
     }
     catch (Throwable t) {
-      //t.printStackTrace();
-      System.out.println(file.getName());
+      logger.info("Failed to retrieve pretty file name for file: " + file.getAbsolutePath() + ".", t);
       return file.getName();
     }
   }
@@ -292,8 +292,8 @@ public class ItemListController implements Initializable {
       bGr.dispose();
       return SwingFXUtils.toFXImage(bufferedImage, null);
     }
-    catch (FileNotFoundException e) {
-      e.printStackTrace();
+    catch (Throwable t) {
+      logger.info("Failed to retrieve icon for file: " + file.getAbsolutePath() + ".", t);
       return null;
     }
   }
