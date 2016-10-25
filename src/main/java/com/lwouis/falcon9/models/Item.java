@@ -17,6 +17,10 @@ public class Item {
     this.image = image;
   }
 
+  public Item oneLevelDeepCopy() {
+    return new Item(name, absolutePath, image); // image is not cloned because it's not needed to solve // access issues
+  }
+
   public Image getImage() {
     return image;
   }
