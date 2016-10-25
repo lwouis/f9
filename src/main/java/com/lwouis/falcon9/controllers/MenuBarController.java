@@ -15,12 +15,9 @@ public class MenuBarController {
 
   private final ItemListController itemListController;
 
-  private final DiskPersistanceManager diskPersistanceManager;
-
   @Inject
   public MenuBarController(ItemListController itemListController, DiskPersistanceManager diskPersistanceManager) {
     this.itemListController = itemListController;
-    this.diskPersistanceManager = diskPersistanceManager;
   }
 
   @FXML
