@@ -3,7 +3,7 @@
 Falcon9 is an app launcher. It appears after you press the global keyboard shortcut and displays a list of apps. You 
 can then choose one and it will get launched.
 
-![Screenshot of Falcon9](docs/screenshot_1.jpg)
+![Screenshot of Falcon9](docs/screenshot_1.png)
 
 # How to install
 
