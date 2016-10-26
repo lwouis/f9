@@ -33,6 +33,8 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'ch.qos.logback:logback-core:1.1.7'
     compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile 'org.hibernate:hibernate-core:5.2.3.Final'
+    compile 'postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted'
     testCompile 'org.testfx:testfx-core:4.0.4-alpha'
     testCompile 'org.testfx:testfx-junit:4.0.4-alpha'
     testCompile 'org.testfx:openjfx-monocle:1.8.0_20'
