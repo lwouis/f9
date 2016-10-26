@@ -2,8 +2,8 @@ package com.lwouis.falcon9.injection;
 
 import java.lang.reflect.Field;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.MembersInjector;
 
@@ -15,7 +15,7 @@ public class Log4JMembersInjector<T> implements MembersInjector<T> {
   Log4JMembersInjector(Field field) {
     this.field = field;
 
-    this.logger = LogManager.getLogger(field.getDeclaringClass().getName());
+    this.logger = LoggerFactory.getLogger(field.getDeclaringClass().getName());
     field.setAccessible(true);
   }
 

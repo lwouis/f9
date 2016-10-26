@@ -2,7 +2,7 @@ package com.lwouis.falcon9.injection;
 
 import java.lang.reflect.Field;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;

@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.boris.pecoff4j.PE;
 import org.boris.pecoff4j.ResourceDirectory;
 import org.boris.pecoff4j.ResourceEntry;
@@ -259,7 +259,7 @@ public class ItemListController implements Initializable {
       ResourceDirectory rd = pe.getImageData().getResourceTable();
       ResourceEntry[] entries = ResourceHelper.findResources(rd, ResourceType.VERSION_INFO);
       if (entries.length == 0) {
-        logger.info("Failed to retrieve pretty file name for file: " + file.getAbsolutePath() + ".");
+        logger.info("Failed to retrieve pretty file name for file: {}.", file.getAbsolutePath());
         return file.getName();
       }
       VersionInfo versionInfo = ResourceParser.readVersionInfo(entries[0].getData());
@@ -270,11 +270,11 @@ public class ItemListController implements Initializable {
           return property.getValue();
         }
       }
-      logger.info("Failed to retrieve pretty file name for file: " + file.getAbsolutePath() + ".");
+      logger.info("Failed to retrieve pretty file name for file: {}.", file.getAbsolutePath());
       return file.getName();
     }
     catch (Throwable t) {
-      logger.info("Failed to retrieve pretty file name for file: " + file.getAbsolutePath() + ".", t);
+      logger.info("Failed to retrieve pretty file name for file: {}.", file.getAbsolutePath(), t);
       return file.getName();
     }
   }
@@ -293,7 +293,7 @@ public class ItemListController implements Initializable {
       return SwingFXUtils.toFXImage(bufferedImage, null);
     }
     catch (Throwable t) {
-      logger.info("Failed to retrieve icon for file: " + file.getAbsolutePath() + ".", t);
+      logger.info("Failed to retrieve icon for file: {}.", file.getAbsolutePath());
       return null;
     }
   }

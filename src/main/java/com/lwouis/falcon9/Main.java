@@ -5,8 +5,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.gluonhq.ignite.guice.GuiceContext;
 import com.lwouis.falcon9.injection.GuiceModule;
@@ -35,7 +35,7 @@ public class Main extends Application {
   @Inject
   private StageManager stageManager;
 
-  private Logger logger = LogManager.getLogger(getClass().getName());
+  private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
   public static void main(String[] args) {
     launch(args);

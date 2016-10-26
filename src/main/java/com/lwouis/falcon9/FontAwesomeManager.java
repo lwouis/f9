@@ -2,7 +2,7 @@ package com.lwouis.falcon9;
 
 import javax.inject.Singleton;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 import org.controlsfx.glyphfont.GlyphFont;

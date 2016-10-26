@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.inject.Singleton;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.melloware.jintellitype.HotkeyListener;
