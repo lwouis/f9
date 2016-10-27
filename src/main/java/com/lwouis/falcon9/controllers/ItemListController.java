@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.boris.pecoff4j.PE;
 import org.boris.pecoff4j.ResourceDirectory;
 import org.boris.pecoff4j.ResourceEntry;
@@ -29,8 +29,10 @@ import org.boris.pecoff4j.util.ResourceHelper;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
+import org.slf4j.Logger;
 import org.stackoverflowusers.file.WindowsShortcut;
 
+import com.google.inject.persist.Transactional;
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.FontAwesomeManager;
 import com.lwouis.falcon9.StageManager;
@@ -83,15 +85,19 @@ public class ItemListController implements Initializable {
 
   private static double opacity = 1;
 
+  @InjectLogger
+  private Logger logger;
+
+  private final EntityManager entityManager;
+
   @Inject
-  public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager) {
+  public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager,
+          EntityManager entityManager) {
     this.appState = appState;
     this.stageManager = stageManager;
     this.fontAwesomeManager = fontAwesomeManager;
+    this.entityManager = entityManager;
   }
-
-  @InjectLogger
-  private Logger logger;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -144,8 +150,11 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
+  @Transactional
   public void removeSelected() {
     appState.getItemObservableList().removeAll(itemListView.getSelectionModel().getSelectedItems());
+    entityManager.persist(new AppState());
+    entityManager.flush();
   }
 
   @FXML

@@ -26,7 +26,7 @@ import javafx.concurrent.Task;
 
 @Singleton
 public class DiskPersistanceManager implements ListChangeListener<Item> {
-  private static final File jsonFile = Paths.get(Environment.USER_HOME + "/.falcon9/appState.json").toFile();
+  private static final File jsonFile = Paths.get(Environment.USER_HOME_APP_FOLDER + "appState.json").toFile();
 
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
