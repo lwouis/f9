@@ -32,6 +32,7 @@ import org.controlsfx.glyphfont.Glyph;
 import org.slf4j.Logger;
 import org.stackoverflowusers.file.WindowsShortcut;
 
+import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.FontAwesomeManager;
@@ -88,11 +89,11 @@ public class ItemListController implements Initializable {
   @InjectLogger
   private Logger logger;
 
-  private final EntityManager entityManager;
+  private final Provider<EntityManager> entityManager;
 
   @Inject
   public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager,
-          EntityManager entityManager) {
+          Provider<EntityManager> entityManager) {
     this.appState = appState;
     this.stageManager = stageManager;
     this.fontAwesomeManager = fontAwesomeManager;
@@ -153,6 +154,7 @@ public class ItemListController implements Initializable {
   @Transactional
   public void removeSelected() {
     appState.getItemObservableList().removeAll(itemListView.getSelectionModel().getSelectedItems());
+    EntityManager entityManager = this.entityManager.get();
     entityManager.persist(new AppState());
     entityManager.flush();
   }
@@ -230,6 +232,7 @@ public class ItemListController implements Initializable {
     }
   }
 
+  @Transactional
   public void addFiles(List<File> files) {
     List<Item> itemList = new ArrayList<>();
     for (File file : files) {
@@ -238,6 +241,9 @@ public class ItemListController implements Initializable {
               .add(new Item(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
     }
     appState.getItemObservableList().addAll(itemList);
+    EntityManager entityManager = this.entityManager.get();
+    entityManager.persist(new AppState());
+    entityManager.flush();
   }
 
   private File resolveWindowsShortcut(File file) {
