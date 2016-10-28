@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.persistence.EntityManager;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -17,6 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
+import com.google.inject.Provider;
+import com.google.inject.persist.Transactional;
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Item;
 import javafx.application.Platform;
@@ -25,7 +28,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 @Singleton
-public class DiskPersistanceManager implements ListChangeListener<Item> {
+public class DiskPersistenceManager implements ListChangeListener<Item> {
   private static final File jsonFile = Paths.get(Environment.USER_HOME_APP_FOLDER + "appState.json").toFile();
 
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -34,6 +37,8 @@ public class DiskPersistanceManager implements ListChangeListener<Item> {
   }.getType();
 
   private final AppState appState;
+
+  private final Provider<EntityManager> entityManager;
 
   @InjectLogger
   private Logger logger;
@@ -68,8 +73,9 @@ public class DiskPersistanceManager implements ListChangeListener<Item> {
   }
 
   @Inject
-  public DiskPersistanceManager(AppState appState) {
+  public DiskPersistenceManager(AppState appState, Provider<EntityManager> entityManager) {
     this.appState = appState;
+    this.entityManager = entityManager;
     appState.getItemObservableList().addListener(this);
   }
 
@@ -86,11 +92,13 @@ public class DiskPersistanceManager implements ListChangeListener<Item> {
     loadFromDiskInternal(file);
   }
 
+  @Transactional
   private void loadFromDiskInternal(File file) {
     if (!file.exists()) {
       return;
     }
     try {
+      //entityManager.get().find
       String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
       List<Item> items = deserializeFromJson(json);
       appState.getItemObservableList().setAll(items);

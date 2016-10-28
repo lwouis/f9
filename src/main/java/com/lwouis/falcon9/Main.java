@@ -27,7 +27,7 @@ public class Main extends Application {
   private FXMLLoader fxmlLoader;
 
   @Inject
-  private DiskPersistanceManager diskPersistanceManager;
+  private DiskPersistenceManager diskPersistenceManager;
 
   @Inject
   private GlobalHotkeyManager globalHotkeyManager;
@@ -57,7 +57,7 @@ public class Main extends Application {
       final String APP_NAME = "Falcon9";
       trayIconManager.showTrayIcon(APP_NAME);
       globalHotkeyManager.registerGlobalHotkey(stageManager);
-      diskPersistanceManager.loadFromDisk();
+      diskPersistenceManager.loadFromDisk();
       fxmlLoader.setResources(ResourceBundle.getBundle("i18n.strings", Locale.getDefault()));
       fxmlLoader.setLocation(ClassLoader.getSystemResource("fxml/MainWindow.fxml"));
       Parent root = fxmlLoader.load();

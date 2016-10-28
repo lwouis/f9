@@ -40,6 +40,7 @@ import com.lwouis.falcon9.StageManager;
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Item;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -69,6 +70,8 @@ public class ItemListController implements Initializable {
 
   @FXML
   private CustomTextField searchTextField;
+
+  private static FilteredList<Item> itemFilteredList;
 
   private static final String NETWORK_FILE_PREFIX = "\\\\";
 
@@ -102,8 +105,8 @@ public class ItemListController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    initializeSearchTextField();
     initializeItemListView();
+    initializeSearchTextField();
   }
 
   private void initializeSearchTextField() {
@@ -113,7 +116,6 @@ public class ItemListController implements Initializable {
     searchTextField.setLeft(searchIcon);
     searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String searchText = searchTextField.getText();
-      FilteredList<Item> itemFilteredList = appState.getItemFilteredList();
       MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
       if (searchText == null || searchText.length() == 0) {
         itemFilteredList.setPredicate(s -> true);
@@ -127,7 +129,9 @@ public class ItemListController implements Initializable {
   }
 
   private void initializeItemListView() {
-    appState.getItemSortedList().setComparator((o1, o2) -> {
+    itemFilteredList = new FilteredList<>(appState.getItemObservableList());
+    SortedList<Item> itemSortedList = new SortedList<>(itemFilteredList);
+    itemSortedList.setComparator((o1, o2) -> {
       String text = searchTextField.getText();
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
@@ -143,7 +147,7 @@ public class ItemListController implements Initializable {
         return 1;
       }
     });
-    itemListView.setItems(appState.getItemSortedList());
+    itemListView.setItems(itemSortedList);
     itemListView.setCellFactory(lv -> new ItemListCell());
     MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
     selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
