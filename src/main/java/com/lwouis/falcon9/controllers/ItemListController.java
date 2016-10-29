@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.StringUtils;
 import org.boris.pecoff4j.PE;
@@ -32,8 +31,6 @@ import org.controlsfx.glyphfont.Glyph;
 import org.slf4j.Logger;
 import org.stackoverflowusers.file.WindowsShortcut;
 
-import com.google.inject.Provider;
-import com.google.inject.persist.Transactional;
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.FontAwesomeManager;
 import com.lwouis.falcon9.StageManager;
@@ -92,15 +89,11 @@ public class ItemListController implements Initializable {
   @InjectLogger
   private Logger logger;
 
-  private final Provider<EntityManager> entityManager;
-
   @Inject
-  public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager,
-          Provider<EntityManager> entityManager) {
+  public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager) {
     this.appState = appState;
     this.stageManager = stageManager;
     this.fontAwesomeManager = fontAwesomeManager;
-    this.entityManager = entityManager;
   }
 
   @Override
@@ -129,7 +122,7 @@ public class ItemListController implements Initializable {
   }
 
   private void initializeItemListView() {
-    itemFilteredList = new FilteredList<>(appState.getItemObservableList());
+    itemFilteredList = new FilteredList<>(appState.getObservableItemList());
     SortedList<Item> itemSortedList = new SortedList<>(itemFilteredList);
     itemSortedList.setComparator((o1, o2) -> {
       String text = searchTextField.getText();
@@ -155,12 +148,8 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  @Transactional
   public void removeSelected() {
-    appState.getItemObservableList().removeAll(itemListView.getSelectionModel().getSelectedItems());
-    EntityManager entityManager = this.entityManager.get();
-    entityManager.persist(new AppState());
-    entityManager.flush();
+    appState.getObservableItemList().removeAll(itemListView.getSelectionModel().getSelectedItems());
   }
 
   @FXML
@@ -236,7 +225,6 @@ public class ItemListController implements Initializable {
     }
   }
 
-  @Transactional
   public void addFiles(List<File> files) {
     List<Item> itemList = new ArrayList<>();
     for (File file : files) {
@@ -244,10 +232,7 @@ public class ItemListController implements Initializable {
       itemList
               .add(new Item(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
     }
-    appState.getItemObservableList().addAll(itemList);
-    EntityManager entityManager = this.entityManager.get();
-    entityManager.persist(new AppState());
-    entityManager.flush();
+    appState.getObservableItemList().addAll(itemList);
   }
 
   private File resolveWindowsShortcut(File file) {

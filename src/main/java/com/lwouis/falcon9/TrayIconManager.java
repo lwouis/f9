@@ -29,16 +29,17 @@ public class TrayIconManager {
   @Inject
   public TrayIconManager(Provider<StageManager> stageManager) {
     this.stageManager = stageManager;
+    showTrayIcon();
   }
 
-  public void showTrayIcon(String appName) {
+  public void showTrayIcon() {
     try {
       tray = SystemTray.getSystemTray();
       int trayHeight = (int)tray.getTrayIconSize().getHeight();
       String iconPath = "trayIcon/icon1_" + trayHeight + ".png";
       URL systemResource = ClassLoader.getSystemResource(iconPath);
       Image image = ImageIO.read(systemResource);
-      TrayIcon trayIcon = new TrayIcon(image, appName);
+      TrayIcon trayIcon = new TrayIcon(image, Environment.APP_NAME);
       trayIcon.addActionListener(e -> stageManager.get().showStageCenteredOnPrimaryDisplay());
       tray.add(trayIcon);
       MenuItem closeItem = new MenuItem("Quit");

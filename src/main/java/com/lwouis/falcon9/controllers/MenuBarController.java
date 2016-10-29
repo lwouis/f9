@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
-import com.lwouis.falcon9.DiskPersistenceManager;
+import com.lwouis.falcon9.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
@@ -16,7 +16,7 @@ public class MenuBarController {
   private final ItemListController itemListController;
 
   @Inject
-  public MenuBarController(ItemListController itemListController, DiskPersistenceManager diskPersistenceManager) {
+  public MenuBarController(ItemListController itemListController, AppState appState) {
     this.itemListController = itemListController;
   }
 

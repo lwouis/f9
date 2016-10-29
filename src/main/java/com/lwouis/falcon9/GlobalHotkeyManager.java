@@ -30,8 +30,13 @@ public class GlobalHotkeyManager {
   }
 
   public void unregisterGlobalHotkey() {
-    jIntellitype.unregisterHotKey(HOTKEY_ID);
-    jIntellitype.cleanUp();
+    try {
+      jIntellitype.unregisterHotKey(HOTKEY_ID);
+      jIntellitype.cleanUp();
+    }
+    catch (Throwable t) {
+      logger.error("Failed to cleanup jIntellitype global hotkey.", t);
+    }
   }
 
   private String copyOfDllFromJar() throws IOException {

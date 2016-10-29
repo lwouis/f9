@@ -3,7 +3,7 @@
 
   <property name="LOG_DIRECTORY" value="${user.home}/.falcon9/logs/"/>
   <property name="LOG_PATTERN"
-            value="%highlight(%d{HH:mm:ss.SSS} [%t] %-5level %c{36} -> %msg%n%ex)"/>
+            value="%highlight(%d{HH:mm:ss.SSS} [%t] %-5level %c{36}%n   %msg%n%ex)"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -31,7 +31,7 @@
     <appender-ref ref="STDOUT"/>
   </root>
 
-  <logger name="org.hibernate" level="WARN" />
-  <logger name="org.hibernate.SQL" level="DEBUG" />
+  <logger name="org.hibernate" level="off" />
+  <logger name="net.ttddyy.dsproxy" level="all" />
 
 </configuration>
