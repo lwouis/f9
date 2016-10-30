@@ -2,6 +2,8 @@ package com.lwouis.falcon9.controllers;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+
 import com.lwouis.falcon9.models.Item;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 
+@Component
 public class ItemListCell extends ListCell<Item> {
 
   @FXML

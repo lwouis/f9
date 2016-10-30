@@ -4,19 +4,18 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import javax.inject.Singleton;
 
-import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 
-@Singleton
+@Component
 public class GlobalHotkeyManager {
 
   @InjectLogger
-  private Logger logger;
+  private org.slf4j.Logger logger;
 
   private static final int HOTKEY_ID = 0;
 

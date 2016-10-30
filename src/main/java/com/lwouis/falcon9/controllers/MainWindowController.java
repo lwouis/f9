@@ -1,10 +1,13 @@
 package com.lwouis.falcon9.controllers;
 
+import org.springframework.stereotype.Component;
+
 import javafx.fxml.FXML;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
+@Component
 public class MainWindowController {
   @FXML
   private ItemListController itemListController;

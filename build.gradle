@@ -19,6 +19,11 @@ repositories {
     //maven { url 'https://jitpack.io' }
 }
 
+configurations.all {
+    // Make Spring log through slf4j (see http://www.codingpedia.org/ama/how-to-log-in-spring-with-slf4j-and-logback/)
+    exclude group: "commons-logging", module: "commons-logging"
+}
+
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
     compile 'org.apache.commons:commons-lang3:3.4'
@@ -26,12 +31,15 @@ dependencies {
     compile 'org.apache.lucene:lucene-core:6.2.1'
     compile 'com.melloware:jintellitype:1.3.9'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'com.gluonhq:ignite-guice:1.0.1'
-    compile 'com.google.inject.extensions:guice-persist:4.1.0'
     compile 'org.controlsfx:controlsfx:8.40.12'
     compile 'org.webjars:font-awesome:4.6.3'
     compile 'org.springframework:spring-core:4.3.3.RELEASE'
+    compile 'org.springframework:spring-context:4.3.3.RELEASE'
+    compile 'org.springframework:spring-orm:4.3.3.RELEASE'
+    compile 'org.springframework:spring-tx:4.3.3.RELEASE'
+    compile 'aspectj:aspectjweaver:1.5.4'
     compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'org.slf4j:jcl-over-slf4j:1.7.21'
     compile 'ch.qos.logback:logback-core:1.1.7'
     compile 'ch.qos.logback:logback-classic:1.1.7'
     compile 'org.hibernate:hibernate-core:5.2.3.Final'

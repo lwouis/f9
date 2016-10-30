@@ -3,58 +3,33 @@ package com.lwouis.falcon9;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.google.inject.Provider;
-import com.google.inject.persist.Transactional;
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Item;
 import com.lwouis.falcon9.models.ItemList;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 
-@Singleton
+@Component
 public class AppState implements ListChangeListener<Item> {
 
-  private final Provider<EntityManager> entityManager;
+  //@PersistenceContext(unitName = "jpaPersist")
+  private EntityManager entityManager;
 
   @InjectLogger
   private Logger logger;
 
   private ObservableList<Item> observableItemList;
 
-  private ItemList itemList;
-
-  private final Service<Void> service = new Service<Void>() {
-    @Override
-    protected Task<Void> createTask() {
-      return new Task<Void>() {
-        @Override
-        protected Void call() {
-          try {
-//            ArrayList<Item> copy = oneLevelDeepCopy(observableItemList);
-//            String json = serializeToJson(copy);
-//            Files.createDirectories(jsonFile.toPath().getParent());
-//            FileUtils.writeStringToFile(jsonFile, json, StandardCharsets.UTF_8, false);
-          }
-          catch (Throwable t) {
-            logger.error("Failed to save appState to disk.", t);
-          }
-          return null;
-        }
-      };
-    }
-  };
-
   @Inject
-  public AppState(Provider<EntityManager> entityManager) {
+  public AppState(EntityManager entityManager) {
     this.entityManager = entityManager;
     observableItemList = FXCollections.observableList(loadListFromDiskOrCreateOne());
     observableItemList.addListener(this);
@@ -63,11 +38,11 @@ public class AppState implements ListChangeListener<Item> {
   @Transactional
   private List<Item> loadListFromDiskOrCreateOne() {
     try {
-      CriteriaQuery<ItemList> query = entityManager.get().getCriteriaBuilder().createQuery(ItemList.class);
-      CriteriaQuery<ItemList> q = query.select(query.from(ItemList.class));
-      List<ItemList> loadedAppState = entityManager.get().createQuery(q).getResultList();
+      CriteriaQuery<ItemList> query = entityManager.getCriteriaBuilder().createQuery(ItemList.class);
+      query = query.select(query.from(ItemList.class));
+      List<ItemList> loadedAppState = entityManager.createQuery(query).getResultList();
+      ItemList itemList;
       if (loadedAppState.isEmpty()) {
-        EntityManager entityManager = this.entityManager.get();
         itemList = new ItemList();
         itemList.setItemList(new ArrayList<>());
         entityManager.persist(itemList);
@@ -77,7 +52,7 @@ public class AppState implements ListChangeListener<Item> {
       return itemList.getItemList();
     }
     catch (Throwable t) {
-      logger.error("Failed to load appState from disk.", t);
+      logger.error("Failed to load app state from disk.", t);
     }
     return null;
   }
@@ -85,9 +60,10 @@ public class AppState implements ListChangeListener<Item> {
   @Transactional
   @Override
   public void onChanged(Change<? extends Item> c) {
-    //Platform.runLater(service::restart);
-    EntityManager entityManager = this.entityManager.get();
+    entityManager.getTransaction().begin();
     entityManager.flush();
+    entityManager.getTransaction().commit();
+    // this callback is needed: @Transactional triggers entitymanager flushes
   }
 
   public ObservableList<Item> getObservableItemList() {

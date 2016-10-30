@@ -4,11 +4,14 @@ import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Component;
+
 import com.lwouis.falcon9.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 
+@Component
 public class MenuBarController {
   @FXML
   private MenuBar menuBar;

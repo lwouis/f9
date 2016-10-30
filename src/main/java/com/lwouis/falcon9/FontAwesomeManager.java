@@ -1,18 +1,17 @@
 package com.lwouis.falcon9;
 
-import javax.inject.Singleton;
-
-import org.slf4j.Logger;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 import org.controlsfx.glyphfont.GlyphFont;
 import org.controlsfx.glyphfont.GlyphFontRegistry;
+import org.slf4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.stereotype.Component;
 
 import com.lwouis.falcon9.injection.InjectLogger;
 
-@Singleton
+@Component
 public class FontAwesomeManager {
 
   @InjectLogger

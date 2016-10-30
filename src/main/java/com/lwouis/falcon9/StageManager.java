@@ -1,7 +1,8 @@
 package com.lwouis.falcon9;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import org.springframework.stereotype.Component;
 
 import com.melloware.jintellitype.HotkeyListener;
 import javafx.application.Platform;
@@ -9,7 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-@Singleton
+@Component
 public class StageManager implements HotkeyListener {
 
   private final TrayIconManager trayIconManager;

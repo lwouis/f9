@@ -29,6 +29,7 @@ import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
@@ -54,6 +55,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import sun.awt.shell.ShellFolder;
 
+@Component
 public class ItemListController implements Initializable {
 
   private final AppState appState;

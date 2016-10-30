@@ -16,7 +16,7 @@ public class ItemList {
   private Integer id;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name="itemList_id", referencedColumnName="id")
+  @JoinColumn(name = "itemList_id", referencedColumnName = "id")
   private List<Item> itemList;
 
   public ItemList() {

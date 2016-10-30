@@ -10,13 +10,13 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 import com.lwouis.falcon9.injection.InjectLogger;
 
-@Singleton
+@Component
 public class TrayIconManager {
 
   private SystemTray tray;
