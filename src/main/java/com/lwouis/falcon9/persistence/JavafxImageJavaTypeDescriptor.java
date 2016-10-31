@@ -18,7 +18,7 @@ public class JavafxImageJavaTypeDescriptor extends AbstractTypeDescriptor<Image>
 
   public static final JavafxImageJavaTypeDescriptor INSTANCE = new JavafxImageJavaTypeDescriptor();
 
-  public JavafxImageJavaTypeDescriptor() {
+  private JavafxImageJavaTypeDescriptor() {
     super(Image.class);
   }
 

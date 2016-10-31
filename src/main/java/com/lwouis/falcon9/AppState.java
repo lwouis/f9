@@ -20,17 +20,17 @@ import javafx.collections.ObservableList;
 @Component
 public class AppState implements ListChangeListener<Item> {
 
-  //@PersistenceContext(unitName = "jpaPersist")
-  private EntityManager entityManager;
+  private final EntityManager entityManager;
 
   @InjectLogger
   private Logger logger;
 
-  private ObservableList<Item> observableItemList;
+  private final ObservableList<Item> observableItemList;
 
   @Inject
   public AppState(EntityManager entityManager) {
     this.entityManager = entityManager;
+    //noinspection ConstantConditions
     observableItemList = FXCollections.observableList(loadListFromDiskOrCreateOne());
     observableItemList.addListener(this);
   }
@@ -61,9 +61,8 @@ public class AppState implements ListChangeListener<Item> {
   @Override
   public void onChanged(Change<? extends Item> c) {
     entityManager.getTransaction().begin();
-    entityManager.flush();
+    // nothing is needed here as the entityManager automatically flushes
     entityManager.getTransaction().commit();
-    // this callback is needed: @Transactional triggers entitymanager flushes
   }
 
   public ObservableList<Item> getObservableItemList() {

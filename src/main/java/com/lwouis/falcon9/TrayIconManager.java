@@ -32,7 +32,7 @@ public class TrayIconManager {
     showTrayIcon();
   }
 
-  public void showTrayIcon() {
+  private void showTrayIcon() {
     try {
       tray = SystemTray.getSystemTray();
       int trayHeight = (int)tray.getTrayIconSize().getHeight();

@@ -17,7 +17,7 @@ public class FontAwesomeManager {
   @InjectLogger
   private Logger logger;
 
-  private GlyphFont fontAwesome;
+  private final GlyphFont fontAwesome;
 
   public FontAwesomeManager() {
     try {

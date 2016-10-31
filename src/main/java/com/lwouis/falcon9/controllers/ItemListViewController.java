@@ -1,45 +1,29 @@
 package com.lwouis.falcon9.controllers;
 
 import java.awt.Desktop;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.text.Collator;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 
-import org.boris.pecoff4j.PE;
-import org.boris.pecoff4j.ResourceDirectory;
-import org.boris.pecoff4j.ResourceEntry;
-import org.boris.pecoff4j.constant.ResourceType;
-import org.boris.pecoff4j.io.PEParser;
-import org.boris.pecoff4j.io.ResourceParser;
-import org.boris.pecoff4j.resources.StringPair;
-import org.boris.pecoff4j.resources.StringTable;
-import org.boris.pecoff4j.resources.VersionInfo;
-import org.boris.pecoff4j.util.ResourceHelper;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
 import com.lwouis.falcon9.Keyboard;
 import com.lwouis.falcon9.StageManager;
+import com.lwouis.falcon9.WindowsFileAnalyzer;
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Item;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -49,14 +33,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import sun.awt.shell.ShellFolder;
 
 @Component
 public class ItemListViewController implements Initializable, ApplicationContextAware, InitializingBean {
-
-  private final String networkFilePrefix = "\\\\";
-
-  private final List<String> buggyShortcutResolutions = Arrays.asList(networkFilePrefix, ".", "i");
 
   private double opacity = 1;
 
@@ -65,9 +44,11 @@ public class ItemListViewController implements Initializable, ApplicationContext
   @FXML
   private ListView<Item> itemListView;
 
+  private SearchTextViewController searchTextViewController;
+
   private final AppState appState;
 
-  private SearchTextViewController searchTextViewController;
+  private final WindowsFileAnalyzer windowsFileAnalyzer;
 
   private final StageManager stageManager;
 
@@ -77,9 +58,10 @@ public class ItemListViewController implements Initializable, ApplicationContext
   private ApplicationContext applicationContext;
 
   @Inject
-  public ItemListViewController(AppState appState, StageManager stageManager) {
+  public ItemListViewController(AppState appState, StageManager stageManager, WindowsFileAnalyzer windowsFileAnalyzer) {
     this.appState = appState;
     this.stageManager = stageManager;
+    this.windowsFileAnalyzer = windowsFileAnalyzer;
   }
 
   @Override
@@ -123,7 +105,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   @FXML
-  public void onKeyPressedOnItemListView(KeyEvent keyEvent) {
+  public void onKeyPressed(KeyEvent keyEvent) {
     if (Keyboard.ONLY_TAB.match(keyEvent)) {
       keyEvent.consume();
       searchTextViewController.getSearchTextField().requestFocus();
@@ -132,7 +114,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   @FXML
-  public void onKeyTypedOnItemListView(KeyEvent keyEvent) {
+  public void onKeyTyped(KeyEvent keyEvent) {
     String typedChar = keyEvent.getCharacter();
     if (Keyboard.ONLY_ENTER.getCharacter().equals(typedChar)) {
       launchSelectedInternal();
@@ -164,77 +146,13 @@ public class ItemListViewController implements Initializable, ApplicationContext
   public void addFiles(List<File> files) {
     List<Item> itemList = new ArrayList<>();
     for (File file : files) {
-      File actualFile = resolveWindowsShortcut(file);
-      itemList.add(new Item(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
+      File actualFile = windowsFileAnalyzer.resolveWindowsShortcut(file);
+      String name = windowsFileAnalyzer.getProductName(actualFile);
+      String absolutePath = actualFile.getAbsolutePath();
+      Image icon = windowsFileAnalyzer.getFileIcon(actualFile);
+      itemList.add(new Item(name, absolutePath, icon));
     }
     appState.getObservableItemList().addAll(itemList);
-  }
-
-  private File resolveWindowsShortcut(File file) {
-    try {
-      if (WindowsShortcut.isPotentialValidLink(file)) {
-        String realFilename = new WindowsShortcut(file).getRealFilename();
-        if (buggyShortcutResolutions.contains(realFilename)) { // buggy .lnk shortcut
-          return file;
-        }
-        return new File(realFilename);
-      }
-      else {
-        return file;
-      }
-    }
-    catch (IOException | ParseException e) {
-      e.printStackTrace();
-      return file;
-    }
-  }
-
-  private String getProductName(File file) {
-    try {
-      if (file.getAbsolutePath().startsWith(networkFilePrefix)) { // network files are too long to resolve
-        return file.getName();
-      }
-      PE pe = PEParser.parse(file);
-      ResourceDirectory rd = pe.getImageData().getResourceTable();
-      ResourceEntry[] entries = ResourceHelper.findResources(rd, ResourceType.VERSION_INFO);
-      if (entries.length == 0) {
-        logger.info("Failed to retrieve pretty file name for file: {}.", file.getAbsolutePath());
-        return file.getName();
-      }
-      VersionInfo versionInfo = ResourceParser.readVersionInfo(entries[0].getData());
-      StringTable properties = versionInfo.getStringFileInfo().getTable(0);
-      for (int i = 0; i < properties.getCount(); i++) {
-        StringPair property = properties.getString(i);
-        if (property.getKey().equals("ProductName")) {
-          return property.getValue();
-        }
-      }
-      logger.info("Failed to retrieve pretty file name for file: {}.", file.getAbsolutePath());
-      return file.getName();
-    }
-    catch (Throwable t) {
-      logger.info("Failed to retrieve pretty file name for file: {}.", file.getAbsolutePath(), t);
-      return file.getName();
-    }
-  }
-
-  private Image getFileIcon(File file) {
-    try {
-      if (file.getAbsolutePath().startsWith(networkFilePrefix)) { // network files are too long to resolve
-        return null;
-      }
-      java.awt.Image icon = ShellFolder.getShellFolder(file).getIcon(true); // true is 32x32, false if 16x16
-      BufferedImage bufferedImage = new BufferedImage(icon.getWidth(null), icon.getHeight(null),
-          BufferedImage.TYPE_INT_ARGB);
-      Graphics2D bGr = bufferedImage.createGraphics();
-      bGr.drawImage(icon, 0, 0, null);
-      bGr.dispose();
-      return SwingFXUtils.toFXImage(bufferedImage, null);
-    }
-    catch (Throwable t) {
-      logger.info("Failed to retrieve icon for file: {}.", file.getAbsolutePath());
-      return null;
-    }
   }
 
   public void toggleDragOverFeedback() {

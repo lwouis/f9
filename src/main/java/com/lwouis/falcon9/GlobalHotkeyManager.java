@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.lwouis.falcon9.injection.InjectLogger;
@@ -15,7 +16,7 @@ import com.melloware.jintellitype.JIntellitype;
 public class GlobalHotkeyManager {
 
   @InjectLogger
-  private org.slf4j.Logger logger;
+  private Logger logger;
 
   private static final int HOTKEY_ID = 0;
 
