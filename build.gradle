@@ -56,7 +56,7 @@ dependencies {
 // runShadow: (build if not done through the watch) + run the shadowJar
 // launch4j: builds the launch4j directory which contains the .exe
 
-mainClassName = 'com.lwouis.falcon9.Main'
+mainClassName = 'com.lwouis.f9.Main'
 
 launch4j {
     copyConfigurable = project.tasks.shadowJar.outputs.files

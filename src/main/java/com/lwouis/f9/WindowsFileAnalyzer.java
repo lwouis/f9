@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.stackoverflowusers.file.WindowsShortcut;
 
-import com.lwouis.falcon9.injection.InjectLogger;
+import com.lwouis.f9.injection.InjectLogger;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import sun.awt.shell.ShellFolder;

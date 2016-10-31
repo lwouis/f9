@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.injection;
+package com.lwouis.f9.injection;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

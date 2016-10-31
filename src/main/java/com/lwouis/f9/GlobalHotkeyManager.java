@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -8,7 +8,7 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.lwouis.falcon9.injection.InjectLogger;
+import com.lwouis.f9.injection.InjectLogger;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 
@@ -25,7 +25,7 @@ public class GlobalHotkeyManager {
   public void registerGlobalHotkey(HotkeyListener hotkeyListener) throws IOException {
     JIntellitype.setLibraryLocation(copyOfDllFromJar());
     jIntellitype = JIntellitype.getInstance();
-    jIntellitype.registerHotKey(HOTKEY_ID, JIntellitype.MOD_SHIFT, KeyEvent.VK_TAB);
+    jIntellitype.registerHotKey(HOTKEY_ID, 0, KeyEvent.VK_F9); // 0 = no modifier key
     jIntellitype.addHotKeyListener(hotkeyListener);
   }
 

@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
@@ -9,7 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-import com.lwouis.falcon9.injection.InjectLogger;
+import com.lwouis.f9.injection.InjectLogger;
 
 @Component
 public class FontAwesomeManager {

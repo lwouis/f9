@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.controllers;
+package com.lwouis.f9.controllers;
 
 import org.springframework.stereotype.Component;
 

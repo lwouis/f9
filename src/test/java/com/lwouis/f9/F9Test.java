@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import org.controlsfx.control.textfield.CustomTextField;
 import org.junit.Before;
@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import static org.testfx.api.FxAssert.verifyThat;
 
-public class Falcon9Test extends ApplicationTest {
+public class F9Test extends ApplicationTest {
 
   @BeforeClass
   public static void setupHeadlessMode() {

@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -8,9 +8,9 @@ import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.lwouis.falcon9.injection.FxmlLoaderSpringConfiguration;
-import com.lwouis.falcon9.injection.InjectLogger;
-import com.lwouis.falcon9.injection.JpaSpringConfiguration;
+import com.lwouis.f9.injection.FxmlLoaderSpringConfiguration;
+import com.lwouis.f9.injection.InjectLogger;
+import com.lwouis.f9.injection.JpaSpringConfiguration;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

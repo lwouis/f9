@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.injection;
+package com.lwouis.f9.injection;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

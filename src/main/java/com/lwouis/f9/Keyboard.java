@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;

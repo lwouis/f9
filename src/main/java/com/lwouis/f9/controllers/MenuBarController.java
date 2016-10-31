@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.controllers;
+package com.lwouis.f9.controllers;
 
 import java.io.File;
 import java.util.List;
@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
-import com.lwouis.falcon9.AppState;
+import com.lwouis.f9.AppState;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;

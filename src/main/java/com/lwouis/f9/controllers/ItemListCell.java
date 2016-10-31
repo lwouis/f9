@@ -1,10 +1,10 @@
-package com.lwouis.falcon9.controllers;
+package com.lwouis.f9.controllers;
 
 import java.io.IOException;
 
 import org.springframework.stereotype.Component;
 
-import com.lwouis.falcon9.models.Item;
+import com.lwouis.f9.models.Item;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

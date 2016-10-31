@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.models;
+package com.lwouis.f9.models;
 
 import java.util.List;
 import javax.persistence.CascadeType;

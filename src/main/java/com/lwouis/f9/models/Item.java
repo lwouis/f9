@@ -1,14 +1,16 @@
-package com.lwouis.falcon9.models;
+package com.lwouis.f9.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
+import com.lwouis.f9.persistence.JavafxImageUserType;
 import javafx.scene.image.Image;
 
+@TypeDef(defaultForType = Image.class, typeClass = JavafxImageUserType.class)
 @Entity(name = "Item")
 public class Item {
 
@@ -23,7 +25,6 @@ public class Item {
   private String absolutePath;
 
   @Column(name = "image")
-  @Type(type = "com.lwouis.falcon9.persistence.JavafxImageUserType")
   private Image image;
 
   public Item() {

@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.controllers;
+package com.lwouis.f9.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -15,10 +15,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.lwouis.falcon9.FontAwesomeManager;
-import com.lwouis.falcon9.Keyboard;
-import com.lwouis.falcon9.injection.InjectLogger;
-import com.lwouis.falcon9.models.Item;
+import com.lwouis.f9.FontAwesomeManager;
+import com.lwouis.f9.Keyboard;
+import com.lwouis.f9.injection.InjectLogger;
+import com.lwouis.f9.models.Item;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

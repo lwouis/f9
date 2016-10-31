@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-  <property name="LOG_DIRECTORY" value="${user.home}/.falcon9/logs/"/>
+  <property name="LOG_DIRECTORY" value="${user.home}/.f9/logs/"/>
   <property name="LOG_PATTERN"
             value="%highlight(%d{HH:mm:ss.SSS} [%t] %-5level %c{36}%n   %msg%n%ex)"/>
 

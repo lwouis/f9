@@ -5,7 +5,7 @@
       minHeight="-Infinity"
       minWidth="-Infinity"
       prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60"
-      fx:controller="com.lwouis.falcon9.controllers.MainWindowController" onDragDropped="#onDragDropped"
+      fx:controller="com.lwouis.f9.controllers.MainWindowController" onDragDropped="#onDragDropped"
       onDragExited="#onDragExited" onDragEntered="#onDragEntered" onDragOver="#onDragOver"
       stylesheets="@/css/style.css">
   <fx:include source="/fxml/MenuBar.fxml"/>

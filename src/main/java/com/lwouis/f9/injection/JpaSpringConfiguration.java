@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.injection;
+package com.lwouis.f9.injection;
 
 import java.util.Properties;
 import javax.persistence.EntityManager;
@@ -14,12 +14,12 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.lwouis.falcon9.Environment;
+import com.lwouis.f9.Environment;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.lwouis.falcon9")
+@ComponentScan("com.lwouis.f9")
 // Fixes com.sun.proxy issue (see http://stackoverflow.com/a/18700986)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class JpaSpringConfiguration {
@@ -40,7 +40,7 @@ public class JpaSpringConfiguration {
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
     entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-    entityManagerFactoryBean.setPackagesToScan("com.lwouis.falcon9.models");
+    entityManagerFactoryBean.setPackagesToScan("com.lwouis.f9.models");
     entityManagerFactoryBean.setDataSource(dataSource());
     entityManagerFactoryBean.setJpaProperties(jpaProperties());
     return entityManagerFactoryBean;

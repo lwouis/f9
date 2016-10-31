@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.persistence;
+package com.lwouis.f9.persistence;
 
 import org.hibernate.type.AbstractSingleColumnStandardBasicType;
 import org.hibernate.type.descriptor.sql.BinaryTypeDescriptor;

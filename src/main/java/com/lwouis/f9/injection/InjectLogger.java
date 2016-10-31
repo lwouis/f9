@@ -1,4 +1,4 @@
-package com.lwouis.falcon9.injection;
+package com.lwouis.f9.injection;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

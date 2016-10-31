@@ -1,4 +1,4 @@
-package com.lwouis.falcon9;
+package com.lwouis.f9;
 
 import java.awt.Font;
 import java.awt.Image;
@@ -14,7 +14,7 @@ import javax.inject.Provider;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.lwouis.falcon9.injection.InjectLogger;
+import com.lwouis.f9.injection.InjectLogger;
 
 @Component
 public class TrayIconManager {

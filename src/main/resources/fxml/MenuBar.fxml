@@ -4,7 +4,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 
-<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lwouis.falcon9.controllers.MenuBarController">
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lwouis.f9.controllers.MenuBarController">
   <Menu mnemonicParsing="false" text="%menubar.item">
     <MenuItem mnemonicParsing="false" onAction="#chooseFile" text="%menubar.add" />
     <MenuItem mnemonicParsing="false" onAction="#removeSelected" text="%menubar.removeSelected" />
