@@ -99,7 +99,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   @FXML
   public void onMouseEvent(MouseEvent mouseEvent) {
     if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-      launchSelectedInternal();
+      launchSelected();
     }
     mouseEvent.consume();
   }
@@ -117,7 +117,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   public void onKeyTyped(KeyEvent keyEvent) {
     String typedChar = keyEvent.getCharacter();
     if (Keyboard.ONLY_ENTER.getCharacter().equals(typedChar)) {
-      launchSelectedInternal();
+      launchSelected();
     }
     else if (Keyboard.ONLY_DELETE.getCharacter().equals(typedChar)) {
       removeSelected();
@@ -125,7 +125,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
     keyEvent.consume();
   }
 
-  public void launchSelectedInternal() {
+  public void launchSelected() {
     for (Item item : itemListView.getSelectionModel().getSelectedItems()) {
       File file = new File(item.getAbsolutePath());
       try {

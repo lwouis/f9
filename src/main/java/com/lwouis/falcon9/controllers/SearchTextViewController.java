@@ -70,7 +70,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
   @FXML
   public void onKeyPressed(KeyEvent keyEvent) {
     if (Keyboard.ONLY_ENTER.match(keyEvent)) {
-      itemListViewController.launchSelectedInternal();
+      itemListViewController.launchSelected();
       keyEvent.consume();
     }
     else if (Keyboard.ONLY_UP.match(keyEvent) || Keyboard.ONLY_DOWN.match(keyEvent)) {
