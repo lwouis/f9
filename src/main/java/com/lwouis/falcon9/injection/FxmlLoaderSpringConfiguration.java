@@ -21,7 +21,7 @@ public class FxmlLoaderSpringConfiguration implements ApplicationContextAware {
   @Bean()
   public FXMLLoader provideFxmlLoader() {
     FXMLLoader loader = new FXMLLoader();
-    loader.setControllerFactory(type -> appContext.getAutowireCapableBeanFactory().createBean((Class<Object>)type));
+    loader.setControllerFactory(clazz -> appContext.getBean(clazz));
     return loader;
   }
 

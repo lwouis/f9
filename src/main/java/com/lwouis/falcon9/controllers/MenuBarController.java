@@ -16,11 +16,11 @@ public class MenuBarController {
   @FXML
   private MenuBar menuBar;
 
-  private final ItemListController itemListController;
+  private final ItemListViewController itemListViewController;
 
   @Inject
-  public MenuBarController(ItemListController itemListController, AppState appState) {
-    this.itemListController = itemListController;
+  public MenuBarController(ItemListViewController itemListViewController, AppState appState) {
+    this.itemListViewController = itemListViewController;
   }
 
   @FXML
@@ -30,11 +30,11 @@ public class MenuBarController {
     if (files == null) {
       return;
     }
-    itemListController.addFiles(files);
+    itemListViewController.addFiles(files);
   }
 
   @FXML
   public void removeSelected() {
-    itemListController.removeSelected();
+    itemListViewController.removeSelected();
   }
 }

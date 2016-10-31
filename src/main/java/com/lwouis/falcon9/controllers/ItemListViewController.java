@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.boris.pecoff4j.PE;
 import org.boris.pecoff4j.ResourceDirectory;
 import org.boris.pecoff4j.ResourceEntry;
@@ -25,15 +24,16 @@ import org.boris.pecoff4j.resources.StringPair;
 import org.boris.pecoff4j.resources.StringTable;
 import org.boris.pecoff4j.resources.VersionInfo;
 import org.boris.pecoff4j.util.ResourceHelper;
-import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.glyphfont.FontAwesome;
-import org.controlsfx.glyphfont.Glyph;
 import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.falcon9.AppState;
-import com.lwouis.falcon9.FontAwesomeManager;
+import com.lwouis.falcon9.Keyboard;
 import com.lwouis.falcon9.StageManager;
 import com.lwouis.falcon9.injection.InjectLogger;
 import com.lwouis.falcon9.models.Item;
@@ -46,88 +46,48 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCharacterCombination;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import sun.awt.shell.ShellFolder;
 
 @Component
-public class ItemListController implements Initializable {
+public class ItemListViewController implements Initializable, ApplicationContextAware, InitializingBean {
 
-  private final AppState appState;
+  private final String networkFilePrefix = "\\\\";
 
-  private final StageManager stageManager;
+  private final List<String> buggyShortcutResolutions = Arrays.asList(networkFilePrefix, ".", "i");
 
-  private final FontAwesomeManager fontAwesomeManager;
+  private double opacity = 1;
+
+  private FilteredList<Item> filteredItemList;
 
   @FXML
   private ListView<Item> itemListView;
 
-  @FXML
-  private CustomTextField searchTextField;
+  private final AppState appState;
 
-  private static FilteredList<Item> itemFilteredList;
+  private SearchTextViewController searchTextViewController;
 
-  private static final String NETWORK_FILE_PREFIX = "\\\\";
-
-  private static final List<String> BUGGY_SHORTCUT_RESOLUTIONS = Arrays.asList(NETWORK_FILE_PREFIX, ".", "i");
-
-  private static final KeyCharacterCombination ONLY_ENTER = new KeyCharacterCombination("\r");
-
-  private static final KeyCharacterCombination ONLY_TAB = new KeyCharacterCombination("\t");
-
-  private static final KeyCharacterCombination ONLY_DELETE = new KeyCharacterCombination("");
-
-  private static final KeyCombination ONLY_UP = new KeyCodeCombination(KeyCode.UP);
-
-  private static final KeyCombination ONLY_DOWN = new KeyCodeCombination(KeyCode.DOWN);
-
-  private static double opacity = 1;
+  private final StageManager stageManager;
 
   @InjectLogger
   private Logger logger;
 
+  private ApplicationContext applicationContext;
+
   @Inject
-  public ItemListController(AppState appState, StageManager stageManager, FontAwesomeManager fontAwesomeManager) {
+  public ItemListViewController(AppState appState, StageManager stageManager) {
     this.appState = appState;
     this.stageManager = stageManager;
-    this.fontAwesomeManager = fontAwesomeManager;
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    initializeItemListView();
-    initializeSearchTextField();
-  }
-
-  private void initializeSearchTextField() {
-    Glyph searchIcon = fontAwesomeManager.getGlyph(FontAwesome.Glyph.SEARCH);
-    searchIcon.setTranslateX(35);
-    searchIcon.setTranslateY(-1);
-    searchTextField.setLeft(searchIcon);
-    searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      String searchText = searchTextField.getText();
-      MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
-      if (searchText == null || searchText.length() == 0) {
-        itemFilteredList.setPredicate(s -> true);
-      }
-      else {
-        String searchTextTrimmed = searchText.trim(); // ignore extra spaces on the sides
-        itemFilteredList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), searchTextTrimmed));
-      }
-      selectionModel.selectFirst();
-    });
-  }
-
-  private void initializeItemListView() {
-    itemFilteredList = new FilteredList<>(appState.getObservableItemList());
-    SortedList<Item> itemSortedList = new SortedList<>(itemFilteredList);
+    filteredItemList = new FilteredList<>(appState.getObservableItemList());
+    SortedList<Item> itemSortedList = new SortedList<>(filteredItemList);
     itemSortedList.setComparator((o1, o2) -> {
-      String text = searchTextField.getText();
+      String text = searchTextViewController.getSearchTextField().getText();
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
       boolean o1StartsWithText = coll.compare(o1.getName().substring(0, text.length()), text) == 0;
@@ -163,53 +123,27 @@ public class ItemListController implements Initializable {
   }
 
   @FXML
-  public void onKeyPressedOnSearchTextField(KeyEvent keyEvent) {
-    MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
-    if (ONLY_ENTER.match(keyEvent)) {
-      launchSelectedInternal();
-      keyEvent.consume();
-    }
-    else if (ONLY_UP.match(keyEvent) || ONLY_DOWN.match(keyEvent)) {
-      if (ONLY_UP.match(keyEvent)) {
-        int newIndex = selectionModel.getSelectedIndex() - 1;
-        if (newIndex < 0) {
-          newIndex = itemListView.getItems().size() - 1;
-        }
-        selectionModel.clearAndSelect(newIndex);
-      }
-      else if (ONLY_DOWN.match(keyEvent)) {
-        int newIndex = selectionModel.getSelectedIndex() + 1;
-        if (newIndex > itemListView.getItems().size() - 1) {
-          newIndex = 0;
-        }
-        selectionModel.clearAndSelect(newIndex);
-      }
-      keyEvent.consume();
-    }
-  }
-
-  @FXML
   public void onKeyPressedOnItemListView(KeyEvent keyEvent) {
-    if (ONLY_TAB.match(keyEvent)) {
+    if (Keyboard.ONLY_TAB.match(keyEvent)) {
       keyEvent.consume();
-      searchTextField.requestFocus();
-      searchTextField.end();
+      searchTextViewController.getSearchTextField().requestFocus();
+      searchTextViewController.getSearchTextField().end();
     }
   }
 
   @FXML
   public void onKeyTypedOnItemListView(KeyEvent keyEvent) {
     String typedChar = keyEvent.getCharacter();
-    if (ONLY_ENTER.getCharacter().equals(typedChar)) {
+    if (Keyboard.ONLY_ENTER.getCharacter().equals(typedChar)) {
       launchSelectedInternal();
     }
-    else if (ONLY_DELETE.getCharacter().equals(typedChar)) {
+    else if (Keyboard.ONLY_DELETE.getCharacter().equals(typedChar)) {
       removeSelected();
     }
     keyEvent.consume();
   }
 
-  private void launchSelectedInternal() {
+  public void launchSelectedInternal() {
     for (Item item : itemListView.getSelectionModel().getSelectedItems()) {
       File file = new File(item.getAbsolutePath());
       try {
@@ -231,8 +165,7 @@ public class ItemListController implements Initializable {
     List<Item> itemList = new ArrayList<>();
     for (File file : files) {
       File actualFile = resolveWindowsShortcut(file);
-      itemList
-              .add(new Item(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
+      itemList.add(new Item(getProductName(actualFile), actualFile.getAbsolutePath(), getFileIcon(actualFile)));
     }
     appState.getObservableItemList().addAll(itemList);
   }
@@ -241,7 +174,7 @@ public class ItemListController implements Initializable {
     try {
       if (WindowsShortcut.isPotentialValidLink(file)) {
         String realFilename = new WindowsShortcut(file).getRealFilename();
-        if (BUGGY_SHORTCUT_RESOLUTIONS.contains(realFilename)) { // buggy .lnk shortcut
+        if (buggyShortcutResolutions.contains(realFilename)) { // buggy .lnk shortcut
           return file;
         }
         return new File(realFilename);
@@ -258,7 +191,7 @@ public class ItemListController implements Initializable {
 
   private String getProductName(File file) {
     try {
-      if (file.getAbsolutePath().startsWith(NETWORK_FILE_PREFIX)) { // network files are too long to resolve
+      if (file.getAbsolutePath().startsWith(networkFilePrefix)) { // network files are too long to resolve
         return file.getName();
       }
       PE pe = PEParser.parse(file);
@@ -287,12 +220,12 @@ public class ItemListController implements Initializable {
 
   private Image getFileIcon(File file) {
     try {
-      if (file.getAbsolutePath().startsWith(NETWORK_FILE_PREFIX)) { // network files are too long to resolve
+      if (file.getAbsolutePath().startsWith(networkFilePrefix)) { // network files are too long to resolve
         return null;
       }
       java.awt.Image icon = ShellFolder.getShellFolder(file).getIcon(true); // true is 32x32, false if 16x16
       BufferedImage bufferedImage = new BufferedImage(icon.getWidth(null), icon.getHeight(null),
-              BufferedImage.TYPE_INT_ARGB);
+          BufferedImage.TYPE_INT_ARGB);
       Graphics2D bGr = bufferedImage.createGraphics();
       bGr.drawImage(icon, 0, 0, null);
       bGr.dispose();
@@ -307,5 +240,24 @@ public class ItemListController implements Initializable {
   public void toggleDragOverFeedback() {
     opacity = opacity == 1 ? 0.5 : 1;
     itemListView.setOpacity(opacity);
+  }
+
+  public ListView<Item> getItemListView() {
+    return itemListView;
+  }
+
+  public FilteredList<Item> getFilteredItemList() {
+    return filteredItemList;
+  }
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    // doing DI this way prevents Spring circular dependency exception
+    searchTextViewController = applicationContext.getBean(SearchTextViewController.class);
+  }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
   }
 }

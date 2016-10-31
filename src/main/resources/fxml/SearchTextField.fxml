@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<?import javafx.geometry.Insets?>
+<CustomTextField xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
+                 fx:controller="com.lwouis.falcon9.controllers.SearchTextViewController" fx:id="searchTextField"
+                 onKeyPressed="#onKeyPressed"
+                 promptText="%searchTextField.prompt"
+                 styleClass="searchTextField">
+  <padding>
+    <Insets bottom="10.0" left="40.0" top="10.0"/>
+  </padding>
+</CustomTextField>

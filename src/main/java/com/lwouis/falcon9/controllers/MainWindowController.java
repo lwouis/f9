@@ -10,7 +10,7 @@ import javafx.scene.input.TransferMode;
 @Component
 public class MainWindowController {
   @FXML
-  private ItemListController itemListController;
+  private ItemListViewController itemListViewController;
 
   @FXML
   public void onDragDropped(DragEvent dragEvent) {
@@ -18,7 +18,7 @@ public class MainWindowController {
     boolean success = false;
     if (db.hasFiles()) {
       success = true;
-      itemListController.addFiles(db.getFiles());
+      itemListViewController.addFiles(db.getFiles());
     }
     dragEvent.setDropCompleted(success);
     dragEvent.consume();
@@ -26,13 +26,13 @@ public class MainWindowController {
 
   @FXML
   public void onDragExited(DragEvent dragEvent) {
-    itemListController.toggleDragOverFeedback();
+    itemListViewController.toggleDragOverFeedback();
     dragEvent.consume();
   }
 
   @FXML
   public void onDragEntered(DragEvent dragEvent) {
-    itemListController.toggleDragOverFeedback();
+    itemListViewController.toggleDragOverFeedback();
     dragEvent.consume();
   }
 
