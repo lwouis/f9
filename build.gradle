@@ -21,7 +21,7 @@ repositories {
 
 configurations.all {
     // Make Spring log through slf4j (see http://www.codingpedia.org/ama/how-to-log-in-spring-with-slf4j-and-logback/)
-    exclude group: "commons-logging", module: "commons-logging"
+    exclude group: 'commons-logging', module: 'commons-logging'
 }
 
 dependencies {
@@ -76,9 +76,10 @@ sourceSets {
     }
 }
 
-// removing javac warning because sun.awt.shell.ShellFolder is used
-// https://gist.github.com/BorePlusPlus/3772416
 compileJava {
+    options.incremental = true
+    // removing javac warning because sun.awt.shell.ShellFolder is used
+    // https://gist.github.com/BorePlusPlus/3772416
     options.compilerArgs << '-XDignore.symbol.file'
     options.fork = true
     options.forkOptions.executable = 'javac'
@@ -95,8 +96,8 @@ tasks.withType(Checkstyle).each { checkstyleTask ->
     checkstyleTask.doLast {
         reports.all { report ->
             def outputFile = report.destination
-            if (outputFile.exists() && outputFile.text.contains("<error ")) {
-                throw new GradleException("There were checkstyle warnings! For more info check $outputFile")
+            if (outputFile.exists() && outputFile.text.contains('<error ')) {
+                throw new GradleException('There were checkstyle warnings! For more info check ' + $outputFile)
             }
         }
     }
