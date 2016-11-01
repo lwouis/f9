@@ -14,11 +14,10 @@ import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
 import com.lwouis.f9.models.ItemList;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 @Component
-public class AppState implements ListChangeListener<Item> {
+public class AppState {
 
   private final EntityManager entityManager;
 
@@ -32,7 +31,6 @@ public class AppState implements ListChangeListener<Item> {
     this.entityManager = entityManager;
     //noinspection ConstantConditions
     observableItemList = FXCollections.observableList(loadListFromDiskOrCreateOne());
-    observableItemList.addListener(this);
   }
 
   @Transactional
@@ -57,15 +55,15 @@ public class AppState implements ListChangeListener<Item> {
     return null;
   }
 
-  @Transactional
-  @Override
-  public void onChanged(Change<? extends Item> c) {
-    entityManager.getTransaction().begin();
-    // nothing is needed here as the entityManager automatically flushes
-    entityManager.getTransaction().commit();
-  }
-
   public ObservableList<Item> getObservableItemList() {
     return observableItemList;
+  }
+
+  @Transactional
+  public void persist() {
+    entityManager.getTransaction().begin();
+    entityManager.flush();
+    // nothing is needed here as the entityManager automatically flushes
+    entityManager.getTransaction().commit();
   }
 }

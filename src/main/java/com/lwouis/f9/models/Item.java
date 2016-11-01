@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.TypeDef;
 
@@ -26,6 +27,9 @@ public class Item {
 
   @Column(name = "image")
   private Image image;
+
+  @ManyToOne
+  private ItemList itemList;
 
   public Item() {
   }

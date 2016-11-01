@@ -16,13 +16,13 @@ import javafx.scene.image.ImageView;
 public class ItemListCell extends ListCell<Item> {
 
   @FXML
-  private Label itemNameLabel;
+  private Label nameLabel;
 
   @FXML
-  private Label itemPathLabel;
+  private Label pathLabel;
 
   @FXML
-  private ImageView itemImageView;
+  private ImageView imageView;
 
   private Node content;
 
@@ -46,9 +46,9 @@ public class ItemListCell extends ListCell<Item> {
       setGraphic(null);
       return;
     }
-    itemImageView.setImage(item.getImage());
-    itemNameLabel.setText(item.getName());
-    itemPathLabel.setText(item.getAbsolutePath());
+    imageView.setImage(item.getImage());
+    nameLabel.setText(item.getName());
+    pathLabel.setText(item.getAbsolutePath());
     setGraphic(content);
   }
 }

@@ -37,7 +37,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   private FilteredList<Item> filteredItemList;
 
   @FXML
-  private ListView<Item> itemListView;
+  private ListView<Item> listView;
 
   private SearchTextViewController searchTextViewController;
 
@@ -79,16 +79,17 @@ public class ItemListViewController implements Initializable, ApplicationContext
         return 1;
       }
     });
-    itemListView.setItems(itemSortedList);
-    itemListView.setCellFactory(lv -> new ItemListCell());
-    MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
+    listView.setItems(itemSortedList);
+    listView.setCellFactory(lv -> new ItemListCell());
+    MultipleSelectionModel<Item> selectionModel = listView.getSelectionModel();
     selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
     selectionModel.selectFirst();
   }
 
   @FXML
   public void removeSelected() {
-    appState.getObservableItemList().removeAll(itemListView.getSelectionModel().getSelectedItems());
+    appState.getObservableItemList().removeAll(listView.getSelectionModel().getSelectedItems());
+    appState.persist();
   }
 
   @FXML
@@ -121,7 +122,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   public void launchSelected() {
-    for (Item item : itemListView.getSelectionModel().getSelectedItems()) {
+    for (Item item : listView.getSelectionModel().getSelectedItems()) {
       File file = new File(item.getAbsolutePath());
       try {
         if (Desktop.isDesktopSupported()) {
@@ -141,11 +142,11 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
 
   public void setDragOverFeedback(boolean isFeedbackVisible) {
-    itemListView.setOpacity(isFeedbackVisible ? 0.5 : 1);
+    listView.setOpacity(isFeedbackVisible ? 0.5 : 1);
   }
 
-  public ListView<Item> getItemListView() {
-    return itemListView;
+  public ListView<Item> getListView() {
+    return listView;
   }
 
   public FilteredList<Item> getFilteredItemList() {

@@ -6,17 +6,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<HBox styleClass="ItemListCell" alignment="CENTER_LEFT" fillHeight="false" xmlns="http://javafx.com/javafx/8.0.92"
+<HBox styleClass="itemListCell" alignment="CENTER_LEFT" fillHeight="false" xmlns="http://javafx.com/javafx/8.0.92"
       xmlns:fx="http://javafx.com/fxml/1">
-  <ImageView fx:id="itemImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+  <ImageView fx:id="imageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
     <Image url="@../css/img/default-icon.png" />
       <HBox.margin>
          <Insets left="5.0" right="15.0" />
       </HBox.margin>
   </ImageView>
   <VBox>
-    <Label fx:id="itemNameLabel" styleClass="itemNameLabel" text="itemNameLabel"/>
-    <Label fx:id="itemPathLabel" styleClass="itemPathLabel" ellipsisString="…" text="itemPathLabel"
+    <Label fx:id="nameLabel" styleClass="nameLabel" text="itemNameLabel"/>
+    <Label fx:id="pathLabel" styleClass="pathLabel" ellipsisString="…" text="itemPathLabel"
            textOverrun="LEADING_ELLIPSIS" />
   </VBox>
 </HBox>

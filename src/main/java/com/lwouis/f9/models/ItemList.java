@@ -5,7 +5,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity(name = "ItemList")
@@ -15,8 +14,7 @@ public class ItemList {
   @GeneratedValue
   private Integer id;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "itemList_id", referencedColumnName = "id")
+  @OneToMany(mappedBy = "itemList",cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Item> itemList;
 
   public ItemList() {

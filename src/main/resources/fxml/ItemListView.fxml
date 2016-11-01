@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.ListView?>
 <ListView xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.lwouis.f9.controllers.ItemListViewController" fx:id="itemListView"
+          fx:controller="com.lwouis.f9.controllers.ItemListViewController" fx:id="listView"
           styleClass="itemListView" onKeyPressed="#onKeyPressed"
           onKeyTyped="#onKeyTyped" onMouseClicked="#onMouseEvent">
 </ListView>

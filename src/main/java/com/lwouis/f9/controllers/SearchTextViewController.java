@@ -54,7 +54,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
     searchTextField.setLeft(searchIcon);
     searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String searchText = searchTextField.getText();
-      MultipleSelectionModel<Item> selectionModel = itemListViewController.getItemListView().getSelectionModel();
+      MultipleSelectionModel<Item> selectionModel = itemListViewController.getListView().getSelectionModel();
       FilteredList<Item> filteredItemList = itemListViewController.getFilteredItemList();
       if (searchText == null || searchText.length() == 0) {
         filteredItemList.setPredicate(s -> true);
@@ -74,7 +74,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
       keyEvent.consume();
     }
     else if (Keyboard.ONLY_UP.match(keyEvent) || Keyboard.ONLY_DOWN.match(keyEvent)) {
-      ListView<Item> itemListView = itemListViewController.getItemListView();
+      ListView<Item> itemListView = itemListViewController.getListView();
       MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
       int itemListSize = itemListView.getItems().size();
       if (Keyboard.ONLY_UP.match(keyEvent)) {

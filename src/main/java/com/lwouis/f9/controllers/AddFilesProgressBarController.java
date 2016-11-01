@@ -58,7 +58,6 @@ public class AddFilesProgressBarController implements Initializable, Application
   }
 
   public void addFiles(List<File> files) {
-    //setLoadingUiMode(true);
     Task task = new Task() {
       @Override
       protected Void call() throws Exception {
@@ -71,15 +70,18 @@ public class AddFilesProgressBarController implements Initializable, Application
           updateTitle(String.format(message, i, filesSize));
           updateProgress(i, filesSize);
           File file = files.get(i);
-          File actualFile = windowsFileAnalyzer.resolveWindowsShortcut(file);
+          /*File actualFile = windowsFileAnalyzer.resolveWindowsShortcut(file);
           String name = windowsFileAnalyzer.getProductName(actualFile);
           String absolutePath = actualFile.getAbsolutePath();
-          Image icon = windowsFileAnalyzer.getFileIcon(actualFile);
+          Image icon = windowsFileAnalyzer.getFileIcon(actualFile);*/
           Platform.runLater(() -> {
-            appState.getObservableItemList().add(new Item(name, absolutePath, icon));
+            //appState.getObservableItemList().add(new Item(name, absolutePath, icon));
+            appState.getObservableItemList().add(new Item("test", "testPath", new Image(ClassLoader
+                .getSystemResource("css/img/default-icon.png").toString())));
           });
         }
         setLoadingUiMode(false);
+        Platform.runLater(appState::persist);
         return null;
       }
     };

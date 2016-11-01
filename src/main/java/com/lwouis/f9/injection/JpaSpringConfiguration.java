@@ -51,14 +51,17 @@ public class JpaSpringConfiguration {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName("org.h2.Driver");
     dataSource.setUrl("jdbc:h2:" + Environment.USER_HOME_APP_FOLDER + "db/app");
-    return ProxyDataSourceBuilder.create(dataSource).logQueryBySlf4j("net.ttddyy.dsproxy")
-        .countQuery().build();
+    return ProxyDataSourceBuilder.create(dataSource).logQueryBySlf4j("net.ttddyy.dsproxy").countQuery().build();
   }
 
   private Properties jpaProperties() {
     Properties properties = new Properties();
     properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
     properties.put("hibernate.hbm2ddl.auto", "update");
+    properties.put("hibernate.jdbc.batch_size", "30");
+    properties.put("hibernate.order_inserts", "true");
+    properties.put("hibernate.order_updates", "true");
+    properties.put("hibernate.jdbc.batch_versioned_data", "true");
     return properties;
   }
 

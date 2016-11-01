@@ -18,12 +18,12 @@
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
 
-.itemNameLabel {
+.itemListCell .nameLabel {
     -fx-font-size: 14px;
     -fx-text-fill: #000;
 }
 
-.itemPathLabel {
+.itemListCell .pathLabel {
     -fx-text-fill: #b2b2b2;
 }
 
