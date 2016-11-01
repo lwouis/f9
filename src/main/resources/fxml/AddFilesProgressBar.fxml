@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="addFilesProgressBarVbox" alignment="CENTER" styleClass="addFilesProgressBarVbox" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lwouis.f9.controllers.AddFilesProgressBarController">
-  <ProgressBar fx:id="addFilesProgressBar" maxHeight="-Infinity" maxWidth="-Infinity" progress="0.0" scaleShape="false" />
+<VBox fx:id="vBox" alignment="CENTER" styleClass="addFilesProgressBarVbox"
+      xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lwouis.f9.controllers.AddFilesProgressBarController">
+  <Label fx:id="label" text="Loading"/>
+  <ProgressBar fx:id="progressBar" maxHeight="-Infinity" maxWidth="-Infinity" progress="0.0"
+               scaleShape="false"/>
   <padding>
-    <Insets left="60.0" right="60.0" />
+    <Insets left="60.0" right="60.0"/>
   </padding>
 </VBox>

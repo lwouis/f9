@@ -2,7 +2,6 @@ package com.lwouis.f9.controllers;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -19,6 +18,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -32,10 +32,13 @@ public class AddFilesProgressBarController implements Initializable, Application
   private MenuBarController menuBarController;
 
   @FXML
-  private VBox addFilesProgressBarVbox;
+  private VBox vBox;
 
   @FXML
-  private ProgressBar addFilesProgressBar;
+  private Label label;
+
+  @FXML
+  private ProgressBar progressBar;
 
   private SearchTextViewController searchTextViewController;
 
@@ -55,43 +58,45 @@ public class AddFilesProgressBarController implements Initializable, Application
   }
 
   public void addFiles(List<File> files) {
-    setLoadingUiMode(true);
+    //setLoadingUiMode(true);
     Task task = new Task() {
       @Override
       protected Void call() throws Exception {
-        List<Item> itemList = new ArrayList<>();
+        setLoadingUiMode(true);
         final int filesSize = files.size();
         for (int i = 0; i < filesSize; i++) {
-          final int progress = i;
-          Platform.runLater(() -> {
-            updateTitle(String.format(message, progress, filesSize));
-            updateProgress(progress, filesSize);
-          });
+          if (isCancelled()) {
+            break;
+          }
+          updateTitle(String.format(message, i, filesSize));
+          updateProgress(i, filesSize);
           File file = files.get(i);
           File actualFile = windowsFileAnalyzer.resolveWindowsShortcut(file);
           String name = windowsFileAnalyzer.getProductName(actualFile);
           String absolutePath = actualFile.getAbsolutePath();
           Image icon = windowsFileAnalyzer.getFileIcon(actualFile);
-          itemList.add(new Item(name, absolutePath, icon));
+          Platform.runLater(() -> {
+            appState.getObservableItemList().add(new Item(name, absolutePath, icon));
+          });
         }
-        Platform.runLater(() -> {
-          appState.getObservableItemList().addAll(itemList);
-          setLoadingUiMode(false);
-        });
+        setLoadingUiMode(false);
         return null;
       }
     };
-    addFilesProgressBar.progressProperty().bind(task.progressProperty());
-    new Thread(task).run();
+    label.textProperty().bind(task.titleProperty());
+    progressBar.progressProperty().bind(task.progressProperty());
+    Thread thread = new Thread(task, "AddFilesThread");
+    thread.setDaemon(true);
+    thread.start();
   }
 
   private void setLoadingUiMode(boolean isVisible) {
     Platform.runLater(() -> {
       menuBarController.getMenu1().setDisable(isVisible);
       searchTextViewController.getSearchTextField().setDisable(isVisible);
-      addFilesProgressBarVbox.setVisible(isVisible);
+      vBox.setVisible(isVisible);
       if (!isVisible) {
-        addFilesProgressBar.setProgress(0);
+        progressBar.setProgress(0);
       }
     });
   }

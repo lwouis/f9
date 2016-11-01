@@ -13,7 +13,7 @@ public class MainWindowController {
   private ItemListViewController itemListViewController;
 
   @FXML
-  private AddFilesProgressBarController addFilesProgressBarVboxController;
+  private AddFilesProgressBarController addFilesProgressBarController;
 
   @FXML
   public void onDragDropped(DragEvent dragEvent) {
@@ -21,7 +21,7 @@ public class MainWindowController {
     boolean success = false;
     if (db.hasFiles()) {
       success = true;
-      addFilesProgressBarVboxController.addFiles(db.getFiles());
+      addFilesProgressBarController.addFiles(db.getFiles());
     }
     dragEvent.setDropCompleted(success);
     dragEvent.consume();
@@ -29,13 +29,13 @@ public class MainWindowController {
 
   @FXML
   public void onDragExited(DragEvent dragEvent) {
-    itemListViewController.toggleDragOverFeedback();
+    itemListViewController.setDragOverFeedback(false);
     dragEvent.consume();
   }
 
   @FXML
   public void onDragEntered(DragEvent dragEvent) {
-    itemListViewController.toggleDragOverFeedback();
+    itemListViewController.setDragOverFeedback(true);
     dragEvent.consume();
   }
 

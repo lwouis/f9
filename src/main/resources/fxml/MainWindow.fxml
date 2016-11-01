@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       onDragDropped="#onDragDropped" onDragEntered="#onDragEntered" onDragExited="#onDragExited"
       onDragOver="#onDragOver" prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/style.css"
@@ -12,10 +9,10 @@
       fx:controller="com.lwouis.f9.controllers.MainWindowController">
   <fx:include source="/fxml/MenuBar.fxml"/>
   <VBox>
-    <fx:include source="/fxml/SearchTextField.fxml"/>
+    <fx:include fx:id="searchTextField" source="/fxml/SearchTextField.fxml"/>
     <StackPane>
-      <fx:include source="/fxml/ItemListView.fxml"/>
-      <fx:include source="/fxml/AddFilesProgressBar.fxml"/>
+      <fx:include fx:id="itemListView" source="/fxml/ItemListView.fxml"/>
+      <fx:include fx:id="addFilesProgressBar" source="/fxml/AddFilesProgressBar.fxml"/>
     </StackPane>
   </VBox>
 </VBox>

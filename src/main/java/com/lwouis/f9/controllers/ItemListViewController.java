@@ -34,8 +34,6 @@ import javafx.scene.input.MouseEvent;
 @Component
 public class ItemListViewController implements Initializable, ApplicationContextAware, InitializingBean {
 
-  private double opacity = 1;
-
   private FilteredList<Item> filteredItemList;
 
   @FXML
@@ -142,9 +140,8 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
 
 
-  public void toggleDragOverFeedback() {
-    opacity = opacity == 1 ? 0.5 : 1;
-    itemListView.setOpacity(opacity);
+  public void setDragOverFeedback(boolean isFeedbackVisible) {
+    itemListView.setOpacity(isFeedbackVisible ? 0.5 : 1);
   }
 
   public ListView<Item> getItemListView() {
