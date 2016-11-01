@@ -4,8 +4,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javax.inject.Inject;
 
@@ -29,7 +27,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -143,17 +140,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
     }
   }
 
-  public void addFiles(List<File> files) {
-    List<Item> itemList = new ArrayList<>();
-    for (File file : files) {
-      File actualFile = windowsFileAnalyzer.resolveWindowsShortcut(file);
-      String name = windowsFileAnalyzer.getProductName(actualFile);
-      String absolutePath = actualFile.getAbsolutePath();
-      Image icon = windowsFileAnalyzer.getFileIcon(actualFile);
-      itemList.add(new Item(name, absolutePath, icon));
-    }
-    appState.getObservableItemList().addAll(itemList);
-  }
+
 
   public void toggleDragOverFeedback() {
     opacity = opacity == 1 ? 0.5 : 1;

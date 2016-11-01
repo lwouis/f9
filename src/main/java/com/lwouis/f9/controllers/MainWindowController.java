@@ -13,12 +13,15 @@ public class MainWindowController {
   private ItemListViewController itemListViewController;
 
   @FXML
+  private AddFilesProgressBarController addFilesProgressBarVboxController;
+
+  @FXML
   public void onDragDropped(DragEvent dragEvent) {
     Dragboard db = dragEvent.getDragboard();
     boolean success = false;
     if (db.hasFiles()) {
       success = true;
-      itemListViewController.addFiles(db.getFiles());
+      addFilesProgressBarVboxController.addFiles(db.getFiles());
     }
     dragEvent.setDropCompleted(success);
     dragEvent.consume();

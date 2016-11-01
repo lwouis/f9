@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity"
-      minHeight="-Infinity"
-      minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60"
-      fx:controller="com.lwouis.f9.controllers.MainWindowController" onDragDropped="#onDragDropped"
-      onDragExited="#onDragExited" onDragEntered="#onDragEntered" onDragOver="#onDragOver"
-      stylesheets="@/css/style.css">
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      onDragDropped="#onDragDropped" onDragEntered="#onDragEntered" onDragExited="#onDragExited"
+      onDragOver="#onDragOver" prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/style.css"
+      xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.lwouis.f9.controllers.MainWindowController">
   <fx:include source="/fxml/MenuBar.fxml"/>
   <VBox>
     <fx:include source="/fxml/SearchTextField.fxml"/>
-    <fx:include source="/fxml/ItemListView.fxml"/>
+    <StackPane>
+      <fx:include source="/fxml/ItemListView.fxml"/>
+      <fx:include source="/fxml/AddFilesProgressBar.fxml"/>
+    </StackPane>
   </VBox>
 </VBox>

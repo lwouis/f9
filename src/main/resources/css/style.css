@@ -30,3 +30,7 @@
 .itemListView .list-cell:selected {
     -fx-background-color: #b8dcff;
 }
+
+.addFilesProgressBarVbox {
+    -fx-background-color: #fff;
+}
