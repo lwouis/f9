@@ -61,7 +61,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
       }
       else {
         String searchTextTrimmed = searchText.trim(); // ignore extra spaces on the sides
-        filteredItemList.setPredicate(s -> StringUtils.containsIgnoreCase(s.getName(), searchTextTrimmed));
+        filteredItemList.setPredicate(s -> StringUtils.containsIgnoreCase(s.nameProperty().get(), searchTextTrimmed));
       }
       selectionModel.selectFirst();
     });

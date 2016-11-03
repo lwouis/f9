@@ -2,8 +2,10 @@ package com.lwouis.f9.controllers;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,16 +28,20 @@ public class ItemListCell extends ListCell<Item> {
 
   private Node content;
 
+  @InjectLogger
+  private Logger logger;
+
   public ItemListCell() {
     super();
+    String fxmlFile = "fxml/ItemListCell.fxml";
     try {
       FXMLLoader loader = new FXMLLoader(
-              ClassLoader.getSystemResource("fxml/ItemListCell.fxml"));
+              ClassLoader.getSystemResource(fxmlFile));
       loader.setController(this);
       content = loader.load();
     }
     catch (IOException e) {
-      e.printStackTrace();
+      logger.error("Failed to load " + fxmlFile, e);
     }
   }
 
@@ -46,9 +52,9 @@ public class ItemListCell extends ListCell<Item> {
       setGraphic(null);
       return;
     }
-    imageView.setImage(item.getImage());
-    nameLabel.setText(item.getName());
-    pathLabel.setText(item.getAbsolutePath());
+    imageView.imageProperty().bind(item.iconProperty());
+    nameLabel.textProperty().bind(item.nameProperty());
+    pathLabel.textProperty().bind(item.absolutePathProperty());
     setGraphic(content);
   }
 }

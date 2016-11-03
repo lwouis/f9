@@ -8,10 +8,16 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.TypeDef;
 
-import com.lwouis.f9.persistence.JavafxImageUserType;
+import com.lwouis.f9.persistence.ObjectPropertyUserType;
+import com.lwouis.f9.persistence.StringPropertyUserType;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
-@TypeDef(defaultForType = Image.class, typeClass = JavafxImageUserType.class)
+@TypeDef(defaultForType = StringProperty.class, typeClass = StringPropertyUserType.class)
+@TypeDef(defaultForType = ObjectProperty.class, typeClass = ObjectPropertyUserType.class)
 @Entity(name = "Item")
 public class Item {
 
@@ -20,13 +26,13 @@ public class Item {
   private Integer id;
 
   @Column(name = "name")
-  private String name;
+  private StringProperty name;
 
   @Column(name = "absolutePath")
-  private String absolutePath;
+  private StringProperty absolutePath;
 
-  @Column(name = "image")
-  private Image image;
+  @Column(name = "icon")
+  private ObjectProperty<Image> icon;
 
   @ManyToOne
   private ItemList itemList;
@@ -34,21 +40,21 @@ public class Item {
   public Item() {
   }
 
-  public Item(String name, String absolutePath, Image image) {
-    this.name = name;
-    this.absolutePath = absolutePath;
-    this.image = image;
+  public Item(String name, String absolutePath, Image icon) {
+    this.name = new SimpleStringProperty(name);
+    this.absolutePath = new SimpleStringProperty(absolutePath);
+    this.icon = new SimpleObjectProperty<>(icon);
   }
 
-  public Image getImage() {
-    return image;
-  }
-
-  public String getName() {
+  public StringProperty nameProperty() {
     return name;
   }
 
-  public String getAbsolutePath() {
+  public ObjectProperty<Image> iconProperty() {
+    return icon;
+  }
+
+  public StringProperty absolutePathProperty() {
     return absolutePath;
   }
 }

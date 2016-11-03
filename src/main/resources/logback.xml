@@ -31,7 +31,7 @@
     <appender-ref ref="STDOUT"/>
   </root>
 
-  <logger name="org.hibernate" level="off" />
-  <logger name="net.ttddyy.dsproxy" level="all" />
+  <logger name="org.hibernate" level="warn" />
+  <logger name="net.ttddyy.dsproxy" level="warn" />
 
 </configuration>

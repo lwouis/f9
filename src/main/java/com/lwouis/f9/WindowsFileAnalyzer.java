@@ -32,7 +32,7 @@ public class WindowsFileAnalyzer {
 
   private final String networkFilePrefix = "\\\\";
 
-  private final List<String> buggyShortcutResolutions = Arrays.asList(networkFilePrefix, ".", "i");
+  private final List<String> buggyShortcutResolutions = Arrays.asList(networkFilePrefix);
 
   @InjectLogger
   private Logger logger;
@@ -41,7 +41,7 @@ public class WindowsFileAnalyzer {
     try {
       if (WindowsShortcut.isPotentialValidLink(file)) {
         String realFilename = new WindowsShortcut(file).getRealFilename();
-        if (buggyShortcutResolutions.contains(realFilename)) { // buggy .lnk shortcut
+        if (realFilename.length() < 2 || buggyShortcutResolutions.contains(realFilename)) { // resolution is bogus
           return file;
         }
         return new File(realFilename);

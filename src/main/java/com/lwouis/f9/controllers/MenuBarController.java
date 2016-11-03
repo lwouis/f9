@@ -13,8 +13,6 @@ import javafx.stage.FileChooser;
 
 @Component
 public class MenuBarController {
-  private final AddFilesProgressBarController addFilesProgressBarController;
-
   @FXML
   private MenuBar menuBar;
 
@@ -24,9 +22,8 @@ public class MenuBarController {
   private final ItemListViewController itemListViewController;
 
   @Inject
-  public MenuBarController(ItemListViewController itemListViewController, AddFilesProgressBarController addFilesProgressBarController) {
+  public MenuBarController(ItemListViewController itemListViewController) {
     this.itemListViewController = itemListViewController;
-    this.addFilesProgressBarController = addFilesProgressBarController;
   }
 
   @FXML
@@ -36,7 +33,7 @@ public class MenuBarController {
     if (files == null) {
       return;
     }
-    addFilesProgressBarController.addFiles(files);
+    itemListViewController.addFiles(files);
   }
 
   @FXML

@@ -4,7 +4,13 @@ import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -14,7 +20,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.lwouis.f9.AppState;
+import com.lwouis.f9.Environment;
 import com.lwouis.f9.Keyboard;
 import com.lwouis.f9.StageManager;
 import com.lwouis.f9.WindowsFileAnalyzer;
@@ -67,10 +75,10 @@ public class ItemListViewController implements Initializable, ApplicationContext
       String text = searchTextViewController.getSearchTextField().getText();
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
-      boolean o1StartsWithText = coll.compare(o1.getName().substring(0, text.length()), text) == 0;
-      boolean o2StartsWithText = coll.compare(o2.getName().substring(0, text.length()), text) == 0;
+      boolean o1StartsWithText = coll.compare(o1.nameProperty().get().substring(0, text.length()), text) == 0;
+      boolean o2StartsWithText = coll.compare(o2.nameProperty().get().substring(0, text.length()), text) == 0;
       if ((o1StartsWithText && o2StartsWithText) || (!o1StartsWithText && !o2StartsWithText)) {
-        return coll.compare(o1.getName(), o2.getName());
+        return coll.compare(o1.nameProperty().get(), o2.nameProperty().get());
       }
       else if (o1StartsWithText) {
         return -1;
@@ -123,13 +131,13 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
   public void launchSelected() {
     for (Item item : listView.getSelectionModel().getSelectedItems()) {
-      File file = new File(item.getAbsolutePath());
+      File file = new File(item.absolutePathProperty().get());
       try {
         if (Desktop.isDesktopSupported()) {
           Desktop.getDesktop().open(file);
         }
         else {
-          new ProcessBuilder(item.getAbsolutePath()).start();
+          new ProcessBuilder(item.absolutePathProperty().get()).start();
         }
       }
       catch (Throwable t) {
@@ -139,7 +147,35 @@ public class ItemListViewController implements Initializable, ApplicationContext
     }
   }
 
+  public void addFiles(List<File> files) {
+    ArrayList<Item> itemList = new ArrayList<>();
+    ThreadFactory threadFactory = new ThreadFactoryBuilder().setDaemon(true)
+        .setNameFormat(Environment.APP_NAME + " " + "FileInspectionTask %d").build();
+    ExecutorService threadPool = Executors.newCachedThreadPool(threadFactory);
 
+    final CountDownLatch countDownLatch = new CountDownLatch(files.size());
+
+    for (File file : files) {
+      String name = file.getName();
+      String absolutePath = file.getAbsolutePath();
+      Item item = new Item(name, absolutePath, null);
+      itemList.add(item);
+      threadPool.submit(new FileInspectionTask(item, file, countDownLatch, windowsFileAnalyzer));
+    }
+    appState.getObservableItemList().addAll(itemList);
+    Thread thread = new Thread(() -> {
+      try {
+        countDownLatch.await();
+      }
+      catch (InterruptedException e) {
+        logger.error("Failed to wait for all FileInspectionTask to finish.", e);
+      }
+      threadPool.shutdown();
+      appState.persist();
+    }, Environment.APP_NAME + " PersistOnceAllItemsAreUpdated");
+    thread.setDaemon(true);
+    thread.start();
+  }
 
   public void setDragOverFeedback(boolean isFeedbackVisible) {
     listView.setOpacity(isFeedbackVisible ? 0.5 : 1);

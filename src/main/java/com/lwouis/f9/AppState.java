@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
 import com.lwouis.f9.models.ItemList;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
 
 @Component
 public class AppState {
@@ -29,8 +31,9 @@ public class AppState {
   @Inject
   public AppState(EntityManager entityManager) {
     this.entityManager = entityManager;
+    Callback<Item, Observable[]> extractor = item -> new Observable[] {item.nameProperty(), item.absolutePathProperty(), item.iconProperty()};
     //noinspection ConstantConditions
-    observableItemList = FXCollections.observableList(loadListFromDiskOrCreateOne());
+    observableItemList = FXCollections.observableList(loadListFromDiskOrCreateOne(), extractor);
   }
 
   @Transactional
