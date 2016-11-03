@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.TypeDef;
@@ -35,6 +36,7 @@ public class Item {
   private ObjectProperty<Image> icon;
 
   @ManyToOne
+  @JoinColumn(name = "itemList_id")
   private ItemList itemList;
 
   public Item() {

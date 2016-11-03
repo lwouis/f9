@@ -4,7 +4,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
@@ -148,21 +147,21 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   public void addFiles(List<File> files) {
-    ArrayList<Item> itemList = new ArrayList<>();
-    ThreadFactory threadFactory = new ThreadFactoryBuilder().setDaemon(true)
-        .setNameFormat(Environment.APP_NAME + " " + "FileInspectionTask %d").build();
+    String threadName = Environment.APP_NAME + " " + "FileInspectionTask %d";
+    ThreadFactory threadFactory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat(threadName)
+        .setUncaughtExceptionHandler((t, e) -> logger.error(threadName + " failed to finish.", e)).build();
     ExecutorService threadPool = Executors.newCachedThreadPool(threadFactory);
-
     final CountDownLatch countDownLatch = new CountDownLatch(files.size());
-
     for (File file : files) {
-      String name = file.getName();
-      String absolutePath = file.getAbsolutePath();
-      Item item = new Item(name, absolutePath, null);
-      itemList.add(item);
+      Item item = new Item(file.getName(), file.getAbsolutePath(), null);
+      appState.getObservableItemList().add(item);
       threadPool.submit(windowsFileAnalyzer.createTask(item, file, countDownLatch));
     }
-    appState.getObservableItemList().addAll(itemList);
+    waitForCountDownOnBackgroundThread(threadPool, countDownLatch);
+  }
+
+  private void waitForCountDownOnBackgroundThread(ExecutorService threadPool, CountDownLatch countDownLatch) {
+    String threadName = Environment.APP_NAME + " PersistOnceAllItemsAreUpdated";
     Thread thread = new Thread(() -> {
       try {
         countDownLatch.await();
@@ -172,13 +171,10 @@ public class ItemListViewController implements Initializable, ApplicationContext
       }
       threadPool.shutdown();
       appState.persist();
-    }, Environment.APP_NAME + " PersistOnceAllItemsAreUpdated");
+    }, threadName);
+    thread.setUncaughtExceptionHandler((t, e) -> logger.error(threadName + " failed to await countdown.", e));
     thread.setDaemon(true);
     thread.start();
-  }
-
-  public void setDragOverFeedback(boolean isFeedbackVisible) {
-    listView.setOpacity(isFeedbackVisible ? 0.5 : 1);
   }
 
   public ListView<Item> getListView() {
