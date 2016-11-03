@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/style.css"
-      xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="600.0" stylesheets="@/css/style.css" xmlns="http://javafx.com/javafx/8.0.92"
+      xmlns:fx="http://javafx.com/fxml/1">
   <fx:include source="/fxml/MenuBar.fxml"/>
-  <VBox>
+  <VBox VBox.vgrow="ALWAYS">
     <fx:include fx:id="searchTextField" source="/fxml/SearchTextField.fxml"/>
     <fx:include fx:id="itemListView" source="/fxml/ItemListView.fxml"/>
   </VBox>

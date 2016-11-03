@@ -39,6 +39,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 @Component
 public class ItemListViewController implements Initializable, ApplicationContextAware, InitializingBean {
@@ -70,6 +72,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    VBox.setVgrow(listView, Priority.ALWAYS);
     filteredItemList = new FilteredList<>(appState.getObservableItemList());
     SortedList<Item> itemSortedList = new SortedList<>(filteredItemList);
     itemSortedList.setComparator((o1, o2) -> {
