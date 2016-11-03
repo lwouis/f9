@@ -3,10 +3,7 @@ package com.lwouis.f9;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.boris.pecoff4j.PE;
 import org.boris.pecoff4j.ResourceDirectory;
@@ -20,9 +17,11 @@ import org.boris.pecoff4j.resources.VersionInfo;
 import org.boris.pecoff4j.util.ResourceHelper;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
-import org.stackoverflowusers.file.WindowsShortcut;
 
 import com.lwouis.f9.injection.InjectLogger;
+import com.lwouis.f9.models.Item;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import sun.awt.shell.ShellFolder;
@@ -32,31 +31,28 @@ public class WindowsFileAnalyzer {
 
   private final String networkFilePrefix = "\\\\";
 
-  private final List<String> buggyShortcutResolutions = Arrays.asList(networkFilePrefix);
-
   @InjectLogger
   private Logger logger;
 
-  public File resolveWindowsShortcut(File file) {
-    try {
-      if (WindowsShortcut.isPotentialValidLink(file)) {
-        String realFilename = new WindowsShortcut(file).getRealFilename();
-        if (realFilename.length() < 2 || buggyShortcutResolutions.contains(realFilename)) { // resolution is bogus
-          return file;
-        }
-        return new File(realFilename);
+  public Task createTask(Item item, File file, CountDownLatch countDownLatch) {
+    return new Task() {
+      @Override
+      protected Void call() throws Exception {
+        String name = getProductName(file);
+        String absolutePath = file.getAbsolutePath();
+        Image icon = getFileIcon(file);
+        Platform.runLater(() -> {
+          item.nameProperty().set(name);
+          item.absolutePathProperty().set(absolutePath);
+          item.iconProperty().set(icon);
+        });
+        countDownLatch.countDown();
+        return null;
       }
-      else {
-        return file;
-      }
-    }
-    catch (IOException | ParseException e) {
-      e.printStackTrace();
-      return file;
-    }
+    };
   }
 
-  public String getProductName(File file) {
+  private String getProductName(File file) {
     try {
       if (file.getAbsolutePath().startsWith(networkFilePrefix)) { // network files are too long to resolve
         return file.getName();
@@ -85,7 +81,7 @@ public class WindowsFileAnalyzer {
     }
   }
 
-  public Image getFileIcon(File file) {
+  private Image getFileIcon(File file) {
     try {
       if (file.getAbsolutePath().startsWith(networkFilePrefix)) { // network files are too long to resolve
         return null;

@@ -2,10 +2,8 @@
 
 <?import javafx.scene.layout.VBox?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      onDragDropped="#onDragDropped" onDragEntered="#onDragEntered" onDragExited="#onDragExited"
-      onDragOver="#onDragOver" prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/style.css"
-      xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.lwouis.f9.controllers.MainWindowController">
+      prefHeight="400.0" prefWidth="600.0" stylesheets="@/css/style.css"
+      xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1">
   <fx:include source="/fxml/MenuBar.fxml"/>
   <VBox>
     <fx:include fx:id="searchTextField" source="/fxml/SearchTextField.fxml"/>

@@ -160,7 +160,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
       String absolutePath = file.getAbsolutePath();
       Item item = new Item(name, absolutePath, null);
       itemList.add(item);
-      threadPool.submit(new FileInspectionTask(item, file, countDownLatch, windowsFileAnalyzer));
+      threadPool.submit(windowsFileAnalyzer.createTask(item, file, countDownLatch));
     }
     appState.getObservableItemList().addAll(itemList);
     Thread thread = new Thread(() -> {
