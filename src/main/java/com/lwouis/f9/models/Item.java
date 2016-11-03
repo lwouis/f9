@@ -35,10 +35,6 @@ public class Item {
   @Column(name = "icon")
   private ObjectProperty<Image> icon;
 
-  @ManyToOne
-  @JoinColumn(name = "itemList_id")
-  private ItemList itemList;
-
   public Item() {
   }
 

@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Component;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 
@@ -15,9 +14,6 @@ import javafx.stage.FileChooser;
 public class MenuBarController {
   @FXML
   private MenuBar menuBar;
-
-  @FXML
-  private Menu menu1;
 
   private final ItemListViewController itemListViewController;
 
@@ -41,7 +37,4 @@ public class MenuBarController {
     itemListViewController.removeSelected();
   }
 
-  public Menu getMenu1() {
-    return menu1;
-  }
 }

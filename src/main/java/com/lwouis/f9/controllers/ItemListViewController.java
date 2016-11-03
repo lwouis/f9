@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
@@ -27,6 +28,7 @@ import com.lwouis.f9.StageManager;
 import com.lwouis.f9.WindowsFileAnalyzer;
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -93,10 +95,10 @@ public class ItemListViewController implements Initializable, ApplicationContext
     selectionModel.selectFirst();
   }
 
-  @FXML
   public void removeSelected() {
-    appState.getObservableItemList().removeAll(listView.getSelectionModel().getSelectedItems());
-    appState.persist();
+    ObservableList<Item> selectedItems = listView.getSelectionModel().getSelectedItems();
+    appState.removeItems(selectedItems);
+    appState.getObservableItemList().removeAll(selectedItems);
   }
 
   @FXML
@@ -147,20 +149,23 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   public void addFiles(List<File> files) {
-    String threadName = Environment.APP_NAME + " " + "FileInspectionTask %d";
+    String threadName = Environment.APP_NAME + " FileInspectionTask %d";
     ThreadFactory threadFactory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat(threadName)
         .setUncaughtExceptionHandler((t, e) -> logger.error(threadName + " failed to finish.", e)).build();
-    ExecutorService threadPool = Executors.newCachedThreadPool(threadFactory);
+    ExecutorService threadPool = Executors.newFixedThreadPool(10, threadFactory);
     final CountDownLatch countDownLatch = new CountDownLatch(files.size());
+    ArrayList<Item> itemList = new ArrayList<>();
     for (File file : files) {
       Item item = new Item(file.getName(), file.getAbsolutePath(), null);
-      appState.getObservableItemList().add(item);
       threadPool.submit(windowsFileAnalyzer.createTask(item, file, countDownLatch));
+      itemList.add(item);
     }
-    waitForCountDownOnBackgroundThread(threadPool, countDownLatch);
+    appState.getObservableItemList().addAll(itemList);
+    waitForCountDownOnBackgroundThread(threadPool, countDownLatch, itemList);
   }
 
-  private void waitForCountDownOnBackgroundThread(ExecutorService threadPool, CountDownLatch countDownLatch) {
+  private void waitForCountDownOnBackgroundThread(ExecutorService threadPool, CountDownLatch countDownLatch,
+      ArrayList<Item> itemList) {
     String threadName = Environment.APP_NAME + " PersistOnceAllItemsAreUpdated";
     Thread thread = new Thread(() -> {
       try {
@@ -170,7 +175,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
         logger.error("Failed to wait for all FileInspectionTask to finish.", e);
       }
       threadPool.shutdown();
-      appState.persist();
+      appState.addItems(itemList);
     }, threadName);
     thread.setUncaughtExceptionHandler((t, e) -> logger.error(threadName + " failed to await countdown.", e));
     thread.setDaemon(true);
