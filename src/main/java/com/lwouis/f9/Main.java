@@ -6,10 +6,10 @@ import javax.inject.Inject;
 
 import org.h2.tools.Server;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.lwouis.f9.injection.FxmlLoaderSpringConfiguration;
-import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.injection.JpaSpringConfiguration;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -31,8 +31,7 @@ public class Main extends Application {
   @Inject
   private StageManager stageManager;
 
-  @InjectLogger
-  private Logger logger;
+  private Logger logger = LoggerFactory.getLogger(getClass());
 
   private Server dbServer;
 
@@ -81,8 +80,12 @@ public class Main extends Application {
 
   @Override
   public void stop() {
-    globalHotkeyManager.unregisterGlobalHotkey();
-    dbServer.stop();
+    if (globalHotkeyManager != null) {
+      globalHotkeyManager.unregisterGlobalHotkey();
+    }
+    if (dbServer != null) {
+      dbServer.stop();
+    }
   }
 
 }
