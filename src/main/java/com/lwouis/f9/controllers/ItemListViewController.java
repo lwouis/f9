@@ -28,6 +28,7 @@ import com.lwouis.f9.StageManager;
 import com.lwouis.f9.WindowsFileAnalyzer;
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
+import com.lwouis.f9.nodes.ItemListCell;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -75,8 +76,8 @@ public class ItemListViewController implements Initializable, ApplicationContext
     VBox.setVgrow(listView, Priority.ALWAYS);
     filteredItemList = new FilteredList<>(appState.getObservableItemList());
     SortedList<Item> itemSortedList = new SortedList<>(filteredItemList);
+    String text = searchTextViewController.getSearchTextField().getText();
     itemSortedList.setComparator((o1, o2) -> {
-      String text = searchTextViewController.getSearchTextField().getText();
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
       boolean o1StartsWithText = coll.compare(o1.nameProperty().get().substring(0, text.length()), text) == 0;
@@ -92,7 +93,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
       }
     });
     listView.setItems(itemSortedList);
-    listView.setCellFactory(lv -> new ItemListCell());
+    listView.setCellFactory(lv -> new ItemListCell(searchTextViewController.getSearchTextField().textProperty()));
     MultipleSelectionModel<Item> selectionModel = listView.getSelectionModel();
     selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
     selectionModel.selectFirst();

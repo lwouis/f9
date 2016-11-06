@@ -18,7 +18,7 @@
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
 
-.itemListCell .nameLabel {
+.itemListCell .searchableTextFlow {
     -fx-font-size: 14px;
     -fx-text-fill: #000;
 }
@@ -29,8 +29,4 @@
 
 .itemListView .list-cell:selected {
     -fx-background-color: #b8dcff;
-}
-
-.addFilesProgressBarVbox {
-    -fx-background-color: #fff;
 }

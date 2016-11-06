@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.lwouis.f9.nodes.SearchableTextFlow?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<HBox styleClass="itemListCell" alignment="CENTER_LEFT" fillHeight="false" xmlns="http://javafx.com/javafx/8.0.92"
-      xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.text.Text?>
+
+<HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="itemListCell" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1">
   <ImageView fx:id="imageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
     <Image url="@../css/img/default-icon.png" />
-      <HBox.margin>
-         <Insets left="5.0" right="15.0" />
-      </HBox.margin>
+    <HBox.margin>
+      <Insets left="5.0" right="15.0" />
+    </HBox.margin>
   </ImageView>
   <VBox>
-    <Label fx:id="nameLabel" styleClass="nameLabel" text="itemNameLabel"/>
-    <Label fx:id="pathLabel" styleClass="pathLabel" ellipsisString="…" text="itemPathLabel"
-           textOverrun="LEADING_ELLIPSIS" />
+    <SearchableTextFlow fx:id="searchableTextFlow" styleClass="searchableTextFlow">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Google Chrome" />
+    </SearchableTextFlow>
+    <Label fx:id="pathLabel" ellipsisString="…" styleClass="pathLabel" text="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" textOverrun="LEADING_ELLIPSIS" />
+      <HBox.margin>
+         <Insets right="5.0" />
+      </HBox.margin>
   </VBox>
 </HBox>

@@ -1,24 +1,26 @@
-package com.lwouis.f9.controllers;
+package com.lwouis.f9.nodes;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
-import org.springframework.stereotype.Component;
+import org.slf4j.LoggerFactory;
 
-import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.TextFlow;
 
-@Component
 public class ItemListCell extends ListCell<Item> {
 
+  private static final Logger logger = LoggerFactory.getLogger(ItemListCell.class);
+
   @FXML
-  private Label nameLabel;
+  private TextFlow highlightedName;
 
   @FXML
   private Label pathLabel;
@@ -26,23 +28,23 @@ public class ItemListCell extends ListCell<Item> {
   @FXML
   private ImageView imageView;
 
+  @FXML
+  private SearchableTextFlow searchableTextFlow;
+
   private Node content;
 
-  @InjectLogger
-  private Logger logger;
-
-  public ItemListCell() {
+  public ItemListCell(StringProperty textToHighlight) {
     super();
     String fxmlFile = "fxml/ItemListCell.fxml";
     try {
-      FXMLLoader loader = new FXMLLoader(
-              ClassLoader.getSystemResource(fxmlFile));
+      FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(fxmlFile));
       loader.setController(this);
       content = loader.load();
     }
     catch (IOException e) {
       logger.error("Failed to load " + fxmlFile, e);
     }
+    searchableTextFlow.textToHighlightProperty().bind(textToHighlight);
   }
 
   @Override
@@ -50,11 +52,12 @@ public class ItemListCell extends ListCell<Item> {
     super.updateItem(item, empty);
     if (empty || item == null) {
       setGraphic(null);
+      searchableTextFlow.textProperty().unbind();
       return;
     }
-    imageView.imageProperty().bind(item.iconProperty());
-    nameLabel.textProperty().bind(item.nameProperty());
+    searchableTextFlow.textProperty().bind(item.nameProperty());
     pathLabel.textProperty().bind(item.absolutePathProperty());
+    imageView.imageProperty().bind(item.iconProperty());
     setGraphic(content);
   }
 }
