@@ -42,7 +42,6 @@ dependencies {
     compile 'org.springframework:spring-context:4.3.3.RELEASE'
     compile 'org.springframework:spring-orm:4.3.3.RELEASE'
     compile 'org.springframework:spring-tx:4.3.3.RELEASE'
-    compile 'aspectj:aspectjweaver:1.5.4'
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'org.slf4j:jcl-over-slf4j:1.7.21'
     compile 'ch.qos.logback:logback-core:1.1.7'
@@ -51,10 +50,10 @@ dependencies {
     compile 'com.h2database:h2:1.4.192'
     compile 'net.ttddyy:datasource-proxy:1.3.3'
     compile 'com.google.guava:guava:20.0'
-    compile 'org.fxmisc.easybind:easybind:1.0.3'
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
     testCompile 'de.saxsys:jfx-testrunner:1.2'
+    testCompile 'org.jmockit:jmockit:1.29'
     integrationTestCompile 'org.testfx:testfx-core:4.0.4-alpha'
     integrationTestCompile 'org.testfx:testfx-junit:4.0.4-alpha'
     integrationTestCompile 'org.testfx:openjfx-monocle:1.8.0_20'
@@ -133,13 +132,6 @@ tasks.withType(Checkstyle).each { checkstyleTask ->
 [test].each { runTask ->
     configure(runTask) {
         systemProperties System.properties
-    }
-}
-
-// show full stracktraces if a test throws an exception
-test {
-    testLogging {
-        exceptionFormat = 'full'
     }
 }
 
