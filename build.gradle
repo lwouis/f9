@@ -24,6 +24,11 @@ configurations.all {
     exclude group: 'commons-logging', module: 'commons-logging'
 }
 
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
 dependencies {
     compile fileTree(dir: 'lib', include: ['*.jar'])
     compile 'org.apache.commons:commons-lang3:3.5'
@@ -46,9 +51,13 @@ dependencies {
     compile 'com.h2database:h2:1.4.192'
     compile 'net.ttddyy:datasource-proxy:1.3.3'
     compile 'com.google.guava:guava:20.0'
-    testCompile 'org.testfx:testfx-core:4.0.4-alpha'
-    testCompile 'org.testfx:testfx-junit:4.0.4-alpha'
-    testCompile 'org.testfx:openjfx-monocle:1.8.0_20'
+    compile 'org.fxmisc.easybind:easybind:1.0.3'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
+    testCompile 'de.saxsys:jfx-testrunner:1.2'
+    integrationTestCompile 'org.testfx:testfx-core:4.0.4-alpha'
+    integrationTestCompile 'org.testfx:testfx-junit:4.0.4-alpha'
+    integrationTestCompile 'org.testfx:openjfx-monocle:1.8.0_20'
 }
 
 // How-to dev/run this project
@@ -75,7 +84,23 @@ sourceSets {
             srcDir 'lib/'
         }
     }
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+        resources.srcDir file('src/integrationTest/resources')
+    }
 }
+
+task integrationTest(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
 
 compileJava {
     options.incremental = true
