@@ -8,7 +8,6 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -21,7 +20,6 @@ import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 @EnableTransactionManagement
 @ComponentScan("com.lwouis.f9")
 // Fixes com.sun.proxy issue (see http://stackoverflow.com/a/18700986)
-@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class JpaSpringConfiguration {
 
   @Bean
