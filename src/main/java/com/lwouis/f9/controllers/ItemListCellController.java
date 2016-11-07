@@ -1,4 +1,4 @@
-package com.lwouis.f9.nodes;
+package com.lwouis.f9.controllers;
 
 import java.io.IOException;
 
@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lwouis.f9.models.Item;
+import com.lwouis.f9.nodes.SearchableTextFlow;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,11 +14,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.text.TextFlow;
 
-public class ItemListCell extends ListCell<Item> {
+public class ItemListCellController extends ListCell<Item> {
 
-  private static final Logger logger = LoggerFactory.getLogger(ItemListCell.class);
+  private static final Logger logger = LoggerFactory.getLogger(ItemListCellController.class);
 
   @FXML
   private TextFlow highlightedName;
@@ -33,7 +35,9 @@ public class ItemListCell extends ListCell<Item> {
 
   private Node content;
 
-  public ItemListCell(StringProperty textToHighlight) {
+  private PopOverController popOverController;
+
+  public ItemListCellController(StringProperty textToHighlight) {
     super();
     String fxmlFile = "fxml/ItemListCell.fxml";
     try {
@@ -45,6 +49,7 @@ public class ItemListCell extends ListCell<Item> {
       logger.error("Failed to load " + fxmlFile, e);
     }
     searchableTextFlow.textToHighlightProperty().bind(textToHighlight);
+    handleMouseEvents();
   }
 
   @Override
@@ -56,8 +61,19 @@ public class ItemListCell extends ListCell<Item> {
       return;
     }
     searchableTextFlow.textProperty().bind(item.nameProperty());
-    pathLabel.textProperty().bind(item.absolutePathProperty());
+    pathLabel.textProperty().bind(item.pathProperty());
     imageView.imageProperty().bind(item.iconProperty());
     setGraphic(content);
+  }
+
+  private void handleMouseEvents() {
+    setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+        if (popOverController == null) {
+          popOverController = new PopOverController();
+        }
+        popOverController.show(this, getItem());
+      }
+    });
   }
 }

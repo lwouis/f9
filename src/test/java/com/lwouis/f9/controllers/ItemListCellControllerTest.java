@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
 @RunWith(JfxRunner.class)
-public class ItemListCellTest {
+public class ItemListCellControllerTest {
 
   private final TextFlow textFlow = new TextFlow();
 

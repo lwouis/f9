@@ -4,13 +4,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.net.URL;
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -20,15 +15,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.lwouis.f9.AppState;
-import com.lwouis.f9.Environment;
 import com.lwouis.f9.Keyboard;
 import com.lwouis.f9.StageManager;
 import com.lwouis.f9.WindowsFileAnalyzer;
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
-import com.lwouis.f9.nodes.ItemListCell;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -93,7 +85,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
       }
     });
     listView.setItems(itemSortedList);
-    listView.setCellFactory(lv -> new ItemListCell(searchTextViewController.getSearchTextField().textProperty()));
+    listView.setCellFactory(lv -> new ItemListCellController(searchTextViewController.getSearchTextField().textProperty()));
     MultipleSelectionModel<Item> selectionModel = listView.getSelectionModel();
     selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
     selectionModel.selectFirst();
@@ -136,13 +128,13 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
   public void launchSelected() {
     for (Item item : listView.getSelectionModel().getSelectedItems()) {
-      File file = new File(item.absolutePathProperty().get());
+      File file = new File(item.pathProperty().get());
       try {
         if (Desktop.isDesktopSupported()) {
           Desktop.getDesktop().open(file);
         }
         else {
-          new ProcessBuilder(item.absolutePathProperty().get()).start();
+          new ProcessBuilder(item.pathProperty().get()).start();
         }
       }
       catch (Throwable t) {
@@ -153,37 +145,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   public void addFiles(List<File> files) {
-    String threadName = Environment.APP_NAME + " FileInspectionTask %d";
-    ThreadFactory threadFactory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat(threadName)
-        .setUncaughtExceptionHandler((t, e) -> logger.error(threadName + " failed to finish.", e)).build();
-    ExecutorService threadPool = Executors.newFixedThreadPool(10, threadFactory);
-    final CountDownLatch countDownLatch = new CountDownLatch(files.size());
-    ArrayList<Item> itemList = new ArrayList<>();
-    for (File file : files) {
-      Item item = new Item(file.getName(), file.getAbsolutePath(), null);
-      threadPool.submit(windowsFileAnalyzer.createTask(item, file, countDownLatch));
-      itemList.add(item);
-    }
-    appState.getObservableItemList().addAll(itemList);
-    waitForCountDownOnBackgroundThread(threadPool, countDownLatch, itemList);
-  }
-
-  private void waitForCountDownOnBackgroundThread(ExecutorService threadPool, CountDownLatch countDownLatch,
-      ArrayList<Item> itemList) {
-    String threadName = Environment.APP_NAME + " PersistOnceAllItemsAreUpdated";
-    Thread thread = new Thread(() -> {
-      try {
-        countDownLatch.await();
-      }
-      catch (InterruptedException e) {
-        logger.error("Failed to wait for all FileInspectionTask to finish.", e);
-      }
-      threadPool.shutdown();
-      appState.addItems(itemList);
-    }, threadName);
-    thread.setUncaughtExceptionHandler((t, e) -> logger.error(threadName + " failed to await countdown.", e));
-    thread.setDaemon(true);
-    thread.start();
+    windowsFileAnalyzer.itemsFromBackgroundThreadInspections(files);
   }
 
   public ListView<Item> getListView() {

@@ -48,13 +48,13 @@ public class SearchTextViewController implements Initializable, ApplicationConte
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    Glyph searchIcon = fontAwesomeManager.getGlyph(FontAwesome.Glyph.SEARCH);
-    searchIcon.setTranslateX(35);
-    searchIcon.setTranslateY(-1);
-    searchTextField.setLeft(searchIcon);
+    addSearchIcon();
+    addListenerToFilterList();
+  }
+
+  private void addListenerToFilterList() {
     searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String searchText = searchTextField.getText();
-      MultipleSelectionModel<Item> selectionModel = itemListViewController.getListView().getSelectionModel();
       FilteredList<Item> filteredItemList = itemListViewController.getFilteredItemList();
       if (searchText == null || searchText.length() == 0) {
         filteredItemList.setPredicate(s -> true);
@@ -63,36 +63,59 @@ public class SearchTextViewController implements Initializable, ApplicationConte
         String searchTextTrimmed = searchText.trim(); // ignore extra spaces on the sides
         filteredItemList.setPredicate(s -> StringUtils.containsIgnoreCase(s.nameProperty().get(), searchTextTrimmed));
       }
-      selectionModel.selectFirst();
+      itemListViewController.getListView().getSelectionModel().selectFirst();
     });
+  }
+
+  private void addSearchIcon() {
+    Glyph searchIcon = fontAwesomeManager.getGlyph(FontAwesome.Glyph.SEARCH);
+    searchIcon.setTranslateX(35);
+    searchIcon.setTranslateY(-1);
+    searchTextField.setLeft(searchIcon);
   }
 
   @FXML
   public void onKeyPressed(KeyEvent keyEvent) {
     if (Keyboard.ONLY_ENTER.match(keyEvent)) {
-      itemListViewController.launchSelected();
-      keyEvent.consume();
+      launchSelectedItem(keyEvent);
     }
     else if (Keyboard.ONLY_UP.match(keyEvent) || Keyboard.ONLY_DOWN.match(keyEvent)) {
-      ListView<Item> itemListView = itemListViewController.getListView();
-      MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
-      int itemListSize = itemListView.getItems().size();
-      if (Keyboard.ONLY_UP.match(keyEvent)) {
-        int newIndex = selectionModel.getSelectedIndex() - 1;
-        if (newIndex < 0) {
-          newIndex = itemListSize - 1;
-        }
-        selectionModel.clearAndSelect(newIndex);
-      }
-      else if (Keyboard.ONLY_DOWN.match(keyEvent)) {
-        int newIndex = selectionModel.getSelectedIndex() + 1;
-        if (newIndex > itemListSize - 1) {
-          newIndex = 0;
-        }
-        selectionModel.clearAndSelect(newIndex);
-      }
-      keyEvent.consume();
+      selectAdjacentItem(keyEvent);
     }
+  }
+
+  private void selectAdjacentItem(KeyEvent keyEvent) {
+    ListView<Item> itemListView = itemListViewController.getListView();
+    MultipleSelectionModel<Item> selectionModel = itemListView.getSelectionModel();
+    int itemListSize = itemListView.getItems().size();
+    if (Keyboard.ONLY_UP.match(keyEvent)) {
+      selectPreviousItem(selectionModel, itemListSize);
+    }
+    else if (Keyboard.ONLY_DOWN.match(keyEvent)) {
+      selectNextItem(selectionModel, itemListSize);
+    }
+    keyEvent.consume();
+  }
+
+  private void selectNextItem(MultipleSelectionModel<Item> selectionModel, int itemListSize) {
+    int newIndex = selectionModel.getSelectedIndex() + 1;
+    if (newIndex > itemListSize - 1) {
+      newIndex = 0;
+    }
+    selectionModel.clearAndSelect(newIndex);
+  }
+
+  private void selectPreviousItem(MultipleSelectionModel<Item> selectionModel, int itemListSize) {
+    int newIndex = selectionModel.getSelectedIndex() - 1;
+    if (newIndex < 0) {
+      newIndex = itemListSize - 1;
+    }
+    selectionModel.clearAndSelect(newIndex);
+  }
+
+  private void launchSelectedItem(KeyEvent keyEvent) {
+    itemListViewController.launchSelected();
+    keyEvent.consume();
   }
 
   public CustomTextField getSearchTextField() {

@@ -58,6 +58,9 @@ public class ObjectPropertyJavaTypeDescriptor extends AbstractTypeDescriptor<Obj
 
   private Image imageFromBytes(byte[] bytes) {
     try {
+      if (bytes == null) {
+        return null;
+      }
       ByteArrayInputStream in = new ByteArrayInputStream(bytes);
       BufferedImage read = ImageIO.read(in);
       return SwingFXUtils.toFXImage(read, null);
@@ -70,6 +73,9 @@ public class ObjectPropertyJavaTypeDescriptor extends AbstractTypeDescriptor<Obj
 
   private byte[] getBytes(Image image) {
     try {
+      if (image == null) {
+        return null;
+      }
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
       return out.toByteArray();

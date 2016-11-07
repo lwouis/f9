@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.TypeDef;
 
@@ -29,8 +27,11 @@ public class Item {
   @Column(name = "name")
   private StringProperty name;
 
-  @Column(name = "absolutePath")
-  private StringProperty absolutePath;
+  @Column(name = "path")
+  private StringProperty path;
+
+  @Column(name = "arguments")
+  private StringProperty arguments;
 
   @Column(name = "icon")
   private ObjectProperty<Image> icon;
@@ -38,9 +39,10 @@ public class Item {
   public Item() {
   }
 
-  public Item(String name, String absolutePath, Image icon) {
+  public Item(String name, String path, String arguments, Image icon) {
     this.name = new SimpleStringProperty(name);
-    this.absolutePath = new SimpleStringProperty(absolutePath);
+    this.path = new SimpleStringProperty(path);
+    this.arguments = new SimpleStringProperty(arguments);
     this.icon = new SimpleObjectProperty<>(icon);
   }
 
@@ -49,10 +51,51 @@ public class Item {
   }
 
   public ObjectProperty<Image> iconProperty() {
+    // for some reason Hibernate returns null on database queries even though it should return SimpleObjectProperty
+    // (null). The culprit code is on BasicExtractor.extract() where this check happens: value == null || rs.wasNull()
+    if (icon == null) {
+      return new SimpleObjectProperty<>(null);
+    }
     return icon;
   }
 
-  public StringProperty absolutePathProperty() {
-    return absolutePath;
+  public StringProperty pathProperty() {
+    return path;
+  }
+
+  public String getName() {
+    return name.get();
+  }
+
+  public void setName(String name) {
+    this.name.set(name);
+  }
+
+  public String getPath() {
+    return path.get();
+  }
+
+  public void setPath(String path) {
+    this.path.set(path);
+  }
+
+  public String getArguments() {
+    return arguments.get();
+  }
+
+  public StringProperty argumentsProperty() {
+    return arguments;
+  }
+
+  public void setArguments(String arguments) {
+    this.arguments.set(arguments);
+  }
+
+  public Image getIcon() {
+    return iconProperty().get();
+  }
+
+  public void setIcon(Image icon) {
+    this.icon.set(icon);
   }
 }
