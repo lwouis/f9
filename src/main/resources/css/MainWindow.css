@@ -1,9 +1,9 @@
-.searchTextField, .itemListView {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-text-box-border: transparent;
-    -fx-background-color: -fx-control-inner-background;
-}
+.searchTextField {
+     -fx-focus-color: transparent;
+     -fx-faint-focus-color: transparent;
+     -fx-text-box-border: transparent;
+     -fx-background-color: -fx-control-inner-background;
+ }
 
 .searchTextField {
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);

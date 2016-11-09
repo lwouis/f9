@@ -77,9 +77,11 @@ public class SearchTextViewController implements Initializable, ApplicationConte
   @FXML
   public void onKeyPressed(KeyEvent keyEvent) {
     if (Keyboard.ONLY_ENTER.match(keyEvent)) {
+      keyEvent.consume();
       launchSelectedItem(keyEvent);
     }
     else if (Keyboard.ONLY_UP.match(keyEvent) || Keyboard.ONLY_DOWN.match(keyEvent)) {
+      keyEvent.consume();
       selectAdjacentItem(keyEvent);
     }
   }
@@ -94,7 +96,6 @@ public class SearchTextViewController implements Initializable, ApplicationConte
     else if (Keyboard.ONLY_DOWN.match(keyEvent)) {
       selectNextItem(selectionModel, itemListSize);
     }
-    keyEvent.consume();
   }
 
   private void selectNextItem(MultipleSelectionModel<Item> selectionModel, int itemListSize) {
@@ -115,7 +116,6 @@ public class SearchTextViewController implements Initializable, ApplicationConte
 
   private void launchSelectedItem(KeyEvent keyEvent) {
     itemListViewController.launchSelected();
-    keyEvent.consume();
   }
 
   public CustomTextField getSearchTextField() {

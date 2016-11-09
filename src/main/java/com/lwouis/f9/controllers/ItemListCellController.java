@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jfoenix.controls.JFXListCell;
 import com.lwouis.f9.models.Item;
 import com.lwouis.f9.nodes.SearchableTextFlow;
 import javafx.beans.property.StringProperty;
@@ -12,14 +13,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.TextFlow;
 
-public class ItemListCellController extends ListCell<Item> {
+public class ItemListCellController extends JFXListCell<Item> {
 
   private static final Logger logger = LoggerFactory.getLogger(ItemListCellController.class);
+
+  private final ItemListViewController itemListViewController;
 
   @FXML
   private TextFlow highlightedName;
@@ -35,10 +37,9 @@ public class ItemListCellController extends ListCell<Item> {
 
   private Node content;
 
-  private PopOverController popOverController;
-
-  public ItemListCellController(StringProperty textToHighlight) {
+  public ItemListCellController(ItemListViewController itemListViewController, StringProperty textToHighlight) {
     super();
+    this.itemListViewController = itemListViewController;
     String fxmlFile = "fxml/ItemListCell.fxml";
     try {
       FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(fxmlFile));
@@ -53,7 +54,7 @@ public class ItemListCellController extends ListCell<Item> {
   }
 
   @Override
-  protected void updateItem(Item item, boolean empty) {
+  public void updateItem(Item item, boolean empty) {
     super.updateItem(item, empty);
     if (empty || item == null) {
       setGraphic(null);
@@ -68,11 +69,15 @@ public class ItemListCellController extends ListCell<Item> {
 
   private void handleMouseEvents() {
     setOnMouseClicked(mouseEvent -> {
-      if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-        if (popOverController == null) {
-          popOverController = new PopOverController();
+      mouseEvent.consume();
+      if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+        itemListViewController.hidePopOver();
+        if (mouseEvent.getClickCount() == 2) {
+          itemListViewController.launchSelected();
         }
-        popOverController.show(this, getItem());
+      }
+      else if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+        itemListViewController.showPopOver(this, getItem());
       }
     });
   }

@@ -72,4 +72,11 @@ public class AppState {
     entityManager.flush();
     entityManager.getTransaction().commit();
   }
+
+  @Transactional
+  public void persist() {
+    entityManager.getTransaction().begin();
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+  }
 }

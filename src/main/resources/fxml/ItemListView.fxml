@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
-<?import javafx.scene.control.ListView?>
-<ListView fx:id="listView" onKeyPressed="#onKeyPressed" onKeyTyped="#onKeyTyped" onMouseClicked="#onMouseEvent"
-          styleClass="itemListView" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.lwouis.f9.controllers.ItemListViewController">
-</ListView>
+<?import com.jfoenix.controls.JFXListView?>
+<JFXListView fx:id="listView" onKeyPressed="#onKeyPressed" onKeyTyped="#onKeyTyped"
+             styleClass="itemListView" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1"
+             fx:controller="com.lwouis.f9.controllers.ItemListViewController">
+</JFXListView>

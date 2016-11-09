@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="itemListCell" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1">
+<HBox mouseTransparent="true" alignment="CENTER_LEFT" fillHeight="false" styleClass="itemListCell"
+        xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1">
   <ImageView fx:id="imageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
     <Image url="@../css/img/default-icon.png" />
     <HBox.margin>

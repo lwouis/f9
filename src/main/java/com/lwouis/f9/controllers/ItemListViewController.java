@@ -15,23 +15,22 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import com.jfoenix.controls.JFXListView;
 import com.lwouis.f9.AppState;
 import com.lwouis.f9.Keyboard;
 import com.lwouis.f9.StageManager;
 import com.lwouis.f9.WindowsFileAnalyzer;
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -41,7 +40,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   private FilteredList<Item> filteredItemList;
 
   @FXML
-  private ListView<Item> listView;
+  private JFXListView<Item> listView;
 
   private SearchTextViewController searchTextViewController;
 
@@ -56,11 +55,15 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
   private ApplicationContext applicationContext;
 
+  private final PopOverController popOverController;
+
   @Inject
-  public ItemListViewController(AppState appState, StageManager stageManager, WindowsFileAnalyzer windowsFileAnalyzer) {
+  public ItemListViewController(AppState appState, StageManager stageManager, WindowsFileAnalyzer windowsFileAnalyzer,
+      PopOverController popOverController) {
     this.appState = appState;
     this.stageManager = stageManager;
     this.windowsFileAnalyzer = windowsFileAnalyzer;
+    this.popOverController = popOverController;
   }
 
   @Override
@@ -85,7 +88,10 @@ public class ItemListViewController implements Initializable, ApplicationContext
       }
     });
     listView.setItems(itemSortedList);
-    listView.setCellFactory(lv -> new ItemListCellController(searchTextViewController.getSearchTextField().textProperty()));
+    listView.setCellFactory(lv -> {
+      StringProperty textToHighlight = searchTextViewController.getSearchTextField().textProperty();
+      return new ItemListCellController(this, textToHighlight);
+    });
     MultipleSelectionModel<Item> selectionModel = listView.getSelectionModel();
     selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
     selectionModel.selectFirst();
@@ -95,14 +101,6 @@ public class ItemListViewController implements Initializable, ApplicationContext
     ObservableList<Item> selectedItems = listView.getSelectionModel().getSelectedItems();
     appState.removeItems(selectedItems);
     appState.getObservableItemList().removeAll(selectedItems);
-  }
-
-  @FXML
-  public void onMouseEvent(MouseEvent mouseEvent) {
-    if (mouseEvent.getClickCount() == 2 && mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-      launchSelected();
-    }
-    mouseEvent.consume();
   }
 
   @FXML
@@ -118,12 +116,13 @@ public class ItemListViewController implements Initializable, ApplicationContext
   public void onKeyTyped(KeyEvent keyEvent) {
     String typedChar = keyEvent.getCharacter();
     if (Keyboard.ONLY_ENTER.getCharacter().equals(typedChar)) {
+      keyEvent.consume();
       launchSelected();
     }
     else if (Keyboard.ONLY_DELETE.getCharacter().equals(typedChar)) {
+      keyEvent.consume();
       removeSelected();
     }
-    keyEvent.consume();
   }
 
   public void launchSelected() {
@@ -148,7 +147,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
     windowsFileAnalyzer.itemsFromBackgroundThreadInspections(files);
   }
 
-  public ListView<Item> getListView() {
+  public JFXListView<Item> getListView() {
     return listView;
   }
 
@@ -165,5 +164,13 @@ public class ItemListViewController implements Initializable, ApplicationContext
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     this.applicationContext = applicationContext;
+  }
+
+  public void showPopOver(ItemListCellController itemListCellController, Item item) {
+    popOverController.show(itemListCellController, item);
+  }
+
+  public void hidePopOver() {
+    popOverController.hide();
   }
 }

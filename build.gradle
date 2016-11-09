@@ -50,6 +50,7 @@ dependencies {
     compile 'com.h2database:h2:1.4.192'
     compile 'net.ttddyy:datasource-proxy:1.3.3'
     compile 'com.google.guava:guava:20.0'
+    compile 'com.jfoenix:jfoenix:1.0.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
     testCompile 'de.saxsys:jfx-testrunner:1.2'
