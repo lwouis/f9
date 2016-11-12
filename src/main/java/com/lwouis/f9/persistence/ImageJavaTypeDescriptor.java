@@ -13,47 +13,45 @@ import org.hibernate.type.descriptor.java.ByteArrayTypeDescriptor;
 import org.slf4j.Logger;
 
 import com.lwouis.f9.injection.InjectLogger;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
-public class ObjectPropertyJavaTypeDescriptor extends AbstractTypeDescriptor<ObjectProperty> {
+public class ImageJavaTypeDescriptor extends AbstractTypeDescriptor<Image> {
 
   @InjectLogger
   private Logger logger;
 
-  public static final ObjectPropertyJavaTypeDescriptor INSTANCE = new ObjectPropertyJavaTypeDescriptor();
+  public static final ImageJavaTypeDescriptor INSTANCE = new ImageJavaTypeDescriptor();
 
-  private ObjectPropertyJavaTypeDescriptor() {
-    super(ObjectProperty.class);
+  private ImageJavaTypeDescriptor() {
+    super(Image.class);
   }
 
   @Override
-  public String toString(ObjectProperty value) {
+  public String toString(Image value) {
     return null;
   }
 
   @Override
-  public ObjectProperty fromString(String string) {
+  public Image fromString(String string) {
     return null;
   }
 
   @Override
-  public <X> X unwrap(ObjectProperty image, Class<X> type, WrapperOptions options) {
-    Byte[] bytes = ArrayUtils.toObject(getBytes((Image)image.getValue()));
+  public <X> X unwrap(Image image, Class<X> type, WrapperOptions options) {
+    Byte[] bytes = ArrayUtils.toObject(bytesFromImage(image));
     return ByteArrayTypeDescriptor.INSTANCE.unwrap(bytes, type, options);
   }
 
   @Override
-  public <X> ObjectProperty wrap(X databaseValue, WrapperOptions options) {
+  public <X> Image wrap(X databaseValue, WrapperOptions options) {
     Byte[] bytes = ByteArrayTypeDescriptor.INSTANCE.wrap(databaseValue, options);
-    return new SimpleObjectProperty<>(imageFromBytes(ArrayUtils.toPrimitive(bytes)));
+    return imageFromBytes(ArrayUtils.toPrimitive(bytes));
   }
 
   @Override
-  public boolean areEqual(ObjectProperty one, ObjectProperty another) {
-    return one == another || Arrays.equals(getBytes((Image)one.getValue()), getBytes((Image)another.getValue()));
+  public boolean areEqual(Image one, Image another) {
+    return one == another || Arrays.equals(bytesFromImage(one), bytesFromImage(another));
   }
 
   private Image imageFromBytes(byte[] bytes) {
@@ -71,7 +69,7 @@ public class ObjectPropertyJavaTypeDescriptor extends AbstractTypeDescriptor<Obj
     return null;
   }
 
-  private byte[] getBytes(Image image) {
+  private byte[] bytesFromImage(Image image) {
     try {
       if (image == null) {
         return null;

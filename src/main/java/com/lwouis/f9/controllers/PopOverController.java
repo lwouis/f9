@@ -34,8 +34,6 @@ public class PopOverController {
 
   private Item item;
 
-  private final AppState appState;
-
   @Inject
   public PopOverController(AppState appState) {
     String fxmlFile = "fxml/ItemListPopOver.fxml";
@@ -46,12 +44,20 @@ public class PopOverController {
       popOver = new PopOver(loader.load());
       popOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
       popOver.setDetachable(false);
-      //popOver.setAutoHide(false);
+      popOver.setConsumeAutoHidingEvents(true);
+      bindPersistOnHide(appState);
     }
     catch (Throwable t) {
       logger.error("Failed contruct PopOverController.", t);
     }
-    this.appState = appState;
+  }
+
+  private void bindPersistOnHide(AppState appState) {
+    popOver.showingProperty().addListener((obs, old, val) -> {
+      if (!val) {
+        appState.persist();
+      }
+    });
   }
 
   public void show(Node owner, Item item) {
@@ -75,7 +81,6 @@ public class PopOverController {
   public void hide() {
     if (popOver.isShowing()) {
       popOver.hide();
-      appState.persist();
     }
   }
 

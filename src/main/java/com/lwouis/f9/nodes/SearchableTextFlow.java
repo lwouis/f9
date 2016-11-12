@@ -2,6 +2,7 @@ package com.lwouis.f9.nodes;
 
 import org.apache.commons.lang3.StringUtils;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.text.Text;
@@ -19,16 +20,18 @@ public class SearchableTextFlow extends TextFlow {
   }
 
   private void recomputeHighlight() {
-    getChildren().clear();
+    Platform.runLater(() -> getChildren().clear());
     if (textToHighlight.get().isEmpty()) {
       addInitialText();
-    } else {
+    }
+    else {
       addPartitionedText();
     }
   }
 
   private void addInitialText() {
-    getChildren().add(new Text(text.get()));
+    Text text = new Text(this.text.get());
+    Platform.runLater(() -> getChildren().add(text));
   }
 
   private void addPartitionedText() {
@@ -60,7 +63,8 @@ public class SearchableTextFlow extends TextFlow {
 
   private void addStyledTextPart(int start, int end, String fontWeight) {
     if (start < end) {
-      getChildren().add(createTextWithWeight(text.get().substring(start, end), fontWeight));
+      Text textWithWeight = createTextWithWeight(text.get().substring(start, end), fontWeight);
+      Platform.runLater(() -> getChildren().add(textWithWeight));
     }
   }
 

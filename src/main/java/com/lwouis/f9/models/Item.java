@@ -1,5 +1,7 @@
 package com.lwouis.f9.models;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,36 +9,30 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.TypeDef;
 
-import com.lwouis.f9.persistence.ObjectPropertyUserType;
-import com.lwouis.f9.persistence.StringPropertyUserType;
+import com.lwouis.f9.persistence.ImageUserType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
-@TypeDef(defaultForType = StringProperty.class, typeClass = StringPropertyUserType.class)
-@TypeDef(defaultForType = ObjectProperty.class, typeClass = ObjectPropertyUserType.class)
+@TypeDef(defaultForType = Image.class, typeClass = ImageUserType.class)
 @Entity(name = "Item")
+@Access(AccessType.PROPERTY)
 public class Item {
 
-  @Id
-  @GeneratedValue
   private Integer id;
 
-  @Column(name = "name")
   private StringProperty name;
 
-  @Column(name = "path")
   private StringProperty path;
 
-  @Column(name = "arguments")
   private StringProperty arguments;
 
-  @Column(name = "icon")
   private ObjectProperty<Image> icon;
 
   public Item() {
+    this(null, null, null, null);
   }
 
   public Item(String name, String path, String arguments, Image icon) {
@@ -51,11 +47,6 @@ public class Item {
   }
 
   public ObjectProperty<Image> iconProperty() {
-    // for some reason Hibernate returns null on database queries even though it should return SimpleObjectProperty
-    // (null). The culprit code is on BasicExtractor.extract() where this check happens: value == null || rs.wasNull()
-    if (icon == null) {
-      return new SimpleObjectProperty<>(null);
-    }
     return icon;
   }
 
@@ -63,6 +54,7 @@ public class Item {
     return path;
   }
 
+  @Column(name = "name")
   public String getName() {
     return name.get();
   }
@@ -71,6 +63,7 @@ public class Item {
     this.name.set(name);
   }
 
+  @Column(name = "path")
   public String getPath() {
     return path.get();
   }
@@ -79,6 +72,7 @@ public class Item {
     this.path.set(path);
   }
 
+  @Column(name = "arguments")
   public String getArguments() {
     return arguments.get();
   }
@@ -91,11 +85,22 @@ public class Item {
     this.arguments.set(arguments);
   }
 
+  @Column(name = "icon")
   public Image getIcon() {
     return iconProperty().get();
   }
 
   public void setIcon(Image icon) {
     this.icon.set(icon);
+  }
+
+  @Id
+  @GeneratedValue
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 }
