@@ -56,11 +56,11 @@ public class SearchTextViewController implements Initializable, ApplicationConte
     searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       String searchText = searchTextField.getText();
       FilteredList<Item> filteredItemList = itemListViewController.getFilteredItemList();
-      if (searchText == null || searchText.length() == 0) {
+      String searchTextTrimmed = searchText.trim(); // ignore extra spaces on the sides
+      if (searchText.length() == 0) {
         filteredItemList.setPredicate(s -> true);
       }
       else {
-        String searchTextTrimmed = searchText.trim(); // ignore extra spaces on the sides
         filteredItemList.setPredicate(s -> StringUtils.containsIgnoreCase(s.nameProperty().get(), searchTextTrimmed));
       }
       itemListViewController.getListView().getSelectionModel().selectFirst();
@@ -78,7 +78,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
   public void onKeyPressed(KeyEvent keyEvent) {
     if (Keyboard.ONLY_ENTER.match(keyEvent)) {
       keyEvent.consume();
-      launchSelectedItem(keyEvent);
+      launchSelectedItem();
     }
     else if (Keyboard.ONLY_UP.match(keyEvent) || Keyboard.ONLY_DOWN.match(keyEvent)) {
       keyEvent.consume();
@@ -114,7 +114,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
     selectionModel.clearAndSelect(newIndex);
   }
 
-  private void launchSelectedItem(KeyEvent keyEvent) {
+  private void launchSelectedItem() {
     itemListViewController.launchSelected();
   }
 

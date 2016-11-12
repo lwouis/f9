@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.jfoenix.controls.JFXTextField;
-import com.lwouis.f9.AppState;
+import com.lwouis.f9.PersistenceManager;
 import com.lwouis.f9.models.Item;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +35,7 @@ public class PopOverController {
   private Item item;
 
   @Inject
-  public PopOverController(AppState appState) {
+  public PopOverController(PersistenceManager persistenceManager) {
     String fxmlFile = "fxml/ItemListPopOver.fxml";
     try {
       FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(fxmlFile));
@@ -45,17 +45,17 @@ public class PopOverController {
       popOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
       popOver.setDetachable(false);
       popOver.setConsumeAutoHidingEvents(true);
-      bindPersistOnHide(appState);
+      bindPersistOnHide(persistenceManager);
     }
     catch (Throwable t) {
       logger.error("Failed contruct PopOverController.", t);
     }
   }
 
-  private void bindPersistOnHide(AppState appState) {
+  private void bindPersistOnHide(PersistenceManager persistenceManager) {
     popOver.showingProperty().addListener((obs, old, val) -> {
       if (!val) {
-        appState.persist();
+        persistenceManager.persist();
       }
     });
   }

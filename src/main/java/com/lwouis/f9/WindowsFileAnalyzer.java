@@ -31,6 +31,7 @@ import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -43,14 +44,15 @@ public class WindowsFileAnalyzer {
   @InjectLogger
   private Logger logger;
 
-  private final AppState appState;
+  private final PersistenceManager persistenceManager;
 
   @Inject
-  public WindowsFileAnalyzer(AppState appState) {
-    this.appState = appState;
+  public WindowsFileAnalyzer(PersistenceManager persistenceManager) {
+    this.persistenceManager = persistenceManager;
   }
 
-  public List<Item> itemsFromBackgroundThreadInspections(Collection<File> files) {
+  public List<Item> itemsFromBackgroundThreadInspections(Collection<File> files,
+      ObservableList<Item> observableItemList) {
     ExecutorService threadPool = threadPool();
     CountDownLatch countDownLatch = new CountDownLatch(files.size() * 2);
     ArrayList<Item> itemList = new ArrayList<>();
@@ -59,13 +61,13 @@ public class WindowsFileAnalyzer {
       updateItemPropertiesOnBackgroundThreads(threadPool, defaultItem, file, countDownLatch);
       itemList.add(defaultItem);
     }
-    updateUi(itemList);
+    updateUi(itemList, observableItemList);
     waitForCountDownOnBackgroundThread(threadPool, countDownLatch, itemList);
     return itemList;
   }
 
-  private void updateUi(ArrayList<Item> itemList) {
-    Platform.runLater(() -> appState.getObservableItemList().addAll(itemList));
+  private void updateUi(ArrayList<Item> itemList, ObservableList<Item> observableItemList) {
+    Platform.runLater(() -> observableItemList.addAll(itemList));
   }
 
   private Item defaultItem(File file) {
@@ -153,7 +155,7 @@ public class WindowsFileAnalyzer {
       try {
         countDownLatch.await();
         threadPool.shutdown();
-        appState.addItems(itemList);
+        persistenceManager.addItems(itemList);
       }
       catch (Throwable t) {
         logger.error("Failed to wait for all FileInspectionTask to finish.", t);

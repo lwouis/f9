@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.lwouis.f9.models.Item;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import mockit.Deencapsulation;
 import mockit.Expectations;
@@ -32,7 +33,7 @@ public class WindowsFileAnalyzerTest {
   private WindowsFileAnalyzer windowsFileAnalyzer;
 
   @Injectable
-  private AppState appState;
+  private PersistenceManager persistenceManager;
 
   @Injectable
   private Logger logger = LoggerFactory.getLogger(getClass());
@@ -53,12 +54,11 @@ public class WindowsFileAnalyzerTest {
   //@Test
   public void test_background_threads() throws URISyntaxException, InterruptedException, MalformedURLException {
     new Expectations(windowsFileAnalyzer) {{
-      appState.getObservableItemList();
-      result = FXCollections.observableArrayList();
       Deencapsulation.invoke(windowsFileAnalyzer, "getFileIcon", any);
       result = testImage;
     }};
-    List<Item> items = windowsFileAnalyzer.itemsFromBackgroundThreadInspections(files);
+    ObservableList<Item> observableItemList = FXCollections.observableArrayList();
+    List<Item> items = windowsFileAnalyzer.itemsFromBackgroundThreadInspections(files, observableItemList);
     Thread.sleep(500);
     assertThat(items.get(0).iconProperty().get(), notNullValue());
   }

@@ -16,13 +16,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import com.jfoenix.controls.JFXListView;
-import com.lwouis.f9.AppState;
 import com.lwouis.f9.Keyboard;
+import com.lwouis.f9.PersistenceManager;
 import com.lwouis.f9.StageManager;
 import com.lwouis.f9.WindowsFileAnalyzer;
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -37,6 +38,8 @@ import javafx.scene.layout.VBox;
 @Component
 public class ItemListViewController implements Initializable, ApplicationContextAware, InitializingBean {
 
+  private ObservableList<Item> observableItemList;
+
   private FilteredList<Item> filteredItemList;
 
   @FXML
@@ -44,7 +47,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
   private SearchTextViewController searchTextViewController;
 
-  private final AppState appState;
+  private final PersistenceManager persistenceManager;
 
   private final WindowsFileAnalyzer windowsFileAnalyzer;
 
@@ -58,9 +61,9 @@ public class ItemListViewController implements Initializable, ApplicationContext
   private final PopOverController popOverController;
 
   @Inject
-  public ItemListViewController(AppState appState, StageManager stageManager, WindowsFileAnalyzer windowsFileAnalyzer,
+  public ItemListViewController(PersistenceManager persistenceManager, StageManager stageManager, WindowsFileAnalyzer windowsFileAnalyzer,
       PopOverController popOverController) {
-    this.appState = appState;
+    this.persistenceManager = persistenceManager;
     this.stageManager = stageManager;
     this.windowsFileAnalyzer = windowsFileAnalyzer;
     this.popOverController = popOverController;
@@ -69,8 +72,29 @@ public class ItemListViewController implements Initializable, ApplicationContext
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     VBox.setVgrow(listView, Priority.ALWAYS);
-    filteredItemList = new FilteredList<>(appState.getObservableItemList());
+    listView.setItems(loadItemListThenFilterAndSort());
+    setListViewCellFactory();
+    MultipleSelectionModel<Item> selectionModel = listView.getSelectionModel();
+    selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
+    selectionModel.selectFirst();
+  }
+
+  private SortedList<Item> loadItemListThenFilterAndSort() {
+    observableItemList = FXCollections.observableList(persistenceManager.loadListFromDiskOrCreateOne());
+    filteredItemList = new FilteredList<>(observableItemList);
     SortedList<Item> itemSortedList = new SortedList<>(filteredItemList);
+    setSortedListComparator(itemSortedList);
+    return itemSortedList;
+  }
+
+  private void setListViewCellFactory() {
+    listView.setCellFactory(lv -> {
+      StringProperty textToHighlight = searchTextViewController.getSearchTextField().textProperty();
+      return new ItemListCellController(this, textToHighlight);
+    });
+  }
+
+  private void setSortedListComparator(SortedList<Item> itemSortedList) {
     String text = searchTextViewController.getSearchTextField().getText();
     itemSortedList.setComparator((o1, o2) -> {
       Collator coll = Collator.getInstance();
@@ -87,20 +111,12 @@ public class ItemListViewController implements Initializable, ApplicationContext
         return 1;
       }
     });
-    listView.setItems(itemSortedList);
-    listView.setCellFactory(lv -> {
-      StringProperty textToHighlight = searchTextViewController.getSearchTextField().textProperty();
-      return new ItemListCellController(this, textToHighlight);
-    });
-    MultipleSelectionModel<Item> selectionModel = listView.getSelectionModel();
-    selectionModel.setSelectionMode(SelectionMode.MULTIPLE);
-    selectionModel.selectFirst();
   }
 
   public void removeSelected() {
     ObservableList<Item> selectedItems = listView.getSelectionModel().getSelectedItems();
-    appState.removeItems(selectedItems);
-    appState.getObservableItemList().removeAll(selectedItems);
+    persistenceManager.removeItems(selectedItems);
+    observableItemList.removeAll(selectedItems);
   }
 
   @FXML
@@ -144,7 +160,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   }
 
   public void addFiles(List<File> files) {
-    windowsFileAnalyzer.itemsFromBackgroundThreadInspections(files);
+    windowsFileAnalyzer.itemsFromBackgroundThreadInspections(files, observableItemList);
   }
 
   public JFXListView<Item> getListView() {

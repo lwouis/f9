@@ -12,45 +12,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lwouis.f9.injection.InjectLogger;
 import com.lwouis.f9.models.Item;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 @Component
-public class AppState {
+public class PersistenceManager {
 
   private final EntityManager entityManager;
 
   @InjectLogger
   private Logger logger;
 
-  private final ObservableList<Item> observableItemList;
-
   @Inject
-  public AppState(EntityManager entityManager) {
+  public PersistenceManager(EntityManager entityManager) {
     this.entityManager = entityManager;
-    //noinspection ConstantConditions
-    observableItemList = FXCollections.observableList(loadListFromDiskOrCreateOne());
   }
 
   @Transactional
-  private List<Item> loadListFromDiskOrCreateOne() {
+  public List<Item> loadListFromDiskOrCreateOne() {
     try {
       CriteriaQuery<Item> query = entityManager.getCriteriaBuilder().createQuery(Item.class);
       query = query.select(query.from(Item.class));
-      List<Item> loadedAppState = entityManager.createQuery(query).getResultList();
-      if (loadedAppState.isEmpty()) {
+      List<Item> itemList = entityManager.createQuery(query).getResultList();
+      if (itemList.isEmpty()) {
         return new ArrayList<>();
       }
-      return loadedAppState;
+      return itemList;
     }
     catch (Throwable t) {
       logger.error("Failed to load app state from disk.", t);
     }
     return null;
-  }
-
-  public ObservableList<Item> getObservableItemList() {
-    return observableItemList;
   }
 
   @Transactional
