@@ -58,9 +58,18 @@ public class PopOverController {
     if (this.item != null && this.item.equals(item) && popOver.isShowing()) {
       return;
     }
+    unbindPreviousItem();
     this.item = item;
-    bindPopOverControllerToItem();
+    bindNewItem();
     popOver.show(owner);
+  }
+
+  private void unbindPreviousItem() {
+    if (item != null) {
+      item.nameProperty().unbind();
+      item.pathProperty().unbind();
+      item.argumentsProperty().unbind();
+    }
   }
 
   public void hide() {
@@ -70,10 +79,7 @@ public class PopOverController {
     }
   }
 
-  private void bindPopOverControllerToItem() {
-    item.nameProperty().unbind();
-    item.pathProperty().unbind();
-    item.argumentsProperty().unbind();
+  private void bindNewItem() {
     nameTextField.textProperty().set(item.nameProperty().get());
     pathTextField.textProperty().set(item.pathProperty().get());
     argumentsTextField.textProperty().set(item.argumentsProperty().get());
