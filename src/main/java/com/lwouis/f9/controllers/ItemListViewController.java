@@ -45,7 +45,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   @FXML
   private JFXListView<Item> listView;
 
-  private SearchTextViewController searchTextViewController;
+  private SearchTextFieldController searchTextFieldController;
 
   private final PersistenceManager persistenceManager;
 
@@ -89,13 +89,13 @@ public class ItemListViewController implements Initializable, ApplicationContext
 
   private void setListViewCellFactory() {
     listView.setCellFactory(lv -> {
-      StringProperty textToHighlight = searchTextViewController.getSearchTextField().textProperty();
+      StringProperty textToHighlight = searchTextFieldController.getSearchTextField().textProperty();
       return new ItemListCellController(this, textToHighlight);
     });
   }
 
   private void setSortedListComparator(SortedList<Item> itemSortedList) {
-    String text = searchTextViewController.getSearchTextField().getText();
+    String text = searchTextFieldController.getSearchTextField().getText();
     itemSortedList.setComparator((o1, o2) -> {
       Collator coll = Collator.getInstance();
       coll.setStrength(Collator.PRIMARY);
@@ -123,8 +123,8 @@ public class ItemListViewController implements Initializable, ApplicationContext
   public void onKeyPressed(KeyEvent keyEvent) {
     if (Keyboard.ONLY_TAB.match(keyEvent)) {
       keyEvent.consume();
-      searchTextViewController.getSearchTextField().requestFocus();
-      searchTextViewController.getSearchTextField().end();
+      searchTextFieldController.getSearchTextField().requestFocus();
+      searchTextFieldController.getSearchTextField().end();
     }
   }
 
@@ -174,7 +174,7 @@ public class ItemListViewController implements Initializable, ApplicationContext
   @Override
   public void afterPropertiesSet() throws Exception {
     // doing DI this way prevents Spring circular dependency exception
-    searchTextViewController = applicationContext.getBean(SearchTextViewController.class);
+    searchTextFieldController = applicationContext.getBean(SearchTextFieldController.class);
   }
 
   @Override

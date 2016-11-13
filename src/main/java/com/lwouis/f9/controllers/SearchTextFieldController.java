@@ -27,7 +27,7 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.input.KeyEvent;
 
 @Component
-public class SearchTextViewController implements Initializable, ApplicationContextAware, InitializingBean {
+public class SearchTextFieldController implements Initializable, ApplicationContextAware, InitializingBean {
 
   @FXML
   private CustomTextField searchTextField;
@@ -42,7 +42,7 @@ public class SearchTextViewController implements Initializable, ApplicationConte
   private ApplicationContext applicationContext;
 
   @Inject
-  public SearchTextViewController(FontAwesomeManager fontAwesomeManager) {
+  public SearchTextFieldController(FontAwesomeManager fontAwesomeManager) {
     this.fontAwesomeManager = fontAwesomeManager;
   }
 
