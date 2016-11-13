@@ -1,10 +1,14 @@
 package com.lwouis.f9.nodes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -35,37 +39,51 @@ public class SearchableTextFlow extends TextFlow {
   }
 
   private void addPartitionedText() {
+    List<Node> nodeList = new ArrayList<>();
     int matchStart = nextMatchPositionStartingAt(0);
     int matchLength = this.textToHighlight.get().length();
     int pos = 0;
     while (matchStart != -1) {
-      addNonMatchingText(pos, matchStart);
-      addMatchingText(matchStart);
+      Node nonMatchingText = nonMatchingText(pos, matchStart);
+      if (nonMatchingText != null) {
+        nodeList.add(nonMatchingText);
+      }
+      Node matchingText = matchingText(matchStart);
+      if (matchingText != null) {
+        nodeList.add(matchingText);
+      }
       pos = matchStart + matchLength;
       matchStart = nextMatchPositionStartingAt(pos);
-
     }
-    addNonMatchingText(pos, text.get().length());
+    Node nonMatchingText = nonMatchingText(pos, text.get().length());
+    if (nonMatchingText != null) {
+      nodeList.add(nonMatchingText);
+    }
+    updateUi(nodeList);
+  }
+
+  private void updateUi(List<Node> nodeList) {
+    Platform.runLater(() -> getChildren().addAll(nodeList));
   }
 
   private int nextMatchPositionStartingAt(int fromIndex) {
     return StringUtils.indexOfIgnoreCase(text.get(), textToHighlight.get(), fromIndex);
   }
 
-  private void addNonMatchingText(int start, int end) {
-    addStyledTextPart(start, end, "normal");
+  private Node nonMatchingText(int start, int end) {
+    return styledTextPart(start, end, "normal");
   }
 
-  private void addMatchingText(int start) {
+  private Node matchingText(int start) {
     int matchEnd = start + textToHighlight.get().length();
-    addStyledTextPart(start, matchEnd, "bold");
+    return styledTextPart(start, matchEnd, "bold");
   }
 
-  private void addStyledTextPart(int start, int end, String fontWeight) {
+  private Node styledTextPart(int start, int end, String fontWeight) {
     if (start < end) {
-      Text textWithWeight = createTextWithWeight(text.get().substring(start, end), fontWeight);
-      Platform.runLater(() -> getChildren().add(textWithWeight));
+      return createTextWithWeight(text.get().substring(start, end), fontWeight);
     }
+    return null;
   }
 
   private static Text createTextWithWeight(String content, String fontWeight) {
