@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.jfoenix.controls.JFXListCell;
 import com.lwouis.f9.models.Item;
 import com.lwouis.f9.nodes.SearchableTextFlow;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,13 +57,15 @@ public class ItemListCellController extends JFXListCell<Item> {
   @Override
   public void updateItem(Item item, boolean empty) {
     super.updateItem(item, empty);
+    searchableTextFlow.textProperty().unbind();
+    pathLabel.textProperty().unbind();
+    imageView.imageProperty().unbind();
     if (empty || item == null) {
       setGraphic(null);
-      searchableTextFlow.textProperty().unbind();
       return;
     }
     searchableTextFlow.textProperty().bind(item.nameProperty());
-    pathLabel.textProperty().bind(item.pathProperty());
+    pathLabel.textProperty().bind(Bindings.concat(item.pathProperty(), " ", item.argumentsProperty()));
     imageView.imageProperty().bind(item.iconProperty());
     setGraphic(content);
   }

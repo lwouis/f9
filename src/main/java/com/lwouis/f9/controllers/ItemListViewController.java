@@ -145,11 +145,12 @@ public class ItemListViewController implements Initializable, ApplicationContext
     for (Item item : listView.getSelectionModel().getSelectedItems()) {
       File file = new File(item.pathProperty().get());
       try {
-        if (Desktop.isDesktopSupported()) {
+        String args = item.argumentsProperty().get();
+        if (Desktop.isDesktopSupported() && args.isEmpty()) {
           Desktop.getDesktop().open(file);
         }
         else {
-          new ProcessBuilder(item.pathProperty().get()).start();
+          new ProcessBuilder(item.pathProperty().get(), args).start();
         }
       }
       catch (Throwable t) {
