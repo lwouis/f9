@@ -30,3 +30,7 @@
 .itemListView .list-cell:selected {
     -fx-background-color: #b8dcff;
 }
+
+.itemListView .list-cell:selected .pathLabel {
+    -fx-text-fill: #a4a4a4;
+}
